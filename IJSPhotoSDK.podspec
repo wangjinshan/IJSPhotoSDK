@@ -32,8 +32,8 @@ Pod::Spec.new do |s|
   # s.dependency 'IJSFoundation'
   s.dependency 'IJSUExtension'
   s.vendored_frameworks = 'SDK/Required/IJSFoundation.framework'
-
-  s.resources = 'SDK/IJSPhotoSDK/IJSPhotoSDKFiles/*.{h,m}'
+  
+  s.source_files = 'SDK/IJSPhotoSDK/IJSPhotoSDKFiles/*.{h,m}'
   s.resource_bundles = {
     'JSPhotoSDK' => ['SDK/IJSPhotoSDK/Support/JSPhotoSDK.bundle']
   }
