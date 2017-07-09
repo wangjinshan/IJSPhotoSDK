@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "IJSPhotoSDK"
-  s.version      = "0.0.2"
+  s.version      = "0.0.3"
 
   s.summary      = "IJSPhotoSDK from PhotoKit."
   s.license          = 'MIT'
@@ -32,7 +32,7 @@ Pod::Spec.new do |s|
   # s.dependency 'IJSFoundation'
   s.dependency 'IJSUExtension'
   s.vendored_frameworks = 'SDK/Required/IJSFoundation.framework'
-  
+
   s.source_files = 'SDK/IJSPhotoSDK/IJSPhotoSDKFiles/*.{h,m}'
   s.resource_bundles = {
     'JSPhotoSDK' => ['SDK/IJSPhotoSDK/Support/JSPhotoSDK.bundle']
