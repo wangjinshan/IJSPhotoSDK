@@ -16,6 +16,10 @@
 @property(nonatomic,strong) IJSAssetModel *assetModel;
 /* 视频界面 */
 @property(nonatomic,weak)  IJSPreviewVideoView*videoView;
+/* 缩放用的scrollview */
+@property(nonatomic,strong) UIScrollView *scrollView;
+/* 隐藏工具栏和导航条 */
+@property(nonatomic,copy) void(^hiddenNavigationAndToos)(BOOL hiddenToolsStatus);
 
 -(void) playLivePhotos;
 -(void) stopLivePhotos;
@@ -23,6 +27,7 @@
 @end
 
 
+/*-----------------------------------IJSSelectedCell-------------------------------------------------------*/
 
 // 用户选中的cell的模型
 @interface IJSSelectedCell :UICollectionViewCell

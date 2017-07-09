@@ -18,7 +18,7 @@
 #import "IJSImagePickerController.h"
 #import <IJSFoundation/IJSFoundation.h>
 #import "IJSExtension.h"
-
+#import "IJS3DTouchController.h"
 
 static NSString *const CellID = @"pickerID";
 @interface IJSPhotoPickerController ()<UICollectionViewDelegate,UICollectionViewDataSource>
@@ -172,6 +172,15 @@ static NSString *const CellID = @"pickerID";
                 [weakSelf.showCollectioView reloadData];
             });
         };
+    
+    if (iOS9Later)
+    {
+        if (self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable)
+        {
+            [self registerForPreviewingWithDelegate:(id)self sourceView:cell];
+        }
+    }
+    
      return cell;
   
 }
@@ -182,7 +191,7 @@ static NSString *const CellID = @"pickerID";
      if (self.selectedModels.count >= self.imagePickerController.maxImagesCount) // 选中的个数超标
      {
           IJSPhotoPreviewController *preViewVc  =[[IJSPhotoPreviewController alloc]init];
-         
+
          for (IJSAssetModel *model in self.selectedModels) //选中的model
          {
              if (model.onlyOneTag == indexPath.row)  //  点击被选中的
@@ -217,6 +226,8 @@ static NSString *const CellID = @"pickerID";
     IJSPhotoPreviewController *vc =[[IJSPhotoPreviewController alloc]init];
     vc.allAssetModelArr = self.assetModelArr;
     vc.selectedModels = self.selectedModels;
+    vc.previewAssetModelArr = [self.selectedModels mutableCopy];
+    vc.pushSelectedIndex = 0;
     vc.isPreviewButton = YES;
     [self.navigationController pushViewController:vc animated:YES];
 }
@@ -339,7 +350,7 @@ static NSString *const CellID = @"pickerID";
    
     //预览
     UIButton *previewButton =[UIButton buttonWithType:UIButtonTypeCustom];
-    previewButton.frame = CGRectMake(5, 5, 50, 30);
+    previewButton.frame = CGRectMake(5, 5, 70, 30);
     [previewButton setTitle:[NSBundle localizedStringForKey:@"Preview"] forState:UIControlStateNormal];
     [previewButton setTitleColor:[IJSFColor colorWithR:98 G:103 B:109 alpha:1] forState:UIControlStateNormal];
     [previewButton addTarget:self action:@selector(_pushPreViewPhoto) forControlEvents:UIControlEventTouchUpInside];
@@ -424,6 +435,29 @@ static NSString *const CellID = @"pickerID";
     UIGraphicsEndImageContext();
     return newImage;
 }
+
+#pragma mark - UIViewControllerPreviewingDelegate method
+//peek(预览模式)
+- (nullable UIViewController *)previewingContext:(id <UIViewControllerPreviewing>)previewingContext viewControllerForLocation:(CGPoint)location
+{
+    
+    //获取按压的cell所在行，[previewingContext sourceView]就是按压的那个视图
+    NSIndexPath *indexPath = [self.showCollectioView indexPathForCell:(IJSPhotoPickerCell* )[previewingContext sourceView]];
+    //设定预览的界面
+    IJS3DTouchController *touchVC = [[IJS3DTouchController alloc] init];
+    touchVC.model = self.assetModelArr[indexPath.row];
+    touchVC.preferredContentSize = CGSizeMake(0.0f,500.0f);
+    //调整不被虚化的范围，按压的那个cell不被虚化（轻轻按压时周边会被虚化，再少用力展示预览，再加力跳页至设定界面）
+    CGRect rect = CGRectMake(0, 0, self.view.frame.size.width,40);
+    previewingContext.sourceRect = rect;
+    //返回预览界面
+    return touchVC;
+}
+
+
+
+
+
 
 
 

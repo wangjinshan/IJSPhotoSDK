@@ -66,7 +66,6 @@ static NSString * const cellID = @"cellID";
     [leftButton addTarget:self action:@selector(addAppAlbum:) forControlEvents:UIControlEventTouchUpInside];
     leftButton.contentMode = UIViewContentModeScaleAspectFit;
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton];
-    
 }
 
 -(void) _createTableViewUI
@@ -78,7 +77,7 @@ static NSString * const cellID = @"cellID";
     tableView.dataSource = self;
     tableView.tableFooterView = [UIView new];
     [tableView registerClass:[IJSAlbumPickerCell class] forCellReuseIdentifier:cellID];
-    _tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    tableView.separatorStyle =UITableViewCellSeparatorStyleNone;
     self.tableView = tableView;
 }
 #pragma mark Tableview 代理方法
@@ -91,7 +90,7 @@ static NSString * const cellID = @"cellID";
 {
     IJSAlbumPickerCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID forIndexPath:indexPath];
     cell.models = self.albumListArr[indexPath.row];
-    cell.selectionStyle = UITableViewCellAccessoryDisclosureIndicator;
+    cell.selectionStyle = UITableViewCellAccessoryNone;
     return cell;
 }
 
@@ -104,17 +103,7 @@ static NSString * const cellID = @"cellID";
     [self.navigationController pushViewController:vc animated:YES];
     
 }
--(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPat
-{
-    if ([cell respondsToSelector:@selector(setLayoutMargins:)])
-    {
-        [cell setLayoutMargins:UIEdgeInsetsZero];
-    }
-    if ([cell respondsToSelector:@selector(setSeparatorInset:)])
-    {
-        [cell setSeparatorInset:UIEdgeInsetsZero];
-    }
-}
+
 // 添加编辑模式
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {

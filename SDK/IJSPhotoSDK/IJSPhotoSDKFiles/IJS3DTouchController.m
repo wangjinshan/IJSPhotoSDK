@@ -13,6 +13,8 @@
 #import "IJSImagePickerController.h"
 #import <IJSFoundation/IJSFoundation.h>
 
+
+
 @interface IJS3DTouchController ()
 
 /* 图片参数 */
@@ -44,7 +46,7 @@
           
             if (!error)
             {
-                  [self  showAlertWithTitle:@"删除成功"];
+                  [self  showAlertWithTitle:@"照片已经从照片库中删除"];
             }else{
                  [self  showAlertWithTitle:@"删除失败"];
             }
@@ -67,26 +69,26 @@
         }
     }];
     
-    UIPreviewAction *export = [UIPreviewAction actionWithTitle:[NSBundle localizedStringForKey:@"Export"] style:UIPreviewActionStyleDefault handler:^(UIPreviewAction * _Nonnull action, UIViewController * _Nonnull previewViewController) {
-        
-        if (self.model.type== JSAssetModelMediaTypeVideo)
-        {
-          
-          [[IJSImageManager shareManager]getVideoOutputPathWithAsset:self.model.asset completion:^(NSString *outputPath) {
-               [self  showAlertWithTitle:@"导出成功" ];
-          }];
-        }else{
-            [self  showAlertWithTitle:@"功能未开发" ];
-        }
-        
-    }];
+//    UIPreviewAction *export = [UIPreviewAction actionWithTitle:[NSBundle localizedStringForKey:@"Export"] style:UIPreviewActionStyleDefault handler:^(UIPreviewAction * _Nonnull action, UIViewController * _Nonnull previewViewController) {
+//        
+//        if (self.model.type== JSAssetModelMediaTypeVideo)
+//        {
+//          
+//          [[IJSImageManager shareManager]getVideoOutputPathWithAsset:self.model.asset completion:^(NSString *outputPath) {
+//               [self  showAlertWithTitle:@"导出成功" ];
+//          }];
+//        }else{
+//            [self  showAlertWithTitle:@"功能未开发" ];
+//        }
+//        
+//    }];
     
-    UIPreviewAction *Edit = [UIPreviewAction actionWithTitle:[NSBundle localizedStringForKey:@"Edit"] style:UIPreviewActionStyleDefault handler:^(UIPreviewAction * _Nonnull action, UIViewController * _Nonnull previewViewController) {
+//    UIPreviewAction *Edit = [UIPreviewAction actionWithTitle:[NSBundle localizedStringForKey:@"Edit"] style:UIPreviewActionStyleDefault handler:^(UIPreviewAction * _Nonnull action, UIViewController * _Nonnull previewViewController) {
+//    
+//        [self  showAlertWithTitle:@"功能开发" ];
+//    }];
     
-        [self  showAlertWithTitle:@"功能开发" ];
-    }];
-    
-    NSArray *actions = @[action1,collection,export,Edit];
+    NSArray *actions = @[action1,collection];
     return actions;
 }
 
@@ -99,7 +101,7 @@
     
     if (touch.view == self.view) {
         //显示压力值
-        NSLog(@"%@", [NSString stringWithFormat:@"压力值:%f",touch.force]);
+//        NSLog(@"%@", [NSString stringWithFormat:@"压力值:%f",touch.force]);
     }
 }
 

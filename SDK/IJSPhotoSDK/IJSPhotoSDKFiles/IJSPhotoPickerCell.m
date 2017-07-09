@@ -65,7 +65,7 @@
     UIButton *livePhotoButton =[UIButton buttonWithType:UIButtonTypeCustom];
     livePhotoButton.frame = CGRectMake(2, 0, ButtonHeight, ButtonHeight);
      [livePhotoButton setImage:[IJSFImageGet loadImageWithBundle:@"JSPhotoSDK" subFile:nil grandson:nil imageName:@"live" imageType:@"png"] forState:UIControlStateNormal];
-    [livePhotoButton addTarget:self action:@selector(seeLivePhoto:) forControlEvents:UIControlEventTouchUpInside];
+//    [livePhotoButton addTarget:self action:@selector(seeLivePhoto:) forControlEvents:UIControlEventTouchUpInside];
     [self.contentView addSubview:livePhotoButton];
     self.livePhotoButton = livePhotoButton;
     
@@ -203,7 +203,7 @@
 
 -(void)seeLivePhoto:(UIButton *)button
 {
-    NSLog(@"eeee");
+//    NSLog(@"eeee");
 }
 
 

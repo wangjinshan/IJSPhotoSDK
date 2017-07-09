@@ -107,7 +107,7 @@ static NSString *const jsSelectedCell = @"IJSSelectedCell";
 {
     if (collectionView == self.showCollectioView)
     {
-        if (self.isPreviewButton) return self.selectedModels.count;
+        if (self.isPreviewButton) return self.previewAssetModelArr.count;
         return self.allAssetModelArr.count;
     }else{
         return self.selectedModels.count;
@@ -123,18 +123,36 @@ static NSString *const jsSelectedCell = @"IJSSelectedCell";
         IJSAssetModel *assetModel;
         if (self.isPreviewButton)
         {
-            assetModel = self.selectedModels[indexPath.row];
+            assetModel = self.previewAssetModelArr[indexPath.row];
         }else{
             assetModel = self.allAssetModelArr[indexPath.row];
         }
         
         assetModel.networkAccessAllowed = self.imagePickerController.networkAccessAllowed;
         cell.assetModel = assetModel;
-        
-        if (self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable)
+        if (iOS9Later)
         {
-             [self registerForPreviewingWithDelegate:(id)self sourceView:cell];
+            if (self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable)
+            {
+                [self registerForPreviewingWithDelegate:(id)self sourceView:cell];
+            }
         }
+         // 隐藏状态栏
+        __weak typeof (cell) weakCell = cell;
+        __weak typeof (self) weakSelf = self;
+        cell.hiddenNavigationAndToos = ^(BOOL hiddenToolsStatus) {
+            weakSelf.videoPlayButton = weakCell.videoView.playButton;
+            weakSelf.player = weakCell.videoView.player;
+            _toHiddToolStatus = hiddenToolsStatus;
+            if (hiddenToolsStatus)
+            {
+                [self isHiddenStatus:YES];
+                [weakCell.videoView.player play];
+            } else {
+                [self isHiddenStatus:NO];
+                [weakCell.videoView.player pause];
+            }
+        };
         
         return cell;
     }else{ //选中的cell
@@ -147,8 +165,9 @@ static NSString *const jsSelectedCell = @"IJSSelectedCell";
         if (self.isPreviewButton) self.didClinkIndex = [NSIndexPath indexPathForRow:0 inSection:0];
         if (self.didClinkIndex && _isFirstAppear)
         {
-            IJSSelectedCell *cell = (IJSSelectedCell *)[collectionView cellForItemAtIndexPath:self.didClinkIndex];
-            [self _resetAssetCellStatus:cell];
+            IJSSelectedCell *firstAppearCell = (IJSSelectedCell *)[collectionView cellForItemAtIndexPath:self.didClinkIndex];
+            [self _resetAssetCellStatus:firstAppearCell];
+            if (self.selectedModels.count ==1) [self _resetAssetCellStatus:cell];
         }
         return cell;
     }
@@ -159,20 +178,6 @@ static NSString *const jsSelectedCell = @"IJSSelectedCell";
 {
     if (collectionView == self.showCollectioView) // 展示的cell
    {
-     IJSPreviewImageCell *cell = (IJSPreviewImageCell *)[collectionView cellForItemAtIndexPath:indexPath];
-      self.videoPlayButton = cell.videoView.playButton;
-       self.player = cell.videoView.player;
-       
-       if (_toHiddToolStatus)
-       {
-           [cell.videoView.player play];
-           [self isHiddenStatus:YES];
-          
-       }else{
-           [cell.videoView.player pause];
-           [self isHiddenStatus:NO];
-       }
-       _toHiddToolStatus = !_toHiddToolStatus;
    }
     else if(collectionView == self.selectedCollection)
    {
@@ -188,21 +193,36 @@ static NSString *const jsSelectedCell = @"IJSSelectedCell";
        IJSAssetModel *model = self.selectedModels[indexPath.row];
        if (self.isPreviewButton)
        {
-           self.showCollectioView.contentOffset = CGPointMake(JSScreenWidth * indexPath.row, 0);
+           for (int i = 0; i < self.previewAssetModelArr.count; i++)
+           {
+               if (self.selectedModels[indexPath.row] == self.previewAssetModelArr[i])
+               {
+                   self.showCollectioView.contentOffset = CGPointMake(JSScreenWidth * i, 0);
+                   break;
+               }
+           }
        }else{
            self.showCollectioView.contentOffset = CGPointMake(JSScreenWidth * model.onlyOneTag, 0);
        }
 
        [self _resetAssetCellStatus:cell];
        // 刷新导航条
-       [_rightButton setTitle:[NSString stringWithFormat:@"%ld",(long)model.cellButtonNnumber] forState:UIControlStateNormal];
-       [_rightButton setBackgroundImage:[IJSFImageGet loadImageWithBundle:@"JSPhotoSDK" subFile:nil grandson:nil imageName:@"preview_number_icon@2x" imageType:@"png"] forState:UIControlStateNormal];
+       [self _resetRightButtonStatus:model.cellButtonNnumber];
    }
+}
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (collectionView == self.showCollectioView)
+    {
+        IJSPreviewImageCell *preciewCell = (IJSPreviewImageCell *)cell;
+        [preciewCell.scrollView setZoomScale:1.0];
+    }
 }
 
 #pragma mark 滚动结束
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
 {
+    
     if (scrollView == self.showCollectioView)
     {
         // 计算当前的下标值
@@ -219,36 +239,49 @@ static NSString *const jsSelectedCell = @"IJSSelectedCell";
         {
             [self _cleanAssetCellStatus:allCell];
         }
-        // 如果是预览点击进来的
-        if (self.isPreviewButton)
+       
+        if (self.isPreviewButton) // 如果是预览点击进来的
         {
-            [_rightButton setTitle:[NSString stringWithFormat:@"%lu",index + 1] forState:UIControlStateNormal];
-            [_rightButton setBackgroundImage:[IJSFImageGet loadImageWithBundle:@"JSPhotoSDK" subFile:nil grandson:nil imageName:@"preview_number_icon@2x" imageType:@"png"] forState:UIControlStateNormal];
-            NSIndexPath *indexPath = [NSIndexPath indexPathForItem:index  inSection:0];
-            [self.selectedCollection scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionNone animated:YES];
-            IJSSelectedCell *cell = (IJSSelectedCell *)[self.selectedCollection cellForItemAtIndexPath:indexPath];
-            [self _resetAssetCellStatus:cell];
-            return;
-        }
-        // 正常视图进来
-        for (IJSAssetModel *selectModel in self.selectedModels)
-        {
-            if (selectModel.onlyOneTag == index)  //对应
-            {
-                [_rightButton setTitle:[NSString stringWithFormat:@"%lu",selectModel.cellButtonNnumber] forState:UIControlStateNormal];
-                [_rightButton setBackgroundImage:[IJSFImageGet loadImageWithBundle:@"JSPhotoSDK" subFile:nil grandson:nil imageName:@"preview_number_icon@2x" imageType:@"png"] forState:UIControlStateNormal];
-                
-                NSIndexPath *indexPath = [NSIndexPath indexPathForItem:selectModel.cellButtonNnumber - 1  inSection:0];
+            [self _resetRightButtonStatus:self.previewAssetModelArr[index].cellButtonNnumber];
             
-                [self.selectedCollection scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionNone animated:YES];
-                
-                IJSSelectedCell *cell = (IJSSelectedCell *)[self.selectedCollection cellForItemAtIndexPath:indexPath];
-                [self _resetAssetCellStatus:cell];
-                break;
-            }else{
+            if (self.previewAssetModelArr[index].cellButtonNnumber ==0)
+            {
                 _rightButton.titleLabel.text = nil;
-                [_rightButton setTitle:nil forState:UIControlStateNormal];
-                [_rightButton setBackgroundImage:[IJSFImageGet loadImageWithBundle:@"JSPhotoSDK" subFile:nil grandson:nil imageName:@"photo_def_previewVc@2x" imageType:@"png"] forState:UIControlStateNormal];
+            
+                [self _cleanRightButtonStatus];
+            }
+            
+            for (int i = 0; i < self.selectedModels.count; i++)
+            {
+                if (self.selectedModels[i] == self.previewAssetModelArr[index])
+                {
+                    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:i  inSection:0];
+                    [self.selectedCollection scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionNone animated:YES];
+                    IJSSelectedCell *cell = (IJSSelectedCell *)[self.selectedCollection cellForItemAtIndexPath:indexPath];
+                    [self _resetAssetCellStatus:cell];
+
+                }
+            }
+          
+        }else{   //正常点击进来
+        
+            for (IJSAssetModel *selectModel in self.selectedModels)
+            {
+                if (selectModel.onlyOneTag == index)  //对应
+                {
+            
+                    [self _resetRightButtonStatus:selectModel.cellButtonNnumber];
+                    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:selectModel.cellButtonNnumber - 1  inSection:0];
+                    [self.selectedCollection scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionNone animated:YES];
+                    
+                    IJSSelectedCell *cell = (IJSSelectedCell *)[self.selectedCollection cellForItemAtIndexPath:indexPath];
+                    [self _resetAssetCellStatus:cell];
+                    break;
+                }else{
+                    _rightButton.titleLabel.text = nil;
+                    [self _cleanRightButtonStatus];
+
+                }
             }
         }
     }
@@ -262,21 +295,37 @@ static NSString *const jsSelectedCell = @"IJSSelectedCell";
         }
     
         NSInteger index = self.showCollectioView.contentOffset.x / JSScreenWidth;
-       for (IJSAssetModel *selectModel in self.selectedModels)
+    
+        if (self.isPreviewButton)
         {
-            if (selectModel.onlyOneTag == index)  //对应
+            for (int i = 0 ; i < self.selectedModels.count; i++)
             {
-                NSIndexPath *indexPath = [NSIndexPath indexPathForItem:selectModel.cellButtonNnumber - 1  inSection:0];
-                IJSSelectedCell *cell = (IJSSelectedCell *)[self.selectedCollection cellForItemAtIndexPath:indexPath];
-                [self _resetAssetCellStatus:cell];
-                break;
+                if (self.selectedModels[i] == self.previewAssetModelArr[index])
+                {
+                    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:i  inSection:0];
+                    IJSSelectedCell *cell = (IJSSelectedCell *)[self.selectedCollection cellForItemAtIndexPath:indexPath];
+                    [self _resetAssetCellStatus:cell];
+                    break;
+                }
+            }
+        }else{
+            for (IJSAssetModel *selectModel in self.selectedModels)
+            {
+                if (selectModel.onlyOneTag == index)  //对应
+                {
+                    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:selectModel.cellButtonNnumber - 1  inSection:0];
+                    IJSSelectedCell *cell = (IJSSelectedCell *)[self.selectedCollection cellForItemAtIndexPath:indexPath];
+                    [self _resetAssetCellStatus:cell];
+                    break;
+                }
             }
         }
     }
     // 不要让 playbutton隐藏
     [self isHiddenStatus:NO];
 }
-// 自动滚动
+
+// 自动滚动 ---导航条添加按钮执行 处理底部选中数组逻辑cell
 -(void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
 {
     if (scrollView == self.selectedCollection)
@@ -288,14 +337,29 @@ static NSString *const jsSelectedCell = @"IJSSelectedCell";
         }
         
         NSInteger index = self.showCollectioView.contentOffset.x / JSScreenWidth;
-        for (IJSAssetModel *selectModel in self.selectedModels)
+        
+        if (self.isPreviewButton)
         {
-            if (selectModel.onlyOneTag == index)  //对应
+            for (int i = 0; i < self.selectedModels.count ; i++)
             {
-                NSIndexPath *indexPath = [NSIndexPath indexPathForItem:selectModel.cellButtonNnumber - 1  inSection:0];
-                IJSSelectedCell *cell = (IJSSelectedCell *)[self.selectedCollection cellForItemAtIndexPath:indexPath];
-                [self _resetAssetCellStatus:cell];
-                break;
+                if (self.selectedModels[i] == self.previewAssetModelArr[index])
+                {
+                    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:i  inSection:0];
+                    IJSSelectedCell *cell = (IJSSelectedCell *)[self.selectedCollection cellForItemAtIndexPath:indexPath];
+                    [self _resetAssetCellStatus:cell];
+                    break;
+                }
+            }
+        }else{
+            for (IJSAssetModel *selectModel in self.selectedModels)
+            {
+                if (selectModel.onlyOneTag == index)  //对应
+                {
+                    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:selectModel.cellButtonNnumber - 1  inSection:0];
+                    IJSSelectedCell *cell = (IJSSelectedCell *)[self.selectedCollection cellForItemAtIndexPath:indexPath];
+                    [self _resetAssetCellStatus:cell];
+                    break;
+                }
             }
         }
     }
@@ -308,6 +372,8 @@ static NSString *const jsSelectedCell = @"IJSSelectedCell";
     [self.player pause];
     _toHiddToolStatus = YES;
 }
+
+
 
 /*-----------------------------------UI-------------------------------------------------------*/
 #pragma mark UI
@@ -343,6 +409,7 @@ static NSString *const jsSelectedCell = @"IJSSelectedCell";
     selectedLayout.minimumLineSpacing = 0;
     selectedLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     UICollectionView *selectedCollection = [[UICollectionView alloc]initWithFrame:CGRectMake(2, JSScreenHeight - 124, JSScreenWidth, 80)collectionViewLayout:selectedLayout];
+    self.selectedCollection = selectedCollection;
     selectedCollection.backgroundColor =  [UIColor colorWithRed:(34/255.0) green:(34/255.0)  blue:(34/255.0) alpha:1.0];
     selectedCollection.alwaysBounceHorizontal = YES;
     selectedCollection.showsVerticalScrollIndicator = NO;
@@ -350,7 +417,7 @@ static NSString *const jsSelectedCell = @"IJSSelectedCell";
    [self.view addSubview:selectedCollection];
     selectedCollection.dataSource = self;
     selectedCollection.delegate = self;
-    self.selectedCollection = selectedCollection;
+    
     [self.selectedCollection registerClass:[IJSSelectedCell class] forCellWithReuseIdentifier:jsSelectedCell];
     if (_selectedCollectionHidden)
     {
@@ -372,7 +439,7 @@ static NSString *const jsSelectedCell = @"IJSSelectedCell";
     [editButton setTitle:[NSBundle localizedStringForKey:@"Edit"] forState:UIControlStateNormal];
      [editButton setTitleColor:[IJSFColor colorWithR:232 G:236 B:239 alpha:1] forState:UIControlStateNormal];
     [editButton addTarget:self action:@selector(_editPhotoAction) forControlEvents:UIControlEventTouchUpInside];
-    [toolBarView addSubview:editButton];
+//    [toolBarView addSubview:editButton];
     self.editButton = editButton;
     
     // 完成
@@ -397,6 +464,7 @@ static NSString *const jsSelectedCell = @"IJSSelectedCell";
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton];
     
     UIButton *rightButton =[UIButton buttonWithType:UIButtonTypeCustom];
+    self.rightButton = rightButton;
     rightButton.frame = CGRectMake(0, 0, 30, 30);
     [rightButton setBackgroundImage:[IJSFImageGet loadImageWithBundle:@"JSPhotoSDK" subFile:nil grandson:nil imageName:@"photo_def_previewVc@2x" imageType:@"png"]  forState:UIControlStateNormal];
     [rightButton setBackgroundImage:[IJSFImageGet loadImageWithBundle:@"JSPhotoSDK" subFile:nil grandson:nil imageName:@"preview_number_icon@2x" imageType:@"png"] forState:UIControlStateSelected];
@@ -406,8 +474,10 @@ static NSString *const jsSelectedCell = @"IJSSelectedCell";
  
     if (self.isPreviewButton)
     {
+
         [rightButton setBackgroundImage:[IJSFImageGet loadImageWithBundle:@"JSPhotoSDK" subFile:nil grandson:nil imageName:@"preview_number_icon@2x" imageType:@"png"] forState:UIControlStateNormal];
          [rightButton setTitle:@"1" forState:UIControlStateNormal];
+
     }else{
         // 正常进来
         if (self.selectedModels.count > 0)
@@ -417,8 +487,7 @@ static NSString *const jsSelectedCell = @"IJSSelectedCell";
             {
                 if (model.onlyOneTag == self.pushSelectedIndex)
                 {
-                    [rightButton setTitle:[NSString stringWithFormat:@"%lu",model.cellButtonNnumber] forState:UIControlStateNormal];
-                    [rightButton setBackgroundImage:[IJSFImageGet loadImageWithBundle:@"JSPhotoSDK" subFile:nil grandson:nil imageName:@"preview_number_icon@2x" imageType:@"png"] forState:UIControlStateNormal];
+                    [self _resetRightButtonStatus:model.cellButtonNnumber];
                     
                     NSInteger index = model.cellButtonNnumber ;
                     if (index > 4) {index = model.cellButtonNnumber - 2;}
@@ -434,7 +503,6 @@ static NSString *const jsSelectedCell = @"IJSSelectedCell";
         }
     }
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:rightButton];
-    self.rightButton = rightButton;
     IJSAssetModel *model = self.allAssetModelArr[self.pushSelectedIndex];
     if (model.type == JSAssetModelMediaTypeVideo)
     {
@@ -497,70 +565,28 @@ static NSString *const jsSelectedCell = @"IJSSelectedCell";
     }
     // 解析数据并返回
     __block BOOL noShowAlert = YES;
+    
     if (vc.selectedModels.count == 0) // 用户没有选中图片或者视频
     {
+        [photos addObject:@1];
+        [assets addObject:@1];
+        [infoArr addObject:@1];
+        [avPlayers addObject:@1];
+        
        NSIndexPath *firstIndexPath = [[self.showCollectioView indexPathsForVisibleItems] firstObject];
         IJSAssetModel *model = self.allAssetModelArr[firstIndexPath.row];
         JSAssetModelSourceType type = model.type;
+        
         if (type == JSAssetModelMediaTypeVideo)//当前显示的是视频资源
         {
-            [[IJSImageManager shareManager] getVideoWithAsset:model.asset networkAccessAllowed:vc.networkAccessAllowed progressHandler:^(double progress, NSError *error, BOOL *stop, NSDictionary *info) {
-                
-            } completion:^(AVPlayerItem *playerItem, NSDictionary *info) {
-                if (playerItem)
-                {
-                    [avPlayers addObject:playerItem];
-                }
-                if (info)  [infoArr addObject:info];
-                [assets addObject:model.asset];
-                
-                for (id item in avPlayers) { if ([item isKindOfClass:[NSNumber class]]) return; }
-                
-                [self _didGetAllPhotos:nil asset:assets infos:infoArr isSelectOriginalPhoto:YES avPlayers:avPlayers];
-            }];
-            
+            [self _getBackThumbnailDataPhotos:photos assets:assets infoArr:infoArr avPlayers:avPlayers model:model index:0 networkAccessAllowed:NO noAlert:NO vc:vc];
         } else {  // 当前显示的是非视频资源
             if (vc.allowPickingOriginalPhoto) // 原图
             {
-                [[IJSImageManager shareManager]getOriginalPhotoWithAsset:model.asset newCompletion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
-                    if (isDegraded) return ;  // 获取不到高清图
-                    if (photo)
-                    {
-                        [photos replaceObjectAtIndex:0 withObject:photo];
-                    }
-                    if (info)  [infoArr replaceObjectAtIndex:0 withObject:info];
-                    [assets replaceObjectAtIndex:0 withObject:model.asset];
-                    
-                    for (id item in photos) { if ([item isKindOfClass:[NSNumber class]]) return; }
-                    
-                    [self _didGetAllPhotos:photos asset:assets infos:infoArr isSelectOriginalPhoto:YES avPlayers:nil];
-                }];
+                [self _getBackOriginalDataPhotos:photos assets:assets infoArr:infoArr avPlayers:nil model:model index:0];
             } else {   //缩略图
-                [[IJSImageManager shareManager]getPhotoWithAsset:model.asset completion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
-                    if (isDegraded) return ;  // 获取不到高清图
-                    if (photo)
-                    {
-                        [photos replaceObjectAtIndex:0 withObject:photo];
-                    }
-                    if (info)  [infoArr replaceObjectAtIndex:0 withObject:info];
-                    [assets replaceObjectAtIndex:0 withObject:model.asset];
-                    
-                    for (id item in photos) { if ([item isKindOfClass:[NSNumber class]]) return; }
-                    
-                    if (noShowAlert)
-                    {
-                        [self _didGetAllPhotos:photos asset:assets infos:infoArr isSelectOriginalPhoto:NO avPlayers:nil];
-                    }
-                    
-                } progressHandler:^(double progress, NSError *error, BOOL *stop, NSDictionary *info) {
-                    // 如果图片正在从iCloud同步中,提醒用户
-                    if (progress < 1 && noShowAlert)
-                    {
-                        [vc showAlertWithTitle:[NSBundle localizedStringForKey:@"Synchronizing photos from iCloud"]];
-                        noShowAlert = NO;
-                        return;
-                    }
-                } networkAccessAllowed:YES];
+                
+                [self _getBackThumbnailDataPhotos:photos assets:assets infoArr:infoArr avPlayers:nil model:model index:0 networkAccessAllowed:YES noAlert:noShowAlert vc:vc];
             }
         }
     }else{     // 已经选中了多图
@@ -570,56 +596,100 @@ static NSString *const jsSelectedCell = @"IJSSelectedCell";
             for (int i = 0; i < vc.selectedModels.count; i++)
             {
                 IJSAssetModel *model = vc.selectedModels[i];
-                [[IJSImageManager shareManager]getOriginalPhotoWithAsset:model.asset newCompletion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
-                    if (isDegraded) return ;  // 获取不到高清图
-                    if (photo)
-                    {
-                        [photos replaceObjectAtIndex:i withObject:photo];
-                    }
-                    if (info)  [infoArr replaceObjectAtIndex:i withObject:info];
-                    [assets replaceObjectAtIndex:i withObject:model.asset];
-                    
-                    for (id item in photos) { if ([item isKindOfClass:[NSNumber class]]) return; }
-                    
-                    [self _didGetAllPhotos:photos asset:assets infos:infoArr isSelectOriginalPhoto:YES avPlayers:nil];
-                }];
+                [self _getBackOriginalDataPhotos:photos assets:assets infoArr:infoArr avPlayers:nil model:model index:i];
             }
         }else{   //缩略图,默认是828
             
             for (int i = 0; i < vc.selectedModels.count; i++)
             {
                 IJSAssetModel *model = vc.selectedModels[i];
-                [[IJSImageManager shareManager]getPhotoWithAsset:model.asset completion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
-                    if (isDegraded) return ;  // 获取不到高清图
-                    if (photo)
-                    {
-                        [photos replaceObjectAtIndex:i withObject:photo];
-                    }
-                    if (info)  [infoArr replaceObjectAtIndex:i withObject:info];
-                    [assets replaceObjectAtIndex:i withObject:model.asset];
-                    
-                    for (id item in photos) { if ([item isKindOfClass:[NSNumber class]]) return; }
-                    
-                    if (noShowAlert)
-                    {
-                        [self _didGetAllPhotos:photos asset:assets infos:infoArr isSelectOriginalPhoto:NO avPlayers:nil];
-                    }
-                    
-                } progressHandler:^(double progress, NSError *error, BOOL *stop, NSDictionary *info) {
-                    // 如果图片正在从iCloud同步中,提醒用户
-                    if (progress < 1 && noShowAlert)
-                    {
-                        [vc showAlertWithTitle:[NSBundle localizedStringForKey:@"Synchronizing photos from iCloud"]];
-                        noShowAlert = NO;
-                        return;
-                    }
-                } networkAccessAllowed:YES];
+                 [self _getBackThumbnailDataPhotos:photos assets:assets infoArr:infoArr avPlayers:avPlayers model:model index:i networkAccessAllowed:YES noAlert:NO vc:vc];
             }
         }
     }
 
-    
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+/// 获取资源的方法---缩略图
+-(void)_getBackThumbnailDataPhotos:(NSMutableArray *)photos
+                     assets:(NSMutableArray *)assets
+                    infoArr:(NSMutableArray *)infoArr
+                  avPlayers:(NSMutableArray *)avPlayers
+                             model:(IJSAssetModel *)model
+                             index:(NSInteger)index
+        networkAccessAllowed:(BOOL)networkAccessAllowed
+                 noAlert:(BOOL)noAlert
+                          vc:(IJSImagePickerController *)vc
+{
+    __block BOOL noShowAlert = noAlert;
+    if (model.type == JSAssetModelMediaTypeVideo)
+    {
+        [[IJSImageManager shareManager] getVideoWithAsset:model.asset networkAccessAllowed:networkAccessAllowed progressHandler:^(double progress, NSError *error, BOOL *stop, NSDictionary *info) {
+            
+        } completion:^(AVPlayerItem *playerItem, NSDictionary *info) {
+            if (playerItem)
+            {
+                [avPlayers addObject:playerItem];
+            }
+            if (info)  [infoArr addObject:info];
+            [assets addObject:model.asset];
+            
+            for (id item in avPlayers) { if ([item isKindOfClass:[NSNumber class]]) return; }
+            
+            [self _didGetAllPhotos:nil asset:assets infos:infoArr isSelectOriginalPhoto:YES avPlayers:avPlayers];
+        }];
+        
+    }else{
+    
+        [[IJSImageManager shareManager]getPhotoWithAsset:model.asset completion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
+            if (isDegraded) return ;  // 获取不到高清图
+            if (photo)
+            {
+                [photos replaceObjectAtIndex:index withObject:photo];
+            }
+            if (info)  [infoArr replaceObjectAtIndex:index withObject:info];
+            [assets replaceObjectAtIndex:index withObject:model.asset];
+            
+            for (id item in photos) { if ([item isKindOfClass:[NSNumber class]]) return; }
+            
+            if (noShowAlert)
+            {
+                [self _didGetAllPhotos:photos asset:assets infos:infoArr isSelectOriginalPhoto:NO avPlayers:nil];
+            }
+            
+        } progressHandler:^(double progress, NSError *error, BOOL *stop, NSDictionary *info) {
+            // 如果图片正在从iCloud同步中,提醒用户
+            if (progress < 1 && noShowAlert)
+            {
+                [vc showAlertWithTitle:[NSBundle localizedStringForKey:@"Synchronizing photos from iCloud"]];
+                noShowAlert = NO;
+                return;
+            }
+        } networkAccessAllowed:YES];
+    }
+}
+/// 获取原图
+-(void)_getBackOriginalDataPhotos:(NSMutableArray *)photos
+                           assets:(NSMutableArray *)assets
+                          infoArr:(NSMutableArray *)infoArr
+                        avPlayers:(NSMutableArray *)avPlayers
+                            model:(IJSAssetModel *)model
+                            index:(NSInteger)index
+{
+
+    [[IJSImageManager shareManager]getOriginalPhotoWithAsset:model.asset newCompletion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
+        if (isDegraded) return ;  // 获取不到高清图
+        if (photo)
+        {
+            [photos replaceObjectAtIndex:index withObject:photo];
+        }
+        if (info)  [infoArr replaceObjectAtIndex:index withObject:info];
+        [assets replaceObjectAtIndex:index withObject:model.asset];
+        
+        for (id item in photos) { if ([item isKindOfClass:[NSNumber class]]) return; }
+        
+        [self _didGetAllPhotos:photos asset:assets infos:infoArr isSelectOriginalPhoto:YES avPlayers:nil];
+    }];
 }
 
 //设置返回的数据
@@ -644,64 +714,116 @@ static NSString *const jsSelectedCell = @"IJSSelectedCell";
     [button addSpringAnimation];
     _isFirstAppear = NO;
     NSInteger index = self.showCollectioView.contentOffset.x / JSScreenWidth;
-    if (_rightButton.titleLabel.text == nil)  //没有选中 选中添加
-    {
-        if (self.selectedModels.count < self.imagePickerController.maxImagesCount) //还没有超标
+    if (self.isPreviewButton)
+    {//1, 处理预览模式下的逻辑
+        if (self.rightButton.titleLabel.text == nil)  //增加
         {
-            IJSAssetModel *model = self.allAssetModelArr[index];
+            IJSAssetModel *model = self.previewAssetModelArr[index];
             [self.selectedModels addObject:model];
             [self.selectedCollection reloadData];
+            
             // 增加属性并替换掉
             model.isSelectedModel = YES;
             model.cellButtonNnumber = self.selectedModels.count;
             model.didClickModelArr = self.selectedModels;
-            model.onlyOneTag = index;
-            [self.allAssetModelArr replaceObjectAtIndex:index withObject:model];
-            
+            [self.allAssetModelArr replaceObjectAtIndex:model.onlyOneTag withObject:model];
+
             NSIndexPath *indexPath = [NSIndexPath indexPathForItem:self.selectedModels.count -1 inSection:0];
             if (self.selectedModels.count <=5) self.selectedCollection.contentOffset= CGPointMake(-0.5, 0);
             [self.selectedCollection scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionNone animated:YES];
             
-            [_rightButton setTitle:[NSString stringWithFormat:@"%lu",self.selectedModels.count] forState:UIControlStateNormal];
-            [_rightButton setBackgroundImage:[IJSFImageGet loadImageWithBundle:@"JSPhotoSDK" subFile:nil grandson:nil imageName:@"preview_number_icon@2x" imageType:@"png"] forState:UIControlStateNormal];
-        }else{  //超标了
-            NSString *title = [NSString stringWithFormat:[NSBundle localizedStringForKey:@"Select a maximum of %zd photos"], self.imagePickerController.maxImagesCount];
-            [self.imagePickerController showAlertWithTitle:title];
-        }
-    }else{  //删除
-        
-        _rightButton.titleLabel.text = nil;
-        for (IJSAssetModel *model in self.selectedModels)
-        {
-            if (model.onlyOneTag == index)
+            [self _resetRightButtonStatus:self.selectedModels.count];
+            
+        }else{  //删除
+            self.rightButton.titleLabel.text = nil;
+            for (IJSAssetModel *model in self.selectedModels)
             {
-                [self.selectedModels removeObject:model];
-                [self.selectedCollection reloadData];
-                // 替换掉被删除的model
-                model.cellButtonNnumber = 0;
-                model.isSelectedModel = NO;
-                model.didClickModelArr = self.selectedModels;
-                model.onlyOneTag = index;
-                [self.allAssetModelArr replaceObjectAtIndex:index withObject:model];
                 
-                 [_rightButton setTitle:nil forState:UIControlStateNormal];
-                [_rightButton setBackgroundImage:[IJSFImageGet loadImageWithBundle:@"JSPhotoSDK" subFile:nil grandson:nil imageName:@"photo_def_previewVc@2x" imageType:@"png"] forState:UIControlStateNormal];
-                break;
+                if (model == self.previewAssetModelArr[index])
+                {
+                    [self.selectedModels removeObject:model];
+                    [self.selectedCollection reloadData];
+                
+                    model.cellButtonNnumber = 0;
+                    model.isSelectedModel = NO;
+                    model.didClickModelArr = self.selectedModels;
+                    
+                    [self.allAssetModelArr replaceObjectAtIndex:model.onlyOneTag withObject:model];
+                    [self.previewAssetModelArr replaceObjectAtIndex:index withObject:model];
+
+                    [self _cleanRightButtonStatus];
+                    break;
+                }
+            }
+            // 重新赋值
+            for (int i = 0; i< self.selectedModels.count; i++)
+            {
+                IJSAssetModel *tempModel =  self.selectedModels[i];
+                tempModel.cellButtonNnumber  = i +1 ;
             }
         }
+    }
+    // 2, 正常点击跳转的逻辑处理
+    else
+    {
         
-        for (int i = 0; i< self.selectedModels.count; i++)
+        if (_rightButton.titleLabel.text == nil)  //没有选中 选中添加
         {
-            IJSAssetModel *tempModel =  self.selectedModels[i];
-            tempModel.cellButtonNnumber  = i +1 ;
+            
+            if (self.selectedModels.count < self.imagePickerController.maxImagesCount) //还没有超标
+            {
+                IJSAssetModel *model = self.allAssetModelArr[index];
+                [self.selectedModels addObject:model];
+                [self.selectedCollection reloadData];
+                // 增加属性并替换掉
+                model.isSelectedModel = YES;
+                model.cellButtonNnumber = self.selectedModels.count;
+                model.didClickModelArr = self.selectedModels;
+                [self.allAssetModelArr replaceObjectAtIndex:index withObject:model];
+                
+                NSIndexPath *indexPath = [NSIndexPath indexPathForItem:self.selectedModels.count -1 inSection:0];
+                if (self.selectedModels.count <=5) self.selectedCollection.contentOffset= CGPointMake(-0.5, 0);
+                [self.selectedCollection scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionNone animated:YES];
+                [self _resetRightButtonStatus:self.selectedModels.count];
+                
+            }else{  //超标了
+                NSString *title = [NSString stringWithFormat:[NSBundle localizedStringForKey:@"Select a maximum of %zd photos"], self.imagePickerController.maxImagesCount];
+                [self.imagePickerController showAlertWithTitle:title];
+            }
+        }else{  //删除
+            
+            self.rightButton.titleLabel.text = nil;
+            for (IJSAssetModel *model in self.selectedModels)
+            {
+                if (model.onlyOneTag == index)
+                {
+                    [self.selectedModels removeObject:model];
+                    [self.selectedCollection reloadData];
+                    // 替换掉被删除的model
+                    model.cellButtonNnumber = 0;
+                    model.isSelectedModel = NO;
+                    model.didClickModelArr = self.selectedModels;
+
+                    [self.allAssetModelArr replaceObjectAtIndex:index withObject:model];
+                    [self _cleanRightButtonStatus];
+                    break;
+                }
+            }
+            for (int i = 0; i< self.selectedModels.count; i++)
+            {
+                IJSAssetModel *tempModel =  self.selectedModels[i];
+                tempModel.cellButtonNnumber  = i +1 ;
+            }
         }
     }
+    
     if (self.selectedModels.count > 0)
     {
         self.selectedCollection.hidden = NO;
     }else{
         self.selectedCollection.hidden = YES;
     }
+    
     [self _resetToorBarStatus];
 }
 
@@ -716,6 +838,7 @@ static NSString *const jsSelectedCell = @"IJSSelectedCell";
     {
         [_finishButton setTitle:[NSString stringWithFormat:@"%@(%lu)",[NSBundle localizedStringForKey:@"Done"],(unsigned long)vc.selectedModels.count] forState:UIControlStateNormal];
         self.finishButton.titleLabel.font =[UIFont systemFontOfSize:13];
+        [_editButton setTitleColor:[IJSFColor colorWithR:232 G:236 B:239 alpha:1] forState:UIControlStateNormal];
     }
     else
     {
@@ -760,7 +883,18 @@ static NSString *const jsSelectedCell = @"IJSSelectedCell";
         }
     }
 }
-
+// 清空导航条button的数据
+-(void)_cleanRightButtonStatus
+{
+    [self.rightButton setTitle:nil forState:UIControlStateNormal];
+    [self.rightButton setBackgroundImage:[IJSFImageGet loadImageWithBundle:@"JSPhotoSDK" subFile:nil grandson:nil imageName:@"photo_def_previewVc@2x" imageType:@"png"] forState:UIControlStateNormal];
+}
+// 重置导航条button的状态
+-(void)_resetRightButtonStatus:(NSInteger) number
+{
+    [self.rightButton setTitle:[NSString stringWithFormat:@"%ld", (long)number] forState:UIControlStateNormal];
+    [self.rightButton setBackgroundImage:[IJSFImageGet loadImageWithBundle:@"JSPhotoSDK" subFile:nil grandson:nil imageName:@"preview_number_icon@2x" imageType:@"png"] forState:UIControlStateNormal];
+}
 
 /*-----------------------------------3D Touch-------------------------------------------------------*/
 #pragma mark - UIViewControllerPreviewingDelegate method
@@ -827,6 +961,36 @@ static NSString *const jsSelectedCell = @"IJSSelectedCell";
     [super didReceiveMemoryWarning];
  
 }
+
+//  优化代码
+//     IJSPreviewImageCell *cell = (IJSPreviewImageCell *)[collectionView cellForItemAtIndexPath:indexPath];
+//      self.videoPlayButton = cell.videoView.playButton;
+//       self.player = cell.videoView.player;
+//       __weak typeof (cell) weakCell = cell;
+//       // 隐藏状态栏
+//       cell.hiddenNavigationAndToos = ^(BOOL hiddenToolsStatus) {
+//           _toHiddToolStatus = hiddenToolsStatus;
+//           if (hiddenToolsStatus)
+//           {
+//                 [self isHiddenStatus:YES];
+//                [weakCell.videoView.player play];
+//           } else {
+//                [self isHiddenStatus:NO];
+//               [weakCell.videoView.player pause];
+//           }
+//       };
+
+//       if (_toHiddToolStatus)
+//       {
+//           [cell.videoView.player play];
+//           [self isHiddenStatus:YES];
+//
+//       }else{
+//           [cell.videoView.player pause];
+//           [self isHiddenStatus:NO];
+//       }
+//       _toHiddToolStatus = !_toHiddToolStatus;
+
 
 
 

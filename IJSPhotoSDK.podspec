@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "IJSPhotoSDK"
-  s.version      = "0.0.1"
+  s.version      = "0.0.2"
 
   s.summary      = "IJSPhotoSDK from PhotoKit."
   s.license          = 'MIT'
@@ -27,32 +27,35 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.description  = 'IJSPhotoSDK from PhotoKit ,you can select more image'
                 
-
   s.source       = { :git => "https://github.com/wangjinshan/IJSPhotoSDK.git", :tag => "#{s.version}" ,:submodules => true}
 
-  s.source_files = 'SDK/IJSPhotoSDK/IJSPhotoSDKFiles/**/*'
-  s.resource_bundles = {
-    'JSPhotoSDK' => ['SDK/IJSPhotoSDK/Support/JSPhotoSDK.bundle']
-  }
+  s.dependency 'IJSFoundation'
+  s.dependency 'IJSUExtension'
+  # s.default_subspecs  = ''
+  s.source_files =  "SDK",'SDK/IJSPhotoSDK/IJSPhotoSDKFiles/*.*'
+  s.resources = 'SDK/IJSPhotoSDK/Support/JSPhotoSDK.bundle'
+  # s.resource_bundles = {
+  #   'JSPhotoSDK' => ['SDK/IJSPhotoSDK/Support/JSPhotoSDK.bundle']
+  # }
 
-    # IJSPhotoSDKFiles 核心文件
-    # s.subspec 'IJSPhotoSDK' do |sp|
-    #   sp.source_files = 'SDK/IJSPhotoSDK/IJSPhotoSDKFiles/*.*'
+    # Controllers 核心文件
+    # s.subspec 'Controllers' do |sp|
+    #   # sp.source_files = 'SDK/IJSPhotoSDK/IJSPhotoSDKFiles/Controllers/*.*'
+    #   # sp.resources = 'SDK/IJSPhotoSDK/Support/JSPhotoSDK.bundle'
     #   # sp.resource_bundles = 'JSPhotoSDK' => ['SDK/IJSPhotoSDK/Support/JSPhotoSDK.bundle']
     # end
-
-
-   # 依赖的公共库
-    s.subspec 'IJSFoundation' do |sp|
-        sp.vendored_frameworks = 'SDK/Required/IJSFoundation.framework'
-    end
-
-   # IJSPhoto扩展模块
-    s.subspec 'IJSPhotoSDKExtension' do |sp|
-      sp.source_files = 'SDK/Required/IJSUExtension/*.*'
-
-    end
- 
+    # # Controllers 核心文件
+    # s.subspec 'Model' do |sp|
+    #   sp.source_files = 'SDK/IJSPhotoSDK/IJSPhotoSDKFiles/Model/*.*'
+    #   sp.resources = 'SDK/IJSPhotoSDK/Support/JSPhotoSDK.bundle'
+    #   # sp.resource_bundles = 'JSPhotoSDK' => ['SDK/IJSPhotoSDK/Support/JSPhotoSDK.bundle']
+    # end
+    # # Controllers 核心文件
+    # s.subspec 'View' do |sp|
+    #   sp.source_files = 'SDK/IJSPhotoSDK/IJSPhotoSDKFiles/View/*.*'
+    #   sp.resources = 'SDK/IJSPhotoSDK/Support/JSPhotoSDK.bundle'
+    #   # sp.resource_bundles = 'JSPhotoSDK' => ['SDK/IJSPhotoSDK/Support/JSPhotoSDK.bundle']
+    # end
   
 
 end

@@ -19,6 +19,8 @@
 @property(nonatomic,strong) NSMutableArray<IJSAssetModel *> *selectedModels;
 /* 所有的数据 */
 @property(nonatomic,strong) NSMutableArray<IJSAssetModel *> *allAssetModelArr;
+/* 预览模式传递一个当前控制器不可改变的数组,大图展示的数据 */
+@property(nonatomic,strong) NSMutableArray<IJSAssetModel *> *previewAssetModelArr;
 
 /* 当前选中的坐标 */
 @property(nonatomic,assign) NSInteger pushSelectedIndex;

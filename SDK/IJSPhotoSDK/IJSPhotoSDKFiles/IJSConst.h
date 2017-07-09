@@ -41,8 +41,9 @@
 #define arrowImageHeight  10
 #define arrowImageMarginTop  20
 #define arrowImageMarginRight  20
-
-
+// 图片缩放比
+#define miniZoomScale  1
+#define maxZoomScale  2
 
 
 

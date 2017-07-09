@@ -60,9 +60,9 @@
     self.arrowImage = arrowImage;
     self.arrowImage.autoresizesSubviews = NO;
     
-    UIView *line =[[UIView alloc]initWithFrame:CGRectMake(0, 0, ScreenW, 0.3)];
+    UIView *line =[[UIView alloc]initWithFrame:CGRectMake(2, 0, ScreenW-4, 0.3)];
     line.backgroundColor =[UIColor blackColor];
-//    [self.contentView addSubview:line];
+    [self.contentView addSubview:line];
 }
 -(void) layoutSubviews
 {
@@ -72,7 +72,7 @@
     [self.titleLable setFrame:CGRectMake(thumbImageMarginleft + thumbImageViewWidth+titleMarginLeft , titleMarginTop, size.width, titleHeight)];
     self.numberLabel.frame = CGRectMake(self.titleLable.frame.origin.x + self.titleLable.frame.size.width +titleMarginLeft, titleMarginTop, numberWidth, numberHeight);
     self.arrowImage.frame = CGRectMake(self.frame.size.width - arrowImageMarginRight, arrowImageMarginTop, arrowImageWidth, arrowImageHeight);
-    self.layoutMargins = UIEdgeInsetsZero;
+    
 }
 
 #pragma mark se方法数据
