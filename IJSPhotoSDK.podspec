@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "IJSPhotoSDK"
-  s.version      = "0.0.1"
+  s.version      = "0.0.4"
 
   s.summary      = "IJSPhotoSDK from PhotoKit."
   s.license          = 'MIT'
