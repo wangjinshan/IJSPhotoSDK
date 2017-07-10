@@ -564,7 +564,7 @@ static NSString *const jsSelectedCell = @"IJSSelectedCell";
         [avPlayers addObject:@1];
     }
     // 解析数据并返回
-    __block BOOL noShowAlert = YES;
+     BOOL noShowAlert = YES;
     
     if (vc.selectedModels.count == 0) // 用户没有选中图片或者视频
     {
@@ -579,7 +579,7 @@ static NSString *const jsSelectedCell = @"IJSSelectedCell";
         
         if (type == JSAssetModelMediaTypeVideo)//当前显示的是视频资源
         {
-            [self _getBackThumbnailDataPhotos:photos assets:assets infoArr:infoArr avPlayers:avPlayers model:model index:0 networkAccessAllowed:NO noAlert:NO vc:vc];
+            [self _getBackThumbnailDataPhotos:photos assets:assets infoArr:infoArr avPlayers:avPlayers model:model index:0 networkAccessAllowed:NO noAlert:noShowAlert vc:vc];
         } else {  // 当前显示的是非视频资源
             if (vc.allowPickingOriginalPhoto) // 原图
             {
@@ -603,12 +603,11 @@ static NSString *const jsSelectedCell = @"IJSSelectedCell";
             for (int i = 0; i < vc.selectedModels.count; i++)
             {
                 IJSAssetModel *model = vc.selectedModels[i];
-                 [self _getBackThumbnailDataPhotos:photos assets:assets infoArr:infoArr avPlayers:avPlayers model:model index:i networkAccessAllowed:YES noAlert:NO vc:vc];
+                 [self _getBackThumbnailDataPhotos:photos assets:assets infoArr:infoArr avPlayers:avPlayers model:model index:i networkAccessAllowed:YES noAlert:noShowAlert vc:vc];
             }
         }
     }
-
-    [self dismissViewControllerAnimated:YES completion:nil];
+     [self dismissViewControllerAnimated:YES completion:nil];
 }
 /// 获取资源的方法---缩略图
 -(void)_getBackThumbnailDataPhotos:(NSMutableArray *)photos
@@ -622,6 +621,7 @@ static NSString *const jsSelectedCell = @"IJSSelectedCell";
                           vc:(IJSImagePickerController *)vc
 {
     __block BOOL noShowAlert = noAlert;
+    
     if (model.type == JSAssetModelMediaTypeVideo)
     {
         [[IJSImageManager shareManager] getVideoWithAsset:model.asset networkAccessAllowed:networkAccessAllowed progressHandler:^(double progress, NSError *error, BOOL *stop, NSDictionary *info) {
@@ -629,14 +629,15 @@ static NSString *const jsSelectedCell = @"IJSSelectedCell";
         } completion:^(AVPlayerItem *playerItem, NSDictionary *info) {
             if (playerItem)
             {
-                [avPlayers addObject:playerItem];
+                [avPlayers   replaceObjectAtIndex:index withObject:playerItem];
             }
-            if (info)  [infoArr addObject:info];
-            [assets addObject:model.asset];
+            if (info)  [infoArr  replaceObjectAtIndex:index withObject:info];
+            [assets replaceObjectAtIndex:index withObject:model.asset];
             
             for (id item in avPlayers) { if ([item isKindOfClass:[NSNumber class]]) return; }
             
             [self _didGetAllPhotos:nil asset:assets infos:infoArr isSelectOriginalPhoto:YES avPlayers:avPlayers];
+            
         }];
         
     }else{
@@ -689,6 +690,7 @@ static NSString *const jsSelectedCell = @"IJSSelectedCell";
         for (id item in photos) { if ([item isKindOfClass:[NSNumber class]]) return; }
         
         [self _didGetAllPhotos:photos asset:assets infos:infoArr isSelectOriginalPhoto:YES avPlayers:nil];
+
     }];
 }
 

@@ -568,10 +568,12 @@ static CGSize assetGridThumbnailSize;  //预览照片的大小
 - (void)getVideoWithAsset:(id)asset networkAccessAllowed:(BOOL)networkAccessAllowed progressHandler:(void (^)(double progress, NSError *error, BOOL *stop, NSDictionary *info))progressHandler completion:(void (^)(AVPlayerItem *playerItem, NSDictionary *info))completion
 {
 
-    if ([asset isKindOfClass:[PHAsset class]]) {
+    if ([asset isKindOfClass:[PHAsset class]])
+    {
         PHVideoRequestOptions *option = [[PHVideoRequestOptions alloc] init];
         option.networkAccessAllowed = networkAccessAllowed;
-        option.progressHandler = ^(double progress, NSError *error, BOOL *stop, NSDictionary *info) {
+        option.progressHandler = ^(double progress, NSError *error, BOOL *stop, NSDictionary *info)
+        {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (progressHandler) {
                     progressHandler(progress, error, stop, info);

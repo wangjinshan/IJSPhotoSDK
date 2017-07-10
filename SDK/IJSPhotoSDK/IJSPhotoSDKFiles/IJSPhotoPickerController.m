@@ -67,7 +67,7 @@ static NSString *const CellID = @"pickerID";
     self.view.backgroundColor =[UIColor whiteColor];
     self.hasSelectedCell = [NSMutableArray array];
     self.title = self.albumModel.name;
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:[NSBundle localizedStringForKey:@"Cancel"] style:UIBarButtonItemStylePlain target:self action:@selector(_cancleSelectImage)];
+   
    [self _handleCallBackData];
     
     [self _createrData];
@@ -341,6 +341,18 @@ static NSString *const CellID = @"pickerID";
 // 创建底部的工具视图
 -(void) _createrBottomToolBarUI
 {
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:[NSBundle localizedStringForKey:@"Cancel"] style:UIBarButtonItemStylePlain target:self action:@selector(_cancleSelectImage)];
+    // 导航栏左右按钮
+    UIButton *leftButton =[UIButton buttonWithType:UIButtonTypeCustom];
+    leftButton.frame = CGRectMake(0, 0, 70, 15);
+    [leftButton setImage:[[IJSFImageGet loadImageWithBundle:@"JSPhotoSDK" subFile:nil grandson:nil imageName:@"navi_back@2x" imageType:@"png"] imageAntialias]  forState:UIControlStateNormal];
+    leftButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    [leftButton addTarget:self action:@selector(_cleanModelButtonAction) forControlEvents:UIControlEventTouchUpInside];
+    [leftButton setTitle:[NSBundle localizedStringForKey:@"Back"] forState:UIControlStateNormal];
+    leftButton.titleLabel.font = [UIFont systemFontOfSize:14];
+    leftButton.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
+    leftButton.titleEdgeInsets = UIEdgeInsetsMake(0, -15, 0, 0);
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton];
     
     //背景
     UIView *toolBarView =[[UIView alloc]initWithFrame:CGRectMake(0, self.view.js_height - 44, self.view.js_width, 44)];
@@ -454,7 +466,13 @@ static NSString *const CellID = @"pickerID";
     return touchVC;
 }
 
-
+#pragma mark 清空数据
+-(void)_cleanModelButtonAction
+{
+    IJSImagePickerController *vc = (IJSImagePickerController *)self.navigationController;
+    vc.selectedModels = nil;
+     [self.navigationController popViewControllerAnimated:YES];
+}
 
 
 
