@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "IJSPhotoSDK"
-  s.version      = "0.0.3"
+  s.version      = "0.0.1"
 
   s.summary      = "IJSPhotoSDK from PhotoKit."
   s.license          = 'MIT'
@@ -31,13 +31,19 @@ Pod::Spec.new do |s|
 
   # s.dependency 'IJSFoundation'
   s.dependency 'IJSUExtension'
-  s.vendored_frameworks = 'SDK/Required/IJSFoundation.framework'
-
-  s.source_files = 'SDK/IJSPhotoSDK/IJSPhotoSDKFiles/*.{h,m}'
-  s.resource_bundles = {
-    'JSPhotoSDK' => ['SDK/IJSPhotoSDK/Support/JSPhotoSDK.bundle']
-  }
-
+  # s.vendored_frameworks = 'SDK/Required/IJSFoundation.framework'
+  # s.default_subspecs    = 'IJSPhotoSDK'
+  # s.source_files = 'SDK/IJSPhotoSDK/IJSPhotoSDKFiles/*.{h,m}'
+  # s.resource_bundles = {
+  #   'JSPhotoSDK' => ['SDK/IJSPhotoSDK/Support/JSPhotoSDK.bundle']
+  # }
+  s.resource = "SDK/IJSPhotoSDK/Support/JSPhotoSDK.bundle"
+  # ShareSDK提供的UI
+  s.subspec 'IJSPhotoSDKFiles' do |sp|
+    sp.source_files = 'SDK/IJSPhotoSDK/IJSPhotoSDKFiles/*.{h,m}'
+    sp.vendored_frameworks = 'SDK/Required/IJSFoundation.framework'
+    # sp.resources = 'SDK/IJSPhotoSDK/Support/JSPhotoSDK.bundle'
+  end
     
 
 end
