@@ -61,7 +61,7 @@
     self.arrowImage.autoresizesSubviews = NO;
     
     UIView *line =[[UIView alloc]initWithFrame:CGRectMake(2, 0, ScreenW-4, 0.3)];
-    line.backgroundColor =[UIColor blackColor];
+    line.backgroundColor =[UIColor colorWithRed:203/255.0 green:203/255.0 blue:203/255.0 alpha:1];
     [self.contentView addSubview:line];
 }
 -(void) layoutSubviews
