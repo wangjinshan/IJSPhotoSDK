@@ -15,8 +15,12 @@ ios多图选择,高仿微信发朋友圈的功能
 6, 支持国际化配置
 
 ```
-
-
+### 项目演示
+![](http://upload-images.jianshu.io/upload_images/2845360-e1139e616dc9b5ce.gif?imageMogr2/auto-orient/strip)
+![](http://upload-images.jianshu.io/upload_images/2845360-7072385da979224f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/2845360-6397045939f95518.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/2845360-8dc30f4f738a4d7e.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/2845360-cbc745c174236711.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 ### 手动拖入的方式
 git下载地址:  https://github.com/wangjinshan/IJSPhotoSDK 
 #### 1, 下载sdk并把里面的SDK文件夹直接拖入到项目中去
