@@ -31,81 +31,80 @@ Pod::Spec.new do |s|
 
 
   s.frameworks       = 'UIKit','Photos'
-  s.default_subspecs    = 'IJSPhotoSDK'
-
+  
   # 依赖的资源 
   s.resource = "SDK/Resources/JSPhotoSDK.bundle"
-  s.vendored_frameworks = 'SDK/Required/IJSFoundation.framework'
-  # 相互依赖
-  # s.dependency 'SDK/IJSUExtension','SDK/IJSImageEditSDK','SDK/IJSPhotoSDK'
+  s.dependency 'IJSFoundation'
+  s.dependency 'IJSUExtension'
 
-  # UI 扩展库文件
-  	s.subspec 'IJSUExtension' do |sp|
-        sp.source_files = 'SDK/IJSUExtension/*.{h,m}'
-    end
+  s.subspec 'IJSPhotoSDK' do |sp|
+    sp.source_files = 'SDK/IJSPhotoSDK/ConstantFile/*.*',
+    'SDK/IJSPhotoSDK/Controllers/*.*',
+    'SDK/IJSPhotoSDK/View/*.*',
+    'SDK/IJSPhotoSDK/Model/*.*',
+    'SDK/IJSImageEditSDK/ConstantFile/*.*',
+    'SDK/IJSImageEditSDK/Controller/*.*',
+    'SDK/IJSImageEditSDK/IJSMapView/*.*',
+    'SDK/IJSImageEditSDK/IJSVideoDrawTool/*.*',
+    'SDK/IJSImageEditSDK/Model/*.*',
+    'SDK/IJSImageEditSDK/TOCropViewController/*.*',
+    'SDK/IJSImageEditSDK/View/*.*'  
+  end
+  
   # 照片选择框架 IJSPhotoSDK
-	s.subspec 'IJSPhotoSDK' do |sp|
-        # ConstantFile
-        sp.subspec 'ConstantFile' do |ssp|
-            ssp.source_files = 'SDK/IJSPhotoSDK/ConstantFile/*.{h,m}'
-        end
-        # Controllers
-        sp.subspec 'Controllers' do |ssp|
-            ssp.source_files = 'SDK/IJSPhotoSDK/Controllers/*.{h,m}'
-        end
-        # Model
-        sp.subspec 'Model' do |ssp|
-            ssp.source_files = 'SDK/IJSPhotoSDK/Model/*.{h,m}'
-        end
-        # View
-        sp.subspec 'View' do |ssp|
-            ssp.source_files = 'SDK/IJSPhotoSDK/View/*.{h,m}'
-        end
+	# s.subspec 'IJSPhotoSDK' do |sp|
+ #        # ConstantFile
+ #        sp.subspec 'ConstantFile' do |ssp|
+ #            ssp.source_files = 'SDK/IJSPhotoSDK/ConstantFile/*.{h,m}'
+ #        end
+ #        # Controllers
+ #        sp.subspec 'Controllers' do |ssp|
+ #            ssp.source_files = 'SDK/IJSPhotoSDK/Controllers/*.{h,m}'
+ #        end
+ #        # Model
+ #        sp.subspec 'Model' do |ssp|
+ #            ssp.source_files = 'SDK/IJSPhotoSDK/Model/*.{h,m}'
+ #        end
+ #        # View
+ #        sp.subspec 'View' do |ssp|
+ #            ssp.source_files = 'SDK/IJSPhotoSDK/View/*.{h,m}'
+ #        end
 
-    end
+ #    end
 	
 	# 图片视频编辑框架 IJSImageEditSDK 
-	s.subspec 'IJSImageEditSDK' do |sp|
-        # ConstantFile
-        sp.subspec 'ConstantFile' do |ssp|
-            ssp.source_files = 'SDK/IJSImageEditSDK/View/*.{h,m}'
-        end
-        # Controller
-        sp.subspec 'Controller' do |ssp|
-            ssp.source_files = 'SDK/IJSImageEditSDK/Controller/*.{h,m}'
-        end
-        # Model
-        sp.subspec 'Model' do |ssp|
-            ssp.source_files = 'SDK/IJSImageEditSDK/Model/*.{h,m}'
-        end
-        # View
-        sp.subspec 'View' do |ssp|
-            ssp.source_files = 'SDK/IJSImageEditSDK/View/*.{h,m}'
-        end
-        # IJSMapView
-        sp.subspec 'IJSMapView' do |ssp|
-            ssp.source_files = 'SDK/IJSImageEditSDK/IJSMapView/*.{h,m}'
-        end
-        # IJSVideoDrawTool
-        sp.subspec 'IJSVideoDrawTool' do |ssp|
-            ssp.source_files = 'SDK/IJSImageEditSDK/IJSVideoDrawTool/*.{h,m}'
-        end
-        # TOCropViewController
-        sp.subspec 'TOCropViewController' do |ssp|
-            ssp.source_files = 'SDK/IJSImageEditSDK/TOCropViewController/*.*'
-        end
-    end
+	# s.subspec 'IJSImageEditSDK' do |sp|
+ #        # ConstantFile
+ #        sp.subspec 'ConstantFile' do |ssp|
+ #            ssp.source_files = 'SDK/IJSImageEditSDK/View/*.{h,m}'
+ #        end
+ #        # Controller
+ #        sp.subspec 'Controller' do |ssp|
+ #            ssp.source_files = 'SDK/IJSImageEditSDK/Controller/*.{h,m}'
+ #        end
+ #        # Model
+ #        sp.subspec 'Model' do |ssp|
+ #            ssp.source_files = 'SDK/IJSImageEditSDK/Model/*.{h,m}'
+ #        end
+ #        # View
+ #        sp.subspec 'View' do |ssp|
+ #            ssp.source_files = 'SDK/IJSImageEditSDK/View/*.{h,m}'
+ #        end
+ #        # IJSMapView
+ #        sp.subspec 'IJSMapView' do |ssp|
+ #            ssp.source_files = 'SDK/IJSImageEditSDK/IJSMapView/*.{h,m}'
+ #        end
+ #        # IJSVideoDrawTool
+ #        sp.subspec 'IJSVideoDrawTool' do |ssp|
+ #            ssp.source_files = 'SDK/IJSImageEditSDK/IJSVideoDrawTool/*.{h,m}'
+ #        end
+ #        # TOCropViewController
+ #        sp.subspec 'TOCropViewController' do |ssp|
+ #            ssp.source_files = 'SDK/IJSImageEditSDK/TOCropViewController/*.*'
+ #        end
+ #    end
 
 end
-
-
-
-
-
-
-
-
-
 
 
 # Pod::Spec.new do |s|
