@@ -13,14 +13,24 @@ ios多图选择,高仿微信发朋友圈的功能
 4, 可以通过3DTouch或者点击播放 Video gif  livephoto等资源
 5,  预览详情支持 单击 双击 缩合等手势处理照片查看
 6, 支持国际化配置
+7, 新增视频处理包括,裁剪,涂鸦,水印,贴图等等
 
 ```
 ### 项目演示
+
 ![](http://upload-images.jianshu.io/upload_images/2845360-e1139e616dc9b5ce.gif?imageMogr2/auto-orient/strip)
-![](http://upload-images.jianshu.io/upload_images/2845360-7072385da979224f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-![](http://upload-images.jianshu.io/upload_images/2845360-6397045939f95518.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-![](http://upload-images.jianshu.io/upload_images/2845360-8dc30f4f738a4d7e.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-![](http://upload-images.jianshu.io/upload_images/2845360-cbc745c174236711.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/2845360-c12b955a610679df.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/2845360-7057f29c498d1e06.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/2845360-ab39607b7469b992.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/2845360-24a9374b9a49204b.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/2845360-24a9374b9a49204b.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/2845360-d1c54660f95fa431.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/2845360-01d4de8f1e86c544.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/2845360-359b1fc91db1fe8b.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/2845360-2415f1e7467133fb.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/2845360-0b0d573e480ed8e3.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/2845360-82c00d5157e2442a.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 ### 手动拖入的方式
 git下载地址:  https://github.com/wangjinshan/IJSPhotoSDK 
 #### 1, 下载sdk并把里面的SDK文件夹直接拖入到项目中去
@@ -28,24 +38,60 @@ git下载地址:  https://github.com/wangjinshan/IJSPhotoSDK
 
 ```
 1,导入头文件
-#import <IJSImagePickerController.h>
+//必须
+#import "IJSImagePickerController.h"
+// 可选
+#import "IJSMapViewModel.h"
+#import <IJSFoundation/IJSFoundation.h>
+#import <Photos/Photos.h>
 2,签订协议
 <IJSImagePickerControllerDelegate>
 3,获取用户选择的图片等资源可以通过 block 也可以通过代理方法
 如下:
 // 1 block 方法
- IJSImagePickerController *vc =[[IJSImagePickerController alloc]initWithMaxImagesCount:9 delegate:self];
-    vc.didFinishUserPickingImageHandle = ^(NSArray<UIImage *> *photos, NSArray *avPlayers, NSArray *assets, NSArray<NSDictionary *> *infos, BOOL isSelectOriginalPhoto) {
-        NSLog(@"---k---%@",photos.firstObject);
-    };
-    [self presentViewController:vc animated:YES completion:nil];
-// 2 协议方法
- IJSImagePickerController *vc =[[IJSImagePickerController alloc]initWithMaxImagesCount:9 delegate:self];
-    [self presentViewController:vc animated:YES completion:nil];
-    
--(void)imagePickerController:(IJSImagePickerController *)picker isSelectOriginalPhoto:(BOOL)isSelectOriginalPhoto didFinishPickingPhotos:(NSArray<UIImage *> *)photos assets:(NSArray *)assets infos:(NSArray<NSDictionary *> *)infos avPlayers:(NSArray *)avPlayers
+- (IBAction)_selectImageActin:(id)sender
 {
-    NSLog(@"----w---%@",photos.firstObject);
+    __weak typeof(self) weakSelf = self;
+    IJSImagePickerController *imageVc = [[IJSImagePickerController alloc] initWithMaxImagesCount:3 delegate:self];
+    // 可选写不写
+    imageVc.minImagesCount = 1; // 图片最小选择要求,可以不设置
+    imageVc.minVideoCut = 4;   //视频最小裁剪尺寸 可选(默认是4秒)
+    //可选  可以通过代理的回调去获取数据
+    imageVc.didFinishUserPickingImageHandle = ^(NSArray<UIImage *> *photos, NSArray *avPlayers, NSArray *assets, NSArray<NSDictionary *> *infos, BOOL isSelectOriginalPhoto, IJSPExportSourceType sourceType) {
+        if (sourceType == IJSPImageType)
+        {
+            weakSelf.imageArr = [NSMutableArray arrayWithArray:photos];
+            [weakSelf.myTableview reloadData];
+        }
+        else
+        {
+            NSLog(@"%@",avPlayers);
+        }
+    };
+    /*
+     1,贴图资源可以不传,不穿则读取SDK内存的资源,可以找到 JSPhotoSDK.bundle Expression文件 把自己的资源放到里面不需要管文件名字sdk自己会便利
+     2, 如果是外部动态添加资源选择下面添加的方式 需要传 IJSMapViewModel 的数组
+     */
+//    NSString *bundlePath = [[NSBundle mainBundle]pathForResource:@"JSPhotoSDK" ofType:@"bundle"];
+//    NSString *filePath =[bundlePath stringByAppendingString:@"/Expression"];
+//    [IJSFFilesManager ergodicFilesFromFolderPath:filePath completeHandler:^(NSInteger fileCount, NSInteger fileSzie, NSMutableArray *filePath) {
+//        IJSMapViewModel *model =[[IJSMapViewModel alloc]initWithImageDataModel:filePath];
+//        [self.mapDataArr addObject:model];
+//        imageVc.mapImageArr  = self.mapDataArr;
+//    }];
+      [self presentViewController:imageVc animated:YES completion:nil];
+}
+ //  不想在block中做,可以选择代理方法 
+#pragma mark - 代理方法
+-(void)imagePickerController:(IJSImagePickerController *)picker isSelectOriginalPhoto:(BOOL)isSelectOriginalPhoto didFinishPickingPhotos:(NSArray<UIImage *> *)photos assets:(NSArray *)assets infos:(NSArray<NSDictionary *> *)infos avPlayers:(NSArray *)avPlayers sourceType:(IJSPExportSourceType)sourceType
+{
+    if (sourceType == IJSPVideoType)
+    {
+        IJSVideoTestController *testVc =[[IJSVideoTestController alloc] init];
+        AVAsset *avaseet = [AVAsset assetWithURL:avPlayers.firstObject];
+        testVc.avasset = avaseet;
+        [self presentViewController:testVc animated:YES completion:nil];
+    }
 }
 大功告成就是这么简单
 额外注意点:
@@ -99,6 +145,7 @@ SDK:  1, IJSPhotoSDK主要存放项目文件和项目资源,
 
 ```
 ###  目前发现的不足:
-1, 照片视频暂时不支持编辑....开发中
-2, 理论上支持到ios之上 ios7 暂时没测试
-3, 删除照片,创建相册 ui 没有更新
+
+1, 暂时没有适配 iphone x
+2, 图片裁剪少了一次国际化
+3, 性能还需要再优化
