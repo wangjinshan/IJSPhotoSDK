@@ -15,6 +15,7 @@
 #import "IJSMapViewModel.h"
 #import <IJSFoundation/IJSFoundation.h>
 
+#import <Photos/Photos.h>
 
 static NSString *const cellID = @"cellID";
 

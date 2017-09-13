@@ -10,9 +10,6 @@
 		1C0F631E1F3F190200C80954 /* IJSVideoTrimView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C0F631D1F3F190200C80954 /* IJSVideoTrimView.m */; };
 		1C0F63211F3F195400C80954 /* IJSVideoRulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C0F63201F3F195400C80954 /* IJSVideoRulerView.m */; };
 		1C0F63241F3F198900C80954 /* IJSVideoSlideView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C0F63231F3F198900C80954 /* IJSVideoSlideView.m */; };
-		1C0F632A1F3F408B00C80954 /* 01.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 1C0F63281F3F408B00C80954 /* 01.mp4 */; };
-		1C0F632B1F3F408B00C80954 /* 02.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 1C0F63291F3F408B00C80954 /* 02.mp4 */; };
-		1C0F632E1F3F433F00C80954 /* 03.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 1C0F632D1F3F433E00C80954 /* 03.mp4 */; };
 		1C30D64F1F568EEC004D547A /* IJSVideoTestController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C30D64E1F568EEC004D547A /* IJSVideoTestController.m */; };
 		1C353B7F1F42F31300DB7349 /* IJSVideoManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C353B7E1F42F31300DB7349 /* IJSVideoManager.m */; };
 		1C685BCD1F679EF900EE986C /* IJSMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C685BC31F679EF900EE986C /* IJSMapView.m */; };
@@ -99,9 +96,6 @@
 		1C0F63201F3F195400C80954 /* IJSVideoRulerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IJSVideoRulerView.m; sourceTree = "<group>"; };
 		1C0F63221F3F198900C80954 /* IJSVideoSlideView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IJSVideoSlideView.h; sourceTree = "<group>"; };
 		1C0F63231F3F198900C80954 /* IJSVideoSlideView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IJSVideoSlideView.m; sourceTree = "<group>"; };
-		1C0F63281F3F408B00C80954 /* 01.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = 01.mp4; sourceTree = "<group>"; };
-		1C0F63291F3F408B00C80954 /* 02.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = 02.mp4; sourceTree = "<group>"; };
-		1C0F632D1F3F433E00C80954 /* 03.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = 03.mp4; sourceTree = "<group>"; };
 		1C30D64D1F568EEC004D547A /* IJSVideoTestController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IJSVideoTestController.h; sourceTree = "<group>"; };
 		1C30D64E1F568EEC004D547A /* IJSVideoTestController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IJSVideoTestController.m; sourceTree = "<group>"; };
 		1C353B7D1F42F31300DB7349 /* IJSVideoManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSVideoManager.h; sourceTree = "<group>"; };
@@ -379,9 +373,6 @@
 				7477D5C71F3C4BE9005F348D /* ViewController.m */,
 				1C30D64D1F568EEC004D547A /* IJSVideoTestController.h */,
 				1C30D64E1F568EEC004D547A /* IJSVideoTestController.m */,
-				1C0F63281F3F408B00C80954 /* 01.mp4 */,
-				1C0F63291F3F408B00C80954 /* 02.mp4 */,
-				1C0F632D1F3F433E00C80954 /* 03.mp4 */,
 				74CC34751F06210E00118CA9 /* Main.storyboard */,
 				74CC34781F06210E00118CA9 /* Assets.xcassets */,
 				74CC347A1F06210E00118CA9 /* LaunchScreen.storyboard */,
@@ -735,15 +726,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1C0F632E1F3F433F00C80954 /* 03.mp4 in Resources */,
 				74CC347C1F06210E00118CA9 /* LaunchScreen.storyboard in Resources */,
 				74CC34791F06210E00118CA9 /* Assets.xcassets in Resources */,
 				74DCA6E71F3C4B4300531739 /* JSPhotoSDK.bundle in Resources */,
 				74DCA6B91F3C4B4300531739 /* Info.plist in Resources */,
 				74CC34771F06210E00118CA9 /* Main.storyboard in Resources */,
-				1C0F632A1F3F408B00C80954 /* 01.mp4 in Resources */,
 				74DCA6B81F3C4B4300531739 /* TOCropViewControllerLocalizable.strings in Resources */,
-				1C0F632B1F3F408B00C80954 /* 02.mp4 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

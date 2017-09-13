@@ -29,9 +29,16 @@ Pod::Spec.new do |s|
                 
   s.source       = { :git => "https://github.com/wangjinshan/IJSPhotoSDK.git", :tag => "#{s.version}" ,:submodules => true}
 
+
+  s.frameworks       = 'UIKit','Photos'
+  s.default_subspecs    = 'IJSPhotoSDK'
+
   # 依赖的资源 
-  s.resource = "SDK/IJSPhotoSDK/Support/JSPhotoSDK.bundle"
+  s.resource = "SDK/Resources/JSPhotoSDK.bundle"
   s.vendored_frameworks = 'SDK/Required/IJSFoundation.framework'
+  # 相互依赖
+  # s.dependency 'SDK/IJSUExtension','SDK/IJSImageEditSDK','SDK/IJSPhotoSDK'
+
   # UI 扩展库文件
   	s.subspec 'IJSUExtension' do |sp|
         sp.source_files = 'SDK/IJSUExtension/*.{h,m}'
@@ -85,7 +92,7 @@ Pod::Spec.new do |s|
         end
         # TOCropViewController
         sp.subspec 'TOCropViewController' do |ssp|
-            ssp.source_files = 'SDK/IJSImageEditSDK/TOCropViewController/**/*'
+            ssp.source_files = 'SDK/IJSImageEditSDK/TOCropViewController/*.*'
         end
     end
 
