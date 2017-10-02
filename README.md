@@ -99,7 +99,7 @@ git下载地址:  https://github.com/wangjinshan/IJSPhotoSDK
 Xcode--PROJECT---info --- Localizations---Chinese(Simplified)
 2, 在项目的plist文件中添加两个字段
 Privacy - Photo Library Usage Description ----允许应用访问相机权限
-View controller-based status bar appearance --NO 改变导航条
+
 
 ``` 
 ###  cocoapods 集成方式
