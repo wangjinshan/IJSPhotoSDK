@@ -15,11 +15,11 @@ typedef void (^finishCallBack)(UIImage *image);
 
 @interface IJSDrawingView : UIView
 
-@property (nonatomic, strong) UIColor *pathColor; // 路径颜色
-@property (nonatomic, assign) CGFloat pathWidth;  // 路径宽度
-@property(nonatomic,copy) void(^isDrawing)(void);  // 正在绘制
-@property(nonatomic,copy) void(^isEndDrawing)(void);  // 结束绘制
-@property (nonatomic, strong) IJSDrawingModel *model; // 模型
+@property (nonatomic, strong) UIColor *pathColor;       // 路径颜色
+@property (nonatomic, assign) CGFloat pathWidth;        // 路径宽度
+@property (nonatomic, copy) void (^isDrawing)(void);    // 正在绘制
+@property (nonatomic, copy) void (^isEndDrawing)(void); // 结束绘制
+@property (nonatomic, strong) IJSDrawingModel *model;   // 模型
 
 - (void)cleanAllPath;
 - (void)cleanLastPath;

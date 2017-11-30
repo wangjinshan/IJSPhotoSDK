@@ -19,7 +19,7 @@
  *
  *  @return 中文转义过的url
  */
-+(NSString *)stringByAddingPercentEncodingWithAllowedCharactersWithChinese:(NSString *)urlString;
++ (NSString *)stringByAddingPercentEncodingWithAllowedCharactersWithChinese:(NSString *)urlString;
 
 /**
  *  对url中含有%3A%2F%2F的url转码
@@ -28,10 +28,6 @@
  *
  *  @return 转义过的url
  */
-+(NSString *)stringByRemovingPercentEncodingWithMessyCode:(NSString *)urlString;
-
-
-
-
++ (NSString *)stringByRemovingPercentEncodingWithMessyCode:(NSString *)urlString;
 
 @end

@@ -10,6 +10,7 @@
 #import "IJSAssetModel.h"
 #import "IJSImageManager.h"
 #import "IJSConst.h"
+#import "IJSExtension.h"
 
 @implementation IJSAssetModel
 
@@ -34,18 +35,20 @@
 - (CGFloat)assetHeight
 {
     if (_assetHeight)
+    {
         return _assetHeight;
+    }
     CGSize imageSize = [[IJSImageManager shareManager] photoSizeWithAsset:self.asset];
     if (imageSize.width == 0)
     {
         return JSScreenHeight;
     }
     CGFloat imageHeight = JSScreenWidth * imageSize.height / imageSize.width;
+    if (imageHeight > JSScreenHeight - IJSGStatusBarAndNavigationBarHeight - IJSGTabbarSafeBottomMargin - IJSGNavigationBarHeight)
+    {
+        return JSScreenHeight - IJSGStatusBarAndNavigationBarHeight - IJSGTabbarSafeBottomMargin - IJSGNavigationBarHeight;
+    }
     return imageHeight;
 }
-
-
-
-
 
 @end

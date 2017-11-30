@@ -106,7 +106,7 @@
     [self _hiddenSquareViewState:NO];
     if (self.handleSingleTap)
     {
-       self.handleSingleTap(self.textView, YES);
+        self.handleSingleTap(self.textView, YES);
     }
     [self removeFromSuperview];
 }
@@ -125,7 +125,7 @@
     {
         if (self.textViewExpoetViewPanCallBack)
         {
-          self.textViewExpoetViewPanCallBack(self.center);
+            self.textViewExpoetViewPanCallBack(self.center);
         }
     }
 }

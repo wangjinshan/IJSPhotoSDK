@@ -15,7 +15,7 @@
 @interface IJSIImputTextView : UIView
 
 @property (nonatomic, copy) void (^textCallBackBlock)(UITextView *textView); // 监听确定按钮
-@property(nonatomic,copy) void (^textCancelCallBack)(void);  // 取消
+@property (nonatomic, copy) void (^textCancelCallBack)(void);                // 取消
 @property (nonatomic, strong) UITextView *tapTextView;                       // 单击返回的view
 
 @end

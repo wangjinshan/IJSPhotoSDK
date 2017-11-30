@@ -54,7 +54,6 @@
 
 #define IJSVideoSecondCuttrimViewHeight IJSImageEditScreenHeight * 0.25
 
-
 #endif /* IJSImageConst_h */
 
 // http://www.cnblogs.com/vicstudio/p/3358358.html

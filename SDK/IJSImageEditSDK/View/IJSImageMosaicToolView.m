@@ -65,7 +65,7 @@
     [self _resetButtonStatus:button];
     if (self.typeOneCallBack)
     {
-      self.typeOneCallBack(button);
+        self.typeOneCallBack(button);
     }
     button.selected = !button.selected;
 }
@@ -84,7 +84,7 @@
     [self _resetButtonStatus:button];
     if (self.cancleLastCallBack)
     {
-      self.cancleLastCallBack(button);
+        self.cancleLastCallBack(button);
     }
     button.selected = !button.selected;
 }
@@ -97,7 +97,7 @@
     {
         if ([buttonView isKindOfClass:[UIButton class]])
         {
-           ((UIButton *) buttonView).selected = NO;
+            ((UIButton *) buttonView).selected = NO;
         }
     }
     button.selected = selected;

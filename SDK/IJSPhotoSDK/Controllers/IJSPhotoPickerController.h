@@ -24,6 +24,6 @@ typedef void (^callBackReload)(NSMutableArray *selectedModel, NSMutableArray *al
 @property (nonatomic, strong) IJSAlbumModel *albumModel;
 
 /* 数据回调刷新表格 */
-@property (nonatomic,copy) callBackReload callBack;
+@property (nonatomic, copy) callBackReload callBack;
 
 @end

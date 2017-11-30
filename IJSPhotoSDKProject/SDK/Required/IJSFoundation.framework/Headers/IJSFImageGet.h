@@ -47,6 +47,4 @@
  */
 + (UIImage *)loadImageSpecResourceBundleName:(NSString *)bundleName imageName:(NSString *)imageName imageType:(NSString *)imageType;
 
-
-
 @end

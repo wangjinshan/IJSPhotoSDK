@@ -102,7 +102,7 @@
 {
     if (self.allLineArr.count != 0)
     {
-       [self.allLineArr removeLastObject];
+        [self.allLineArr removeLastObject];
     }
     [self drawSmearView]; //重新绘制
 }
@@ -118,7 +118,7 @@
 {
     if (self.gaussanViewDidTap)
     {
-      self.gaussanViewDidTap();
+        self.gaussanViewDidTap();
     }
 }
 
@@ -141,7 +141,7 @@
     [self addPoint:currentDraggingPosition];
     if (self.gaussanViewdrawingCallBack)
     {
-       self.gaussanViewdrawingCallBack(YES);
+        self.gaussanViewdrawingCallBack(YES);
     }
 }
 // 结束
@@ -152,7 +152,7 @@
     [self addPoint:currentDraggingPosition];
     if (self.gaussanViewEndDrawCallBack)
     {
-       self.gaussanViewEndDrawCallBack(YES);
+        self.gaussanViewEndDrawCallBack(YES);
     }
 }
 // 取消
@@ -163,7 +163,7 @@
     [self addPoint:currentDraggingPosition];
     if (self.gaussanViewEndDrawCallBack)
     {
-      self.gaussanViewEndDrawCallBack(YES);
+        self.gaussanViewEndDrawCallBack(YES);
     }
 }
 - (void)addPoint:(CGPoint)p
@@ -177,7 +177,7 @@
 {
     if (completionBlock)
     {
-      completionBlock(self.nowImage, nil, nil);
+        completionBlock(self.nowImage, nil, nil);
     }
 }
 

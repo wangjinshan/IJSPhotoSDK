@@ -19,7 +19,7 @@
 
 static NSString *const CellID = @"pickerID";
 
-@interface IJSPhotoPickerController () <UICollectionViewDelegate, UICollectionViewDataSource,IJSPhotoPickerCellDelegate>
+@interface IJSPhotoPickerController () <UICollectionViewDelegate, UICollectionViewDataSource, IJSPhotoPickerCellDelegate>
 
 /* 解析出来的照片的个数 */
 @property (nonatomic, strong) NSMutableArray<IJSAssetModel *> *assetModelArr;
@@ -33,14 +33,14 @@ static NSString *const CellID = @"pickerID";
 @property (nonatomic, strong) NSMutableArray<IJSPhotoPickerCell *> *hasSelectedCell;
 /* 存储被点击的modle */
 @property (nonatomic, strong) NSMutableArray<IJSAssetModel *> *selectedModels;
-@property(nonatomic,weak) IJSLodingView *lodingView;  // 加载界面
-@property(nonatomic,assign) CGFloat itemHeight;  // item的高度
+@property (nonatomic, weak) IJSLodingView *lodingView; // 加载界面
+@property (nonatomic, assign) CGFloat itemHeight;      // item的高度
 @end
 
 @implementation IJSPhotoPickerController
 
 #pragma mark 内存
--(void)dealloc
+- (void)dealloc
 {
     JSLog(@"----释放----IJSPhotoPickerController");
 }
@@ -53,19 +53,19 @@ static NSString *const CellID = @"pickerID";
     }
     return _selectedModels;
 }
--(NSMutableArray *)assetModelArr
+- (NSMutableArray *)assetModelArr
 {
     if (_assetModelArr == nil)
     {
-        _assetModelArr =[NSMutableArray array];
+        _assetModelArr = [NSMutableArray array];
     }
     return _assetModelArr;
 }
--(NSMutableArray *)hasSelectedCell
+- (NSMutableArray *)hasSelectedCell
 {
     if (_hasSelectedCell == nil)
     {
-        _hasSelectedCell =[NSMutableArray array];
+        _hasSelectedCell = [NSMutableArray array];
     }
     return _hasSelectedCell;
 }
@@ -102,10 +102,10 @@ static NSString *const CellID = @"pickerID";
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     IJSPhotoPickerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CellID forIndexPath:indexPath];
-    IJSImagePickerController *vc = (IJSImagePickerController *)self.navigationController;
+    IJSImagePickerController *vc = (IJSImagePickerController *) self.navigationController;
     IJSAssetModel *model = self.assetModelArr[indexPath.row];
     cell.type = model.type;
-   
+
     if (model.type == JSAssetModelMediaTypeVideo || model.type == JSAssetModelMediaTypeAudio)
     {
         if (self.selectedModels.count != 0)
@@ -114,7 +114,7 @@ static NSString *const CellID = @"pickerID";
         }
         else
         {
-             model.didMask = NO;
+            model.didMask = NO;
         }
     }
     else
@@ -131,7 +131,7 @@ static NSString *const CellID = @"pickerID";
     }
     cell.model = model;
     cell.cellDelegate = self;
-    
+
     if (iOS9Later)
     {
         if (self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable)
@@ -144,9 +144,9 @@ static NSString *const CellID = @"pickerID";
 #pragma mark tableview的点击方法
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    IJSImagePickerController *vc = (IJSImagePickerController *)self.navigationController;
+    IJSImagePickerController *vc = (IJSImagePickerController *) self.navigationController;
     IJSPhotoPreviewController *preViewVc = [[IJSPhotoPreviewController alloc] init];
-    preViewVc.isPreviewButton = NO;  // 正常点进去
+    preViewVc.isPreviewButton = NO;                     // 正常点进去
     if (self.selectedModels.count >= vc.maxImagesCount) // 选中的个数超标
     {
         for (IJSAssetModel *model in self.selectedModels) //选中的model
@@ -180,7 +180,7 @@ static NSString *const CellID = @"pickerID";
             {
                 NSString *title = [NSString stringWithFormat:@"%@", [NSBundle localizedStringForKey:@"Video cannot be selected"]];
                 [vc showAlertWithTitle:title];
-                return ;
+                return;
             }
             else
             {
@@ -193,10 +193,10 @@ static NSString *const CellID = @"pickerID";
     }
 }
 #pragma mark - cell的代理方法
--(void)didClickCellButtonWithButtonState:(BOOL)state buttonIndex:(NSInteger)currentIndex
+- (void)didClickCellButtonWithButtonState:(BOOL)state buttonIndex:(NSInteger)currentIndex
 {
     IJSAssetModel *currentModel = self.assetModelArr[currentIndex];
-    IJSImagePickerController *vc = (IJSImagePickerController *)self.navigationController;
+    IJSImagePickerController *vc = (IJSImagePickerController *) self.navigationController;
     if (state) // 被选中
     {
         currentModel.isSelectedModel = YES;
@@ -265,7 +265,7 @@ static NSString *const CellID = @"pickerID";
 {
     // lodingView
 
-    IJSImagePickerController *vc = (IJSImagePickerController *)self.navigationController;
+    IJSImagePickerController *vc = (IJSImagePickerController *) self.navigationController;
     // 不满足最小要求就警告
     if (vc.minImagesCount && vc.selectedModels.count < vc.minImagesCount)
     {
@@ -273,7 +273,7 @@ static NSString *const CellID = @"pickerID";
         [vc showAlertWithTitle:title];
         return;
     }
-    IJSLodingView *lodingView =[IJSLodingView showLodingViewAddedTo:self.view title:@"正在处理中... ..."];
+    IJSLodingView *lodingView = [IJSLodingView showLodingViewAddedTo:self.view title:@"正在处理中... ..."];
     self.lodingView = lodingView;
     NSMutableArray *photos = [NSMutableArray array];
     NSMutableArray *assets = [NSMutableArray array];
@@ -286,13 +286,13 @@ static NSString *const CellID = @"pickerID";
     }
     // 解析数据并返回
     __block BOOL noShowAlert = YES;
-    __weak typeof (self) weakSelf = self;
+    __weak typeof(self) weakSelf = self;
     if (vc.allowPickingOriginalPhoto) // 获取本地原图
     {
         for (int i = 0; i < vc.selectedModels.count; i++)
         {
             IJSAssetModel *model = vc.selectedModels[i];
-            
+
             if (model.image) //裁剪过了
             {
                 [photos replaceObjectAtIndex:i withObject:model.image];
@@ -386,7 +386,7 @@ static NSString *const CellID = @"pickerID";
                     {
                         [weakSelf _didGetAllPhotos:photos asset:assets infos:infoArr isSelectOriginalPhoto:NO];
                     }
-                    
+
                 } progressHandler:^(double progress, NSError *error, BOOL *stop, NSDictionary *info) {
                     // 如果图片正在从iCloud同步中,提醒用户
                     if (progress < 1 && noShowAlert)
@@ -399,8 +399,8 @@ static NSString *const CellID = @"pickerID";
             }
         }
     }
-    
-    if (vc.selectedModels.count <= 0)  //用户没有选择的情况下直接返回空数据
+
+    if (vc.selectedModels.count <= 0) //用户没有选择的情况下直接返回空数据
     {
         [self _didGetAllPhotos:photos asset:assets infos:infoArr isSelectOriginalPhoto:NO];
     }
@@ -410,16 +410,16 @@ static NSString *const CellID = @"pickerID";
 - (void)_didGetAllPhotos:(NSArray *)photos asset:(NSArray *)asset infos:(NSArray *)infos isSelectOriginalPhoto:(BOOL)isSelectOriginalPhoto
 {
     [self.lodingView removeFromSuperview];
-    
+
     [self dismissViewControllerAnimated:YES completion:^{
         //  block 方式进行数据返回
         IJSImagePickerController *vc = (IJSImagePickerController *) self.navigationController;
         if (vc.didFinishUserPickingImageHandle)
         {
-            vc.didFinishUserPickingImageHandle(photos, nil, asset, infos, isSelectOriginalPhoto,IJSPImageType);
+            vc.didFinishUserPickingImageHandle(photos, nil, asset, infos, isSelectOriginalPhoto, IJSPImageType);
         }
         // 代理方式
-        if ([vc.imagePickerDelegate respondsToSelector:@selector(imagePickerController:isSelectOriginalPhoto:didFinishPickingPhotos:assets:infos:avPlayers: sourceType:)])
+        if ([vc.imagePickerDelegate respondsToSelector:@selector(imagePickerController:isSelectOriginalPhoto:didFinishPickingPhotos:assets:infos:avPlayers:sourceType:)])
         {
             [vc.imagePickerDelegate imagePickerController:vc isSelectOriginalPhoto:isSelectOriginalPhoto didFinishPickingPhotos:photos assets:asset infos:infos avPlayers:nil sourceType:IJSPImageType];
         }
@@ -428,7 +428,7 @@ static NSString *const CellID = @"pickerID";
 #pragma mark 取消
 - (void)_cancleSelectImage
 {
-    IJSImagePickerController *vc = (IJSImagePickerController *)self.navigationController;
+    IJSImagePickerController *vc = (IJSImagePickerController *) self.navigationController;
     if (vc.didCancelHandle)
     {
         vc.didCancelHandle();
@@ -457,13 +457,13 @@ static NSString *const CellID = @"pickerID";
     leftButton.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
     leftButton.titleEdgeInsets = UIEdgeInsetsMake(0, -15, 0, 0);
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:leftButton];
-    
+
     //背景
     UIView *toolBarView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.js_height - 44, self.view.js_width, 44)];
     toolBarView.backgroundColor = [UIColor colorWithRed:(34 / 255.0) green:(34 / 255.0) blue:(34 / 255.0) alpha:1.0];
     [self.view addSubview:toolBarView];
     self.automaticallyAdjustsScrollViewInsets = NO;
-    
+
     //预览
     UIButton *previewButton = [UIButton buttonWithType:UIButtonTypeCustom];
     previewButton.frame = CGRectMake(5, 5, 70, 30);
@@ -472,7 +472,7 @@ static NSString *const CellID = @"pickerID";
     [previewButton addTarget:self action:@selector(_pushPreViewPhoto) forControlEvents:UIControlEventTouchUpInside];
     [toolBarView addSubview:previewButton];
     self.previewButton = previewButton;
-    
+
     // 完成
     UIButton *finishButton = [UIButton buttonWithType:UIButtonTypeCustom];
     finishButton.frame = CGRectMake(self.view.js_width - 70, 5, 70, 30); //27 81 28
@@ -516,7 +516,7 @@ static NSString *const CellID = @"pickerID";
 {
     [[IJSImageManager shareManager] getAssetsFromFetchResult:self.albumModel.result allowPickingVideo:YES allowPickingImage:YES completion:^(NSArray<IJSAssetModel *> *models) {
         self.assetModelArr = [NSMutableArray arrayWithArray:models];
-        [self.assetModelArr enumerateObjectsUsingBlock:^(IJSAssetModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [self.assetModelArr enumerateObjectsUsingBlock:^(IJSAssetModel *_Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
             obj.onlyOneTag = idx;
         }];
         [self.showCollectioView reloadData];
@@ -589,15 +589,10 @@ static NSString *const CellID = @"pickerID";
     [self.navigationController popViewControllerAnimated:YES];
 }
 
--(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
     JSLog(@"开始touch");
 }
-
-
-
-
-
 
 - (void)didReceiveMemoryWarning
 {
@@ -606,11 +601,5 @@ static NSString *const CellID = @"pickerID";
 
 // 刷新数据
 //         [weakSelf.showCollectioView reloadItemsAtIndexPaths:@[index]];
-
-
-
-
-
-
 
 @end

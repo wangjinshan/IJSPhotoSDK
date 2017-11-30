@@ -52,8 +52,7 @@
 
 #define IJSVideoEditNavigationHeight 44
 
-#define IJSVideoSecondCuttrimViewHeight IJSImageEditScreenHeight * 0.25
-
+#define IJSVideoSecondCuttrimViewHeight IJSImageEditScreenHeight * 0.20
 
 #endif /* IJSImageConst_h */
 

@@ -278,7 +278,7 @@ static IJSVideoManager *manager;
 
     //异步导出
     [exportSession exportAsynchronouslyWithCompletionHandler:^(void) {
-        
+
         dispatch_async(dispatch_get_main_queue(), ^{
             switch (exportSession.status)
             {
@@ -356,7 +356,7 @@ static IJSVideoManager *manager;
         AVAssetExportSession *exportSession = [[AVAssetExportSession alloc]
             initWithAsset:videoAsset
                presetName:AVAssetExportPresetHighestQuality]; //AVAssetExportPresetPassthrough可能返回没有处理过的视频
-        if (! isCut)
+        if (!isCut)
         {
             exportSession.timeRange = timeRange; //截取时间---直接导出的方法只能从0开始
         }

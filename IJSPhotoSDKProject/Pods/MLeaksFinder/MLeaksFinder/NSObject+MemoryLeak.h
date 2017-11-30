@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#define MLCheck(TARGET) [self willReleaseObject:(TARGET) relationship:@#TARGET];
+#define MLCheck(TARGET) [self willReleaseObject:(TARGET) relationship:@ #TARGET];
 
 @interface NSObject (MemoryLeak)
 

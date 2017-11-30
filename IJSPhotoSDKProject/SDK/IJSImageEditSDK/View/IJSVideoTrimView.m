@@ -104,7 +104,7 @@
 {
     // 背景滚动图
     UIScrollView *backScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.js_width, self.js_height)];
-    backScrollView.backgroundColor = [UIColor blackColor];
+    backScrollView.backgroundColor = [UIColor clearColor];
     backScrollView.delegate = self;
     backScrollView.pagingEnabled = NO;
     backScrollView.bounces = NO;
@@ -129,7 +129,7 @@
     [self _setupVideoImage];
 
     //刻度尺
-    CGRect rulerFrame = CGRectMake(0, self.slideHeight, 2 * self.marginLeft + self.assetDuration * self.widthPerSecond, self.js_height - self.slideHeight);
+    CGRect rulerFrame = CGRectMake(0, self.slideHeight, self.marginLeft + self.assetDuration * self.widthPerSecond, self.js_height - self.slideHeight);
     IJSVideoRulerView *rulerView = [[IJSVideoRulerView alloc] initWithFrame:rulerFrame widthPerSecond:self.widthPerSecond themeColor:[UIColor whiteColor] slideWidth:self.marginLeft assetDuration:self.assetDuration];
     [self.contentView addSubview:rulerView];
     self.rulerView = rulerView;

@@ -55,11 +55,21 @@
 
     if (iOS9_1Later)
     {
-          __weak typeof (self) weakSelf = self;
-        [[IJSImageManager shareManager] getLivePhotoWithAsset:assetModel.asset photoWidth:JSScreenWidth networkAccessAllowed:YES completion:^(PHLivePhoto *livePhoto, NSDictionary *info) {
-            weakSelf.backLivePhtotoView.livePhoto = livePhoto;
-        } progressHandler:^(double progress, NSError *error, BOOL *stop, NSDictionary *info){
-        }];
+        __weak typeof(self) weakSelf = self;
+        if (assetModel.analysisLivePhoto)
+        {
+            self.backLivePhtotoView.livePhoto = assetModel.analysisLivePhoto;
+        }
+        else
+        {
+            [[IJSImageManager shareManager] getLivePhotoWithAsset:assetModel.asset photoWidth:JSScreenWidth networkAccessAllowed:YES completion:^(PHLivePhoto *livePhoto, NSDictionary *info) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    weakSelf.backLivePhtotoView.livePhoto = livePhoto;
+                    assetModel.analysisLivePhoto = livePhoto;
+                });
+            } progressHandler:^(double progress, NSError *error, BOOL *stop, NSDictionary *info){
+            }];
+        }
     }
 }
 

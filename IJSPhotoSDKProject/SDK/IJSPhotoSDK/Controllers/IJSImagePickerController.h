@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 @class IJSAssetModel;
-@class IJSMapViewModel;  //贴图数据模型
+@class IJSMapViewModel; //贴图数据模型
 /*
  *  导航栏控制器，通过改变该控制器的一些属性来达到你想要的效果,开放的外部接口
  */
@@ -94,17 +94,17 @@ typedef NS_ENUM(NSUInteger, IJSPExportSourceType) {
 /**
  最小裁剪尺寸
  */
-@property(nonatomic,assign) NSInteger minVideoCut;
+@property (nonatomic, assign) NSInteger minVideoCut;
 /**
  最大裁剪尺寸
  */
-@property(nonatomic,assign) NSInteger maxVideoCut;  // 最大裁剪尺寸
+@property (nonatomic, assign) NSInteger maxVideoCut; // 最大裁剪尺寸
 
 /*-----------------------------------返回用户选取的图片-------------------------------------------------------*/
 /* block属性保存方式返回用户选取的图片 ,此处返回的是一个默认是828像素,经过缩放的图片,如果想获取原图,可以解析assets对象*/
-@property (nonatomic, copy) void (^didFinishUserPickingImageHandle)(NSArray<UIImage *> *photos, NSArray *avPlayers, NSArray *assets, NSArray<NSDictionary *> *infos, BOOL isSelectOriginalPhoto,IJSPExportSourceType sourceType);
+@property (nonatomic, copy) void (^didFinishUserPickingImageHandle)(NSArray<UIImage *> *photos, NSArray *avPlayers, NSArray *assets, NSArray<NSDictionary *> *infos, BOOL isSelectOriginalPhoto, IJSPExportSourceType sourceType);
 /* 代理属性 */
-@property(nonatomic,copy) void(^didCancelHandle)(void);  // 取消选择
+@property (nonatomic, copy) void (^didCancelHandle)(void); // 取消选择
 
 @property (nonatomic, weak) id<IJSImagePickerControllerDelegate> imagePickerDelegate;
 
@@ -161,6 +161,6 @@ typedef NS_ENUM(NSUInteger, IJSPExportSourceType) {
 /**
  取消选择图片
  */
--(void)imagePickerControllerWhenDidCancle;
+- (void)imagePickerControllerWhenDidCancle;
 
 @end

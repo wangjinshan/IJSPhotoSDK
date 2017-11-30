@@ -25,6 +25,7 @@
 #import "TOActivityCroppedImageProvider.h"
 #import "UIImage+CropRotate.h"
 #import "TOCroppedImageAttributes.h"
+#import "IJSExtension.h"
 
 @interface TOCropViewController () <UIActionSheetDelegate, UIViewControllerTransitioningDelegate, TOCropViewDelegate>
 
@@ -254,6 +255,12 @@
 - (CGRect)frameForToolBarWithVerticalLayout:(BOOL)verticalLayout
 {
     CGRect frame = CGRectZero;
+    
+    if (IJSGiPhoneX)
+    {
+        frame = CGRectMake(0, IJSGScreenHeight - IJSGTabbarSafeBottomMargin - 44, CGRectGetWidth(self.view.bounds), 44.0f);
+        return frame;
+    }
     if (!verticalLayout)
     {
         frame.origin.x = 0.0f;
@@ -277,14 +284,12 @@
         frame.size.width = CGRectGetWidth(self.view.bounds);
         frame.size.height = 44.0f;
 
-        // If the bar is at the top of the screen and the status bar is visible, account for the status bar height
         if (self.toolbarPosition == TOCropViewControllerToolbarPositionTop && self.prefersStatusBarHidden == NO)
         {
             frame.size.height = 64.0f;
         }
     }
-
-    return frame;
+     return frame;
 }
 
 - (CGRect)frameForCropViewWithVerticalLayout:(BOOL)verticalLayout

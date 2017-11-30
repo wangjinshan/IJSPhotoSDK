@@ -12,7 +12,7 @@
  */
 @interface IJSVideoSlideView : UIView
 
-@property (nonatomic, assign) BOOL isLeft;        // yes为左半图
+@property (nonatomic, assign) BOOL isLeft;      // yes为左半图
 @property (nonatomic, weak) UIImage *backImage; // 替换为自己需要的图
 /**
  * 初始化

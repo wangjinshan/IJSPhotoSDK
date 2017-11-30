@@ -41,7 +41,7 @@
 - (void)setAssetModel:(IJSAssetModel *)assetModel
 {
     _assetModel = assetModel;
-  __weak typeof (self) weakSelf = self;
+    __weak typeof(self) weakSelf = self;
     [[IJSImageManager shareManager] getOriginalPhotoDataWithAsset:assetModel.asset completion:^(NSData *data, NSDictionary *info, BOOL isDegraded) {
         [weakSelf.backWebView loadData:data MIMEType:@"image/gif" textEncodingName:@"" baseURL:[NSURL URLWithString:@""]];
     }];

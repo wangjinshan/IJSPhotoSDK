@@ -57,7 +57,7 @@
 
     if (!self.panGesture.isEnabled)
     {
-      self.panGesture.enabled = YES;
+        self.panGesture.enabled = YES;
     }
     //轻点手势
     if (!self.tapGesture)
@@ -78,7 +78,7 @@
 {
     if (self.panDrawingViewDidTap)
     {
-      self.panDrawingViewDidTap();
+        self.panDrawingViewDidTap();
     }
 }
 /*-----------------------------------方法实现-------------------------------------------------------*/
@@ -104,7 +104,7 @@
         [self drawLine];
         if (self.panDrawingViewdrawingCallBack)
         {
-           self.panDrawingViewdrawingCallBack(YES);
+            self.panDrawingViewdrawingCallBack(YES);
         }
     }
 
@@ -158,7 +158,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             if (completionBlock)
             {
-               completionBlock(temImage, nil, nil);
+                completionBlock(temImage, nil, nil);
             }
         });
     });

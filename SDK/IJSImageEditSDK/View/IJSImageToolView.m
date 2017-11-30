@@ -117,7 +117,7 @@
     [self _resetButtonStatus:button];
     if (self.textButtonBlock)
     {
-         self.textButtonBlock(button);
+        self.textButtonBlock(button);
     }
     button.selected = !button.selected;
 }
@@ -149,7 +149,7 @@
     {
         if ([buttonView isKindOfClass:[UIButton class]])
         {
-             ((UIButton *) buttonView).selected = NO;
+            ((UIButton *) buttonView).selected = NO;
         }
     }
     button.selected = selected;

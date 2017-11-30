@@ -12,6 +12,7 @@
 #import "IJSImagePickerController.h"
 #import <IJSFoundation/IJSFoundation.h>
 #import "IJSExtension.h"
+
 @interface IJS3DTouchController ()
 
 /* 图片参数 */
@@ -20,10 +21,8 @@
 @end
 
 @implementation IJS3DTouchController
-- (void)dealloc
-{
-    JSLog(@"---IJS3DTouchController---释放----")
-}
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -38,9 +37,9 @@
 - (NSArray<id<UIPreviewActionItem>> *)previewActionItems
 {
     UIPreviewAction *action1 = [UIPreviewAction actionWithTitle:[NSBundle localizedStringForKey:@"Delete"] style:UIPreviewActionStyleDefault handler:^(UIPreviewAction *_Nonnull action, UIViewController *_Nonnull previewViewController) {
-        __weak typeof (self) weakSelf = self;
+        __weak typeof(self) weakSelf = self;
         [[IJSImageManager shareManager] deleteAssetArr:@[self.model.asset] completion:^(id assetCollection, NSError *error, BOOL isExistedOrIsSuccess) {
-            
+
             if (!error)
             {
                 [weakSelf showAlertWithTitle:@"照片已经从照片库中删除"];
@@ -55,7 +54,7 @@
     UIPreviewAction *collection = [UIPreviewAction actionWithTitle:[NSBundle localizedStringForKey:@"Collection"] style:UIPreviewActionStyleDefault handler:^(UIPreviewAction *_Nonnull action, UIViewController *_Nonnull previewViewController) {
         if (iOS8Later)
         {
-              __weak typeof (self) weakSelf = self;
+            __weak typeof(self) weakSelf = self;
             [[IJSImageManager shareManager] collectedAsset:self.model.asset completion:^(NSError *error, BOOL isExistedOrIsSuccess) {
                 if (error)
                 {

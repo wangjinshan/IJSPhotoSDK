@@ -83,7 +83,7 @@
     _titleLable.text = models.name;
     _numberLabel.text = [NSString stringWithFormat:@"(%ld)", (long) models.count];
     // 请求封面的照片
-      __weak typeof (self) weakSelf = self;
+    __weak typeof(self) weakSelf = self;
     [[IJSImageManager shareManager] getPostImageWithAlbumModel:models completion:^(UIImage *postImage) {
         weakSelf.thumbImageView.image = postImage;
     }];

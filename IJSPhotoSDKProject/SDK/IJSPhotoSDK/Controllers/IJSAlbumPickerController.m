@@ -29,10 +29,7 @@ static NSString *const cellID = @"cellID";
 
 @implementation IJSAlbumPickerController
 
-- (void)dealloc
-{
-    JSLog(@"-----IJSAlbumPickerController----释放-----")
-}
+
 
 - (NSArray *)albumListArr
 {

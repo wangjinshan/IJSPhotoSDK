@@ -54,22 +54,25 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
+
     [self.navigationController setNavigationBarHidden:NO animated:animated];
     [self.player pause];
     [self removeListenPlayerTimer];
-      [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
 }
 #pragma mark 设置UI
 - (void)_setupUI
 {
-    // 导航条
-    IJSImageNavigationView *navigationView = [[IJSImageNavigationView alloc] initWithFrame:CGRectMake(0, 0, JSScreenWidth, IJSINavigationHeight)];
-    navigationView.backgroundColor = [UIColor blackColor];
-    [self.view addSubview:navigationView];
-    self.navigationView = navigationView;
-
-    UIView *playView = [[UIView alloc] initWithFrame:CGRectMake(0, IJSINavigationHeight, JSScreenWidth, JSScreenHeight - IJSINavigationHeight - IJSVideotrimViewHeight)];
+    // 播放层
+    UIView *playView;
+    if (IJSGiPhoneX)
+    {
+        playView= [[UIView alloc] initWithFrame:CGRectMake(0, IJSGStatusBarHeight, JSScreenWidth, JSScreenHeight - IJSGStatusBarHeight - IJSGTabbarSafeBottomMargin)];
+    }
+    else
+    {
+      playView= [[UIView alloc] initWithFrame:self.view.bounds];
+    }
     playView.backgroundColor = [UIColor blackColor];
     self.playView = playView;
     [self.view addSubview:playView];
@@ -95,19 +98,34 @@
     playButton.userInteractionEnabled = NO;
     self.playButton = playButton;
 
+    // 导航条
+    IJSImageNavigationView *navigationView;
+    if (IJSGiPhoneX)
+    {
+        navigationView = [[IJSImageNavigationView alloc] initWithFrame:CGRectMake(0, IJSGStatusBarHeight, JSScreenWidth, IJSVideoEditNavigationHeight)];
+    }
+    else
+    {
+      navigationView = [[IJSImageNavigationView alloc] initWithFrame:CGRectMake(0, 0, JSScreenWidth, IJSVideoEditNavigationHeight)];
+    }
+    navigationView.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:navigationView];
+    self.navigationView = navigationView;
+    [self.view bringSubviewToFront:navigationView];
+    
     // 底部的UI 在数据请求完成再加载
     Float64 duration = CMTimeGetSeconds([self.avasset duration]);
     if (self.maxCutTime >= duration)
     {
-       self.maxCutTime = duration;
+        self.maxCutTime = duration;
     }
     if (duration <= self.minCutTime)
     {
-       self.minCutTime = duration;
+        self.minCutTime = duration;
     }
-    
-    IJSVideoTrimView *trimView = [[IJSVideoTrimView alloc] initWithFrame:CGRectMake(0, JSScreenHeight - IJSVideotrimViewHeight, JSScreenWidth, IJSVideotrimViewHeight) minCutTime:self.minCutTime ?: 4 maxCutTime:self.maxCutTime ?: 10 assetDuration:duration avAsset:self.avasset];
-    trimView.backgroundColor = [UIColor blackColor];
+
+    IJSVideoTrimView *trimView = [[IJSVideoTrimView alloc] initWithFrame:CGRectMake(0, JSScreenHeight - IJSVideotrimViewHeight - IJSGTabbarSafeBottomMargin, JSScreenWidth, IJSVideotrimViewHeight) minCutTime:self.minCutTime ?: 4 maxCutTime:self.maxCutTime ?: 10 assetDuration:duration avAsset:self.avasset];
+    trimView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:trimView];
     trimView.delegate = self;
     self.trimView = trimView;
@@ -131,15 +149,15 @@
         weakSelf.isDoing = YES;
         if (weakSelf.videoLenght == 0)
         {
-             weakSelf.videoLenght = weakSelf.maxCutTime;
+            weakSelf.videoLenght = weakSelf.maxCutTime;
         }
         if (weakSelf.startTime == 0)
         {
-           weakSelf.startTime = 0;
+            weakSelf.startTime = 0;
         }
         if (weakSelf.endTime == 0)
         {
-             weakSelf.endTime = 60;
+            weakSelf.endTime = 60;
         }
         IJSLodingView *lodingView = [IJSLodingView showLodingViewAddedTo:weakSelf.view title:@"正在处理中... ..."];
 
@@ -159,7 +177,7 @@
                 IJSVideoEditController *videoEditVc = [[IJSVideoEditController alloc] init];
                 videoEditVc.outputPath = outputPath;
                 videoEditVc.mapImageArr = weakSelf.mapImageArr;
-                 [weakSelf.navigationController pushViewController:videoEditVc animated:YES];
+                [weakSelf.navigationController pushViewController:videoEditVc animated:YES];
             }
             weakSelf.isDoing = NO;
         }];

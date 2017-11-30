@@ -12,7 +12,7 @@
 
 // 导航条的高度
 #define NavigationHeight 64
-#define TabbarHeight 44
+#define TabbarHeight 44     // 工具条的高度
 #define ToorHeight 20
 #define albumCellHright 60
 #define cellMargin 3 // cell 直接的距离
@@ -43,6 +43,5 @@
 // 图片缩放比
 #define miniZoomScale 1
 #define maxZoomScale 2
-
 
 #endif /* IJSConst_h */

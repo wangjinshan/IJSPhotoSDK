@@ -14,7 +14,7 @@ typedef void (^completeBlock)(UIImage *image);
 
 @interface IJSImageManagerController : UIViewController
 
-@property (nonatomic, strong) UIImage *editImage;                     // 传递的数据
+@property (nonatomic, strong) UIImage *editImage;          // 传递的数据
 @property (nonatomic, strong) NSMutableArray *mapImageArr; // 贴图数据
 
 /**

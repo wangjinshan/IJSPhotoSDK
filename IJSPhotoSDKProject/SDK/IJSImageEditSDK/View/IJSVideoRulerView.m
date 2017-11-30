@@ -83,9 +83,5 @@
     }
 }
 
-- (CGFloat)www
-{
-    return _www;
-}
 
 @end

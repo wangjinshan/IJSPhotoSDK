@@ -70,7 +70,7 @@
     [self.layer addSublayer:self.shapeLayer];
 
     self.imageLayer.mask = self.shapeLayer; // 子视图完全遮盖马赛克视图
-    
+
     self.path = CGPathCreateMutable();
     self.allLineArr = [NSMutableArray array];
 }
@@ -117,7 +117,7 @@
     [super touchesEnded:touches withEvent:event];
     if (self.mosaicViewEndDrawCallBack)
     {
-      self.mosaicViewEndDrawCallBack(YES);
+        self.mosaicViewEndDrawCallBack(YES);
     }
 }
 
@@ -175,7 +175,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             if (completionBlock)
             {
-              completionBlock(temImage, nil, nil);
+                completionBlock(temImage, nil, nil);
             }
         });
     });

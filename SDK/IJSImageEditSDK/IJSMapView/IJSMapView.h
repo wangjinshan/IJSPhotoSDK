@@ -13,7 +13,6 @@
  */
 @interface IJSMapView : UIView
 
-
 /**
  默认初始化方法
 
@@ -21,10 +20,10 @@
  @param imageData 图片数据,数组嵌套数组的模式
  @return 自己
  */
--(instancetype)initWithFrame:(CGRect)frame imageData:(NSMutableArray<IJSMapViewModel *> *)imageData;
+- (instancetype)initWithFrame:(CGRect)frame imageData:(NSMutableArray<IJSMapViewModel *> *)imageData;
 
-@property(nonatomic,copy) void(^didClickItemCallBack)(NSInteger index,UIImage *indexImage);  //点击的下标
-@property(nonatomic,copy) void (^cancelCallBack)(void);  // 取消按钮
+@property (nonatomic, copy) void (^didClickItemCallBack)(NSInteger index, UIImage *indexImage); //点击的下标
+@property (nonatomic, copy) void (^cancelCallBack)(void);                                       // 取消按钮
 
 @end
 // 375x667    230(总高)  180(贴图)   55(贴图) * 55   45(最小较大小) * 32

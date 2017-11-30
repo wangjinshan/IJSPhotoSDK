@@ -14,6 +14,7 @@
 #import "IJSPreviewVideoView.h"
 // 展示用的cell
 @protocol IJSPreviewImageCellDelegate;
+
 @interface IJSPreviewImageCell : UICollectionViewCell
 
 /* 所有的数据 */
@@ -23,7 +24,7 @@
 /* 缩放用的scrollview */
 @property (nonatomic, strong) UIScrollView *scrollView;
 
-@property(nonatomic,weak) id<IJSPreviewImageCellDelegate> cellDelegate;  // cell的代理方法
+@property (nonatomic, weak) id<IJSPreviewImageCellDelegate> cellDelegate; // cell的代理方法
 
 - (void)playLivePhotos;
 - (void)stopLivePhotos;
@@ -33,8 +34,8 @@
 /*
  * 协议
  */
-@protocol IJSPreviewImageCellDelegate<NSObject>
+@protocol IJSPreviewImageCellDelegate <NSObject>
 
--(void)didClickCellToHiddenNavigationAndToosWithCell:(IJSPreviewImageCell *)cell hiddenToolsStatus:(BOOL)hiddenToolsStatus;
+- (void)didClickCellToHiddenNavigationAndToosWithCell:(IJSPreviewImageCell *)cell hiddenToolsStatus:(BOOL)hiddenToolsStatus;
 
 @end

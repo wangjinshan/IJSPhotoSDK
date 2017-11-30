@@ -29,9 +29,9 @@
     toolBar.frame = CGRectMake(0, 0, self.frame.size.width, 30);
 
     //    UIBarButtonItem *cancle =[[UIBarButtonItem alloc]initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(cancleAction:)];
-    UIBarButtonItem *cleanAll = [[UIBarButtonItem alloc] initWithTitle:[NSString stringWithFormat:@"%@",@"清屏"] style:UIBarButtonItemStylePlain target:self action:@selector(cleanAllAction:)];
+    UIBarButtonItem *cleanAll = [[UIBarButtonItem alloc] initWithTitle:[NSString stringWithFormat:@"%@", @"清屏"] style:UIBarButtonItemStylePlain target:self action:@selector(cleanAllAction:)];
 
-    UIBarButtonItem *cleanLast = [[UIBarButtonItem alloc] initWithTitle:[NSString stringWithFormat:@"%@",@"撤销"] style:UIBarButtonItemStylePlain target:self action:@selector(cleanLastAction:)];
+    UIBarButtonItem *cleanLast = [[UIBarButtonItem alloc] initWithTitle:[NSString stringWithFormat:@"%@", @"撤销"] style:UIBarButtonItemStylePlain target:self action:@selector(cleanLastAction:)];
     //    UIBarButtonItem *erase =[[UIBarButtonItem alloc]initWithTitle:@"擦除" style:UIBarButtonItemStylePlain target:self action:@selector(eraseAction:)];
     //    UIBarButtonItem *addPhoto =[[UIBarButtonItem alloc]initWithTitle:@"照片" style:UIBarButtonItemStylePlain target:self action:@selector(addPhotoAction:)];
     //   UIBarButtonItem *sivePhoto =[[UIBarButtonItem alloc]initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(sivePhotoAction:)];

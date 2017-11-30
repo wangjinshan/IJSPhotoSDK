@@ -11,9 +11,7 @@
 
 @interface IJSMapViewMapCell : UICollectionViewCell
 
-
-@property(nonatomic,weak) UIImage *itemImage;  // 展示数据对象
-@property(nonatomic,copy) NSString *labelTitle;  // 标题
-
+@property (nonatomic, weak) UIImage *itemImage;   // 展示数据对象
+@property (nonatomic, copy) NSString *labelTitle; // 标题
 
 @end

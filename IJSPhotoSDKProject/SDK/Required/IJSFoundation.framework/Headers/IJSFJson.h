@@ -12,7 +12,6 @@
  */
 @interface IJSFJson : NSObject
 
-
 /**
  *  对象序列化为Json字符串
  *
@@ -31,8 +30,4 @@
  */
 - (id)objectFromJSONString:(NSString *)jsonString;
 
-
-
-
 @end
-

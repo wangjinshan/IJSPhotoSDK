@@ -19,7 +19,7 @@
 
 static NSMutableSet *leakedObjectPtrs;
 
-@interface MLeakedObjectProxy ()<UIAlertViewDelegate>
+@interface MLeakedObjectProxy () <UIAlertViewDelegate>
 @property (nonatomic, weak) id object;
 @property (nonatomic, strong) NSNumber *objectPtr;
 @property (nonatomic, strong) NSArray *viewStack;
@@ -27,36 +27,42 @@ static NSMutableSet *leakedObjectPtrs;
 
 @implementation MLeakedObjectProxy
 
-+ (BOOL)isAnyObjectLeakedAtPtrs:(NSSet *)ptrs {
++ (BOOL)isAnyObjectLeakedAtPtrs:(NSSet *)ptrs
+{
     NSAssert([NSThread isMainThread], @"Must be in main thread.");
-    
+
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         leakedObjectPtrs = [[NSMutableSet alloc] init];
     });
-    
-    if (!ptrs.count) {
+
+    if (!ptrs.count)
+    {
         return NO;
     }
-    if ([leakedObjectPtrs intersectsSet:ptrs]) {
+    if ([leakedObjectPtrs intersectsSet:ptrs])
+    {
         return YES;
-    } else {
+    }
+    else
+    {
         return NO;
     }
 }
 
-+ (void)addLeakedObject:(id)object {
++ (void)addLeakedObject:(id)object
+{
     NSAssert([NSThread isMainThread], @"Must be in main thread.");
-    
+
     MLeakedObjectProxy *proxy = [[MLeakedObjectProxy alloc] init];
     proxy.object = object;
-    proxy.objectPtr = @((uintptr_t)object);
+    proxy.objectPtr = @((uintptr_t) object);
     proxy.viewStack = [object viewStack];
     static const void *const kLeakedObjectProxyKey = &kLeakedObjectProxyKey;
     objc_setAssociatedObject(object, kLeakedObjectProxyKey, proxy, OBJC_ASSOCIATION_RETAIN);
-    
+
     [leakedObjectPtrs addObject:proxy.objectPtr];
-    
+
 #if _INTERNAL_MLF_RC_ENABLED
     [MLeaksMessenger alertWithTitle:@"Memory Leak"
                             message:[NSString stringWithFormat:@"%@", proxy.viewStack]
@@ -68,7 +74,8 @@ static NSMutableSet *leakedObjectPtrs;
 #endif
 }
 
-- (void)dealloc {
+- (void)dealloc
+{
     NSNumber *objectPtr = _objectPtr;
     NSArray *viewStack = _viewStack;
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -80,29 +87,35 @@ static NSMutableSet *leakedObjectPtrs;
 
 #pragma mark - UIAlertViewDelegate
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (!buttonIndex) {
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (!buttonIndex)
+    {
         return;
     }
-    
+
     id object = self.object;
-    if (!object) {
+    if (!object)
+    {
         return;
     }
-    
+
 #if _INTERNAL_MLF_RC_ENABLED
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         FBRetainCycleDetector *detector = [FBRetainCycleDetector new];
         [detector addCandidate:self.object];
         NSSet *retainCycles = [detector findRetainCyclesWithMaxCycleLength:20];
-        
+
         BOOL hasFound = NO;
-        for (NSArray *retainCycle in retainCycles) {
+        for (NSArray *retainCycle in retainCycles)
+        {
             NSInteger index = 0;
-            for (FBObjectiveCGraphElement *element in retainCycle) {
-                if (element.object == object) {
+            for (FBObjectiveCGraphElement *element in retainCycle)
+            {
+                if (element.object == object)
+                {
                     NSArray *shiftedRetainCycle = [self shiftArray:retainCycle toIndex:index];
-                    
+
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [MLeaksMessenger alertWithTitle:@"Retain Cycle"
                                                 message:[NSString stringWithFormat:@"%@", shiftedRetainCycle]];
@@ -110,14 +123,16 @@ static NSMutableSet *leakedObjectPtrs;
                     hasFound = YES;
                     break;
                 }
-                
+
                 ++index;
             }
-            if (hasFound) {
+            if (hasFound)
+            {
                 break;
             }
         }
-        if (!hasFound) {
+        if (!hasFound)
+        {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [MLeaksMessenger alertWithTitle:@"Retain Cycle"
                                         message:@"Fail to find a retain cycle"];
@@ -127,11 +142,13 @@ static NSMutableSet *leakedObjectPtrs;
 #endif
 }
 
-- (NSArray *)shiftArray:(NSArray *)array toIndex:(NSInteger)index {
-    if (index == 0) {
+- (NSArray *)shiftArray:(NSArray *)array toIndex:(NSInteger)index
+{
+    if (index == 0)
+    {
         return array;
     }
-    
+
     NSRange range = NSMakeRange(index, array.count - index);
     NSMutableArray *result = [[array subarrayWithRange:range] mutableCopy];
     [result addObjectsFromArray:[array subarrayWithRange:NSMakeRange(0, index)]];

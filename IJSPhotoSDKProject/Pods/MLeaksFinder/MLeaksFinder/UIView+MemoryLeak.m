@@ -13,13 +13,15 @@
 
 @implementation UIView (MemoryLeak)
 
-- (BOOL)willDealloc {
-    if (![super willDealloc]) {
+- (BOOL)willDealloc
+{
+    if (![super willDealloc])
+    {
         return NO;
     }
-    
+
     [self willReleaseChildren:self.subviews];
-    
+
     return YES;
 }
 

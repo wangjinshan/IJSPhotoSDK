@@ -25,7 +25,6 @@
 
 @property (nonatomic, strong) NSMutableArray *mapImageArr; // 贴图数据
 
-@property(nonatomic,assign) BOOL secondCut;  // 二次裁剪界面
-
+@property (nonatomic, assign) BOOL secondCut; // 二次裁剪界面
 
 @end

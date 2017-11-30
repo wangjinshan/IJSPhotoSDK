@@ -8,10 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "IJSMapViewModel.h"
+
 @interface IJSMapViewThumbCell : UICollectionViewCell
 
-
-@property(nonatomic,weak) IJSMapViewModel *imageModel;  // 数据
-
+@property (nonatomic, weak) IJSMapViewModel *imageModel; // 数据
 
 @end

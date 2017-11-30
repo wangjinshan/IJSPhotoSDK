@@ -13,13 +13,15 @@
 
 @implementation UIPageViewController (MemoryLeak)
 
-- (BOOL)willDealloc {
-    if (![super willDealloc]) {
+- (BOOL)willDealloc
+{
+    if (![super willDealloc])
+    {
         return NO;
     }
-    
+
     [self willReleaseChildren:self.viewControllers];
-    
+
     return YES;
 }
 

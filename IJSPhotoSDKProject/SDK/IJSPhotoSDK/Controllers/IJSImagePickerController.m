@@ -25,15 +25,11 @@
 }
 /* 默认的列数 */
 @property (nonatomic, assign) NSInteger columnNumber;
-@property(nonatomic,strong) NSMutableArray *mapDataArr;  // 贴图数据
+@property (nonatomic, strong) NSMutableArray *mapDataArr; // 贴图数据
 @end
 
 @implementation IJSImagePickerController
 
-- (void)dealloc
-{
-    JSLog(@"---IJSImagePickerControllers释放-----")
-}
 
 - (void)viewDidLoad
 {
@@ -215,10 +211,10 @@
     _didPushPhotoPickerVc = NO;
     if (!_didPushPhotoPickerVc && _pushPhotoPickerVc) // 直接push
     {
-       IJSPhotoPickerController *vc = [[IJSPhotoPickerController alloc] init];
+        IJSPhotoPickerController *vc = [[IJSPhotoPickerController alloc] init];
         vc.columnNumber = self.columnNumber; //列数
-          __weak typeof (self) weakSelf = self;
-          __weak typeof (vc) weakVc = vc;
+        __weak typeof(self) weakSelf = self;
+        __weak typeof(vc) weakVc = vc;
         [[IJSImageManager shareManager] getCameraRollAlbumContentImage:self.allowPickingImage contentVideo:self.allowPickingVideo completion:^(IJSAlbumModel *model) {
             weakVc.albumModel = model;
             [weakSelf pushViewController:vc animated:YES];
@@ -253,14 +249,14 @@
 {
 }
 #pragma mark - 设置map数据
--(void)_setupMapData
+- (void)_setupMapData
 {
     if (self.mapImageArr == nil)
     {
-        NSString *bundlePath = [[NSBundle mainBundle]pathForResource:@"JSPhotoSDK" ofType:@"bundle"];
-        NSString *filePath =[bundlePath stringByAppendingString:@"/Expression"];
+        NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"JSPhotoSDK" ofType:@"bundle"];
+        NSString *filePath = [bundlePath stringByAppendingString:@"/Expression"];
         [IJSFFilesManager ergodicFilesFromFolderPath:filePath completeHandler:^(NSInteger fileCount, NSInteger fileSzie, NSMutableArray *filePath) {
-            IJSMapViewModel *model =[[IJSMapViewModel alloc]initWithImageDataModel:filePath];
+            IJSMapViewModel *model = [[IJSMapViewModel alloc] initWithImageDataModel:filePath];
             [self.mapDataArr addObject:model];
             self.mapImageArr = self.mapDataArr;
         }];
@@ -353,7 +349,7 @@
     [IJSImageManager shareManager].allowPickingOriginalPhoto = allowPickingOriginalPhoto;
 }
 /// 贴图数组
--(void)setMapImageArr:(NSMutableArray<IJSMapViewModel *> *)mapImageArr
+- (void)setMapImageArr:(NSMutableArray<IJSMapViewModel *> *)mapImageArr
 {
     _mapImageArr = mapImageArr;
 }
@@ -375,11 +371,11 @@
     [IJSImageManager shareManager].columnNumber = _columnNumber;
 }
 
--(void)setMinVideoCut:(NSInteger)minVideoCut
+- (void)setMinVideoCut:(NSInteger)minVideoCut
 {
     _minVideoCut = minVideoCut;
 }
--(void)setMaxVideoCut:(NSInteger)maxVideoCut
+- (void)setMaxVideoCut:(NSInteger)maxVideoCut
 {
     _maxVideoCut = maxVideoCut;
 }
@@ -425,24 +421,14 @@
 }
 
 #pragma mark 懒加载区域
--(NSMutableArray *)mapDataArr
+- (NSMutableArray *)mapDataArr
 {
     if (_mapImageArr == nil)
     {
-        _mapImageArr =[NSMutableArray array];
+        _mapImageArr = [NSMutableArray array];
     }
     return _mapImageArr;
 }
-
-
-
-
-
-
-
-
-
-
 
 - (void)didReceiveMemoryWarning
 {

@@ -48,7 +48,6 @@ typedef NS_ENUM(NSUInteger, JSAssetModelSourceType) {
 /* 预览模式进来单独设置 */
 @property (nonatomic, assign) BOOL isPreviewButton;
 
-
 /**
  *  设置资源类型
  */

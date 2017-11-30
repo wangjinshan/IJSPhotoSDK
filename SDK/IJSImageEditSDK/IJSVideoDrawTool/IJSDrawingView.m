@@ -45,11 +45,11 @@
         model.path = path;
         if (self.pathWidth == 0)
         {
-          self.pathWidth = 25;
+            self.pathWidth = 25;
         }
         if (self.pathColor == nil)
         {
-           self.pathColor = [UIColor redColor];
+            self.pathColor = [UIColor redColor];
         }
         model.pathColor = self.pathColor;
         model.pathWidth = self.pathWidth;

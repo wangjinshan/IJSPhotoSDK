@@ -31,7 +31,7 @@
 @property (nonatomic, weak) IJSImageToolView *toolsView;             // 工具条
 @property (nonatomic, assign) CGFloat imageHeight;                   //图片的高度
 @property (nonatomic, weak) IJSIColorButtonView *colorButtonView;    //工具笔条
-@property (nonatomic, weak) IJSMapView *mapView;                    // 贴图
+@property (nonatomic, weak) IJSMapView *mapView;                     // 贴图
 @property (nonatomic, weak) IJSIMapViewExportView *exportView;       // 导出的贴图
 @property (nonatomic, weak) IJSIImputTextExportView *exportTextView; // 导出的文字视图
 @property (nonatomic, weak) IJSIImputTextView *imputTextView;        // 文字视图
@@ -45,15 +45,15 @@
 @property (nonatomic, weak) UIView *placeholderToolView; // 工具站位视图
 @property (nonatomic, strong) UIImage *gaussanImage;     // 提前获取好高斯图
 @property (nonatomic, assign) CGRect cropImageRect;      // 裁剪的尺寸
-@property(nonatomic,strong) NSTimer *listenGuassTimer;  // 监听高斯的时间表
-@property(nonatomic,weak) IJSLodingView *lodingView;  // 正在渲染loding
-@property(nonatomic,assign) BOOL isGetingGuassImage;  // 正在获取高斯图
+@property (nonatomic, strong) NSTimer *listenGuassTimer; // 监听高斯的时间表
+@property (nonatomic, weak) IJSLodingView *lodingView;   // 正在渲染loding
+@property (nonatomic, assign) BOOL isGetingGuassImage;   // 正在获取高斯图
 
 @end
 
 @implementation IJSImageEditController
 
--(void)dealloc
+- (void)dealloc
 {
     JSLog(@"---IJSImageEditController-----释放--");
 }
@@ -66,7 +66,7 @@
     self.isGetingGuassImage = YES;
     [self _getImageSize];
     [self _createdUI];
-    
+
     [self _buttonClickAction];
     [self _resetUIHierarchy];
 }
@@ -127,16 +127,16 @@
             {
                 weakSelf.completeEditImageCallBlock(image);
             }
-              [weakSelf dismissViewControllerAnimated:YES completion:nil];
+            [weakSelf dismissViewControllerAnimated:YES completion:nil];
         }];
     };
-    
+
     // 工具条点击
     // 画笔
     self.toolsView.panButtonBlock = ^(UIButton *button) {
-        
+
         BOOL isHidden = button.isSelected;
-        
+
         weakSelf.currentModel = IJSIDrawMode;
         [weakSelf _hiddenplaceholderToolViewSubView];
         weakSelf.placeholderToolView.frame = CGRectMake(0, JSScreenHeight - ToolBarMarginBottom - ColorButtonViewWidth, JSScreenWidth, ColorButtonViewWidth);
@@ -151,18 +151,18 @@
             [weakSelf _drawingViewSubViewUserInteractionEnabled:weakSelf.drawTool.panDrawingView state:NO];
         }
     };
-    
+
     // 笑脸图
     self.toolsView.smileButtonBlock = ^(UIButton *button) {
         weakSelf.currentModel = IJSIPaperMode;
         [weakSelf _hiddenplaceholderToolViewSubView];
-        weakSelf.placeholderToolView.frame = CGRectMake(0, JSScreenHeight - JSScreenHeight * 230/667, JSScreenWidth, JSScreenHeight * 230/667);
+        weakSelf.placeholderToolView.frame = CGRectMake(0, JSScreenHeight - JSScreenHeight * 230 / 667, JSScreenWidth, JSScreenHeight * 230 / 667);
         weakSelf.mapView.hidden = NO;
         [weakSelf _hiddenPlaceholderToolView:NO];
         [weakSelf.view bringSubviewToFront:weakSelf.placeholderToolView];
         [weakSelf _drawingViewSubViewUserInteractionEnabled:nil state:NO];
     };
-    
+
     // 文字
     self.toolsView.textButtonBlock = ^(UIButton *button) {
         weakSelf.currentModel = IJSITextMode;
@@ -171,7 +171,7 @@
         weakSelf.imputTextView.hidden = NO;
         [weakSelf _drawingViewSubViewUserInteractionEnabled:nil state:NO];
     };
-    
+
     // 马赛克
     self.toolsView.mosaicButtonBlock = ^(UIButton *button) {
         weakSelf.currentModel = IJSIMosaicMode;
@@ -212,41 +212,41 @@
     [backScrollView setZoomScale:1];
     [self.view addSubview:backScrollView];
     self.backScrollView = backScrollView;
-    
+
     // 占位背景图
     UIView *backPlacehodelView = [[UIView alloc] initWithFrame:self.view.bounds];
     [backScrollView addSubview:backPlacehodelView];
     self.backPlacehodelView = backPlacehodelView;
-    
+
     // 背景图片
     self.backImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, JSScreenWidth, self.imageHeight)];
     _backImageView.center = self.view.center;
     _backImageView.image = self.editImage;
     [self.backPlacehodelView addSubview:self.backImageView];
-    
+
     // 绘画图
-    
+
     self.drawingView = [[UIImageView alloc] init];
     self.drawingView.contentMode = UIViewContentModeCenter;
     self.drawingView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin;
     self.drawingView.backgroundColor = [UIColor clearColor];
     [self.backImageView.superview addSubview:self.drawingView];
     self.drawingView.userInteractionEnabled = YES;
-    
+
     // 导航条
     IJSImageNavigationView *navigationView = [[IJSImageNavigationView alloc] initWithFrame:CGRectMake(0, 0, JSScreenWidth, IJSINavigationHeight)];
     navigationView.backgroundColor = [UIColor blackColor];
     [self.view addSubview:navigationView];
     self.navigationView = navigationView;
     [self.view bringSubviewToFront:navigationView];
-    
+
     // 工具站位视图
     UIView *placeholderToolView = [[UIView alloc] initWithFrame:CGRectMake(0, JSScreenHeight - IJSIMapViewHeight, JSScreenWidth, IJSIMapViewHeight)];
     placeholderToolView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:placeholderToolView];
     placeholderToolView.hidden = NO;
     self.placeholderToolView = placeholderToolView;
-    
+
     // 工具条
     IJSImageToolView *toolsView = [[IJSImageToolView alloc] initWithFrame:CGRectMake(0, JSScreenHeight - ToolBarMarginBottom, JSScreenWidth, ToolBarMarginBottom)];
     [self.view addSubview:toolsView];
@@ -265,10 +265,10 @@
 
 - (void)_getImageSize
 {
-    CGSize imageSize = self.editImage.size; 
+    CGSize imageSize = self.editImage.size;
     if (imageSize.width != 0)
     {
-      self.imageHeight = imageSize.height / imageSize.width * JSScreenWidth;
+        self.imageHeight = imageSize.height / imageSize.width * JSScreenWidth;
     }
 }
 #pragma mark - 获取高斯图片
@@ -297,12 +297,12 @@
     if (_drawTool == nil)
     {
         _drawTool = [[IJSImageDrawTool alloc] initToolWithViewController:self];
-        
+
         __weak typeof(self) weakSelf = self;
-        
+
         // 文字视图单击
         _drawTool.drawToolDidTap = ^{
-            
+
             if (weakSelf.currentModel == IJSIDrawMode)
             {
                 [weakSelf.view bringSubviewToFront:weakSelf.toolsView];
@@ -349,9 +349,9 @@
         IJSIColorButtonView *colorButtonView = [[IJSIColorButtonView alloc] initWithFrame:CGRectMake(0, 0, JSScreenWidth, ColorButtonViewWidth)];
         [self.placeholderToolView addSubview:colorButtonView];
         _colorButtonView = colorButtonView;
-        
+
         __weak typeof(self) weakSelf = self;
-        
+
         _colorButtonView.colorCallBack = ^(UIColor *color) {
             weakSelf.panColor = color;
         };
@@ -372,11 +372,11 @@
     if (_mapView == nil)
     {
         __weak typeof(self) weakSelf = self;
-       
-        if (((IJSImagePickerController *)(self.presentingViewController)).mapImageArr)
+
+        if (((IJSImagePickerController *) (self.presentingViewController)).mapImageArr)
         {
-            NSMutableArray *imageData =((IJSImagePickerController *)(self.presentingViewController)).mapImageArr;
-            IJSMapView *mapView =[[IJSMapView alloc]initWithFrame:CGRectMake(0, 0, JSScreenWidth, JSScreenHeight * 230/667) imageData:imageData];
+            NSMutableArray *imageData = ((IJSImagePickerController *) (self.presentingViewController)).mapImageArr;
+            IJSMapView *mapView = [[IJSMapView alloc] initWithFrame:CGRectMake(0, 0, JSScreenWidth, JSScreenHeight * 230 / 667) imageData:imageData];
             [self.placeholderToolView addSubview:mapView];
             [self.view bringSubviewToFront:self.placeholderToolView];
             _mapView = mapView;
@@ -391,7 +391,6 @@
         }
         else
         {
-            
         }
     }
     return _mapView;
@@ -408,7 +407,7 @@
         [self.view addSubview:imputView];
         [self.view bringSubviewToFront:imputView];
         _imputTextView = imputView;
-        
+
         _imputTextView.textCallBackBlock = ^(UITextView *textView) {
             weakSelf.exportTextView.textView = textView;
         };
@@ -424,16 +423,16 @@
     [self.drawingView addSubview:exportView];
     exportView.backgroundColor = [UIColor clearColor];
     _exportView = exportView;
-    
+
     __weak typeof(exportView) weakExportView = exportView;
-    
+
     exportView.mapViewExpoetViewTapCallBack = ^{
         [weakExportView hiddenSquareViewState:NO];
     };
     //改变导出视图的中心点
-      __weak typeof (self) weakSelf = self;
+    __weak typeof(self) weakSelf = self;
     exportView.mapViewExpoetViewPanCallBack = ^(CGPoint viewPoint) {
-        
+
         // x
         if (viewPoint.x < 0 ||
             viewPoint.x > JSScreenWidth)
@@ -464,10 +463,10 @@
     [self.drawingView addSubview:exportTextView];
     exportTextView.backgroundColor = [UIColor clearColor];
     _exportTextView = exportTextView;
-    
+
     // 单击
     __weak typeof(self) weakSelf = self;
-      __weak typeof (exportTextView) weakExportTextView = exportTextView;
+    __weak typeof(exportTextView) weakExportTextView = exportTextView;
     exportTextView.handleSingleTap = ^(UITextView *textView, BOOL isTap) {
         weakSelf.imputTextView.tapTextView = textView;
     };
@@ -480,7 +479,7 @@
             weakExportTextView.center = weakSelf.drawingView.center;
         }
         // y
-        if (viewPoint.y < weakSelf.drawTool.panDrawingView.js_top  ||
+        if (viewPoint.y < weakSelf.drawTool.panDrawingView.js_top ||
             viewPoint.y > weakSelf.drawTool.panDrawingView.js_bottom)
         {
             weakExportTextView.center = weakSelf.drawingView.center;
@@ -492,7 +491,7 @@
             weakExportTextView.center = weakSelf.drawingView.center;
         }
     };
-    
+
     return _exportTextView;
 }
 // 马赛克工具条
@@ -505,10 +504,10 @@
         mosaicToolView.backgroundColor = [UIColor clearColor];
         [self.placeholderToolView addSubview:mosaicToolView];
         [self.view bringSubviewToFront:self.placeholderToolView];
-        
+
         __weak typeof(self) weakSelf = self;
         _mosaicToolView.typeOneCallBack = ^(UIButton *button) { //马赛克
-            
+
             weakSelf.mosaicTool.graffitiType = JSMosaicType;
             weakSelf.mosaicTool.mosaicView.backgroundColor = [UIColor clearColor];
             [weakSelf _drawingViewSubViewUserInteractionEnabled:weakSelf.mosaicTool.mosaicView state:YES];
@@ -522,11 +521,11 @@
             weakSelf.mosaicTool.drawEndCallBack = ^(BOOL isEndDraw) {
                 [weakSelf _hiddenToolsView:NO];
             };
-            
+
         };
-        
+
         mosaicToolView.typeTwoCallBack = ^(UIButton *button) { // 高斯
-            
+
             weakSelf.mosaicTool.graffitiType = JSGaussanType;
             weakSelf.mosaicTool.guassanView.backgroundColor = [UIColor clearColor];
             [weakSelf _drawingViewSubViewUserInteractionEnabled:weakSelf.mosaicTool.guassanView state:YES];
@@ -534,25 +533,25 @@
                 [weakSelf _hiddenToolsView:weakSelf.hiddenToolView];
                 weakSelf.hiddenToolView = !weakSelf.hiddenToolView;
             };
-            
+
             weakSelf.mosaicTool.drawingCallBack = ^(BOOL isDrawing) {
                 [weakSelf _hiddenToolsView:YES];
             };
             weakSelf.mosaicTool.drawEndCallBack = ^(BOOL isEndDraw) {
                 [weakSelf _hiddenToolsView:NO];
             };
-            
+
             if (weakSelf.gaussanImage == nil)
             {
-                IJSLodingView *lodingView =[IJSLodingView showLodingViewAddedTo:weakSelf.view title:@"正在处理... ..."];
+                IJSLodingView *lodingView = [IJSLodingView showLodingViewAddedTo:weakSelf.view title:@"正在处理... ..."];
                 weakSelf.lodingView = lodingView;
                 [weakSelf _startListenPlayerTimer];
                 [weakSelf _getGaussanImage];
             }
         };
-        
+
         mosaicToolView.cancleLastCallBack = ^(UIButton *button) { // 取消
-            
+
             if (weakSelf.mosaicTool.graffitiType == JSMosaicType)
             {
                 [weakSelf.mosaicTool.mosaicView cleanLastDrawPath];
@@ -650,7 +649,7 @@
     {
         if ([subView isKindOfClass:[IJSIMapViewExportView class]] && [subView isKindOfClass:[IJSIImputTextExportView class]])
         {
-           [subView removeFromSuperview];
+            [subView removeFromSuperview];
         }
     }
 }
@@ -681,17 +680,17 @@
 {
     CGSize size = view.bounds.size;
     CGSize targetSize = CGSizeMake(size.width * view.layer.js_transformScaleX, size.height * view.layer.js_transformScaleY);
-    
+
     UIGraphicsBeginImageContextWithOptions(targetSize, NO, [UIScreen mainScreen].scale);
-    
+
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGContextSaveGState(ctx);
     [view drawViewHierarchyInRect:CGRectMake(0, 0, targetSize.width, targetSize.height) afterScreenUpdates:NO];
     CGContextRestoreGState(ctx);
-    
+
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    
+
     return image;
 }
 /*-----------------------------------内部数据处理-------------------------------------------------------*/
@@ -699,15 +698,15 @@
 - (void)_completeCallback:(void (^)(UIImage *image))completeCallback
 {
     //    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-    
+
     CGFloat WS = self.backImageView.js_width / self.drawingView.js_width;
     CGFloat HS = self.backImageView.js_height / self.drawingView.js_height;
-    
+
     UIGraphicsBeginImageContextWithOptions(CGSizeMake(self.backImageView.image.size.width, self.backImageView.image.size.height),
                                            NO,
                                            self.backImageView.image.scale);
     [self.backImageView.image drawAtPoint:CGPointZero];
-    
+
     CGFloat viewToimgW = self.backImageView.js_width / self.backImageView.image.size.width;
     CGFloat viewToimgH = self.backImageView.js_height / self.backImageView.image.size.height;
     __unused CGFloat drawX = self.backImageView.js_left / viewToimgW;
@@ -719,16 +718,16 @@
         UIImage *textImg = [self.class _screenshot:exportView orientation:UIDeviceOrientationPortrait usePresentationLayer:YES];
         CGFloat rotation = exportView.layer.js_transformRotationZ;
         textImg = [textImg imageRotatedByRadians:rotation];
-        
+
         CGFloat selfRw = self.backImageView.bounds.size.width / self.backImageView.image.size.width;
         CGFloat selfRh = self.backImageView.bounds.size.height / self.backImageView.image.size.height;
-        
+
         CGFloat sw = textImg.size.width / selfRw;
         CGFloat sh = textImg.size.height / selfRh;
-        
+
         [textImg drawInRect:CGRectMake(exportView.js_left / selfRw, (exportView.js_top / selfRh) - drawY, sw, sh)];
     }
-    
+
     UIImage *tmp = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -764,7 +763,7 @@
     self.mosaicTool.mosaicView = nil;
     self.mosaicTool.guassanView = nil;
     [self _resetUIHierarchy];
-    
+
     self.cropImageRect = cropRect;
     [cropViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
@@ -797,7 +796,7 @@
         self.listenGuassTimer = nil;
     }
 }
--(void)_listenObjcAction
+- (void)_listenObjcAction
 {
     if (self.gaussanImage)
     {
@@ -806,28 +805,8 @@
     }
     else
     {
-        
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 - (void)didReceiveMemoryWarning
 {

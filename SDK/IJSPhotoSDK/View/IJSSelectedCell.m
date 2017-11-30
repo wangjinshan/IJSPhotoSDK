@@ -36,7 +36,7 @@
     }
     else
     {
-          __weak typeof (self) weakSelf = self;
+        __weak typeof(self) weakSelf = self;
         [[IJSImageManager shareManager] getPhotoWithAsset:selectedModel.asset completion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
             weakSelf.backImageView.image = photo;
         }];
@@ -45,24 +45,18 @@
     _backImageView.layer.cornerRadius = 0;
     _backImageView.clipsToBounds = YES;
 
-    if ((self.pushSelectedIndex == selectedModel.onlyOneTag
-         && selectedModel.isFirstAppear)
-        && !selectedModel.isPreviewButton)
+    if ((self.pushSelectedIndex == selectedModel.onlyOneTag && selectedModel.isFirstAppear) && !selectedModel.isPreviewButton)
     { // 第一次
         [self _addBorderForBackImageView];
     }
 }
 /// 点亮方法
--(void)_addBorderForBackImageView
+- (void)_addBorderForBackImageView
 {
     _backImageView.layer.borderWidth = 2;
     _backImageView.layer.cornerRadius = 3;
     _backImageView.layer.borderColor = [[UIColor greenColor] CGColor]; //设置边框的颜色
     _backImageView.clipsToBounds = YES;
 }
-
-
-
-
 
 @end

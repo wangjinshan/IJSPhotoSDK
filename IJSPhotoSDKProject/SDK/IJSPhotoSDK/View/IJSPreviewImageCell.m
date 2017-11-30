@@ -10,9 +10,8 @@
 #import "IJSImageManager.h"
 #import "IJSConst.h"
 #import "IJSPreviewGifView.h"
-
 #import "IJSPreviewLivePhotoView.h"
-
+#import "IJSExtension.h"
 @interface IJSPreviewImageCell () <UIScrollViewDelegate>
 /* gif视图 */
 @property (nonatomic, weak) IJSPreviewGifView *gifView;
@@ -56,6 +55,7 @@
     {
         _backImageView = [UIImageView new];
         _backImageView.backgroundColor = [UIColor colorWithRed:(34 / 255.0) green:(34 / 255.0) blue:(34 / 255.0) alpha:1.0];
+        _backImageView.contentMode = UIViewContentModeScaleAspectFill;
         [self.scrollView addSubview:_backImageView];
         [self _addTapWithView:_backImageView];
     }
@@ -92,7 +92,7 @@
 {
     if (!_scrollView)
     {
-        _scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
+        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.js_width,  self.js_height)];
         _scrollView.pagingEnabled = NO;
         _scrollView.minimumZoomScale = miniZoomScale;
         _scrollView.maximumZoomScale = maxZoomScale;
@@ -110,21 +110,28 @@
 - (void)setAssetModel:(IJSAssetModel *)assetModel
 {
     _assetModel = assetModel;
-
     __weak typeof(self) weakSelf = self;
     if (assetModel.type == JSAssetModelMediaTypePhoto)
     {
-        if (assetModel.image) //编辑完成的image
+        if (assetModel.cutImage) //编辑完成的image
         {
-            self.backImageView.image = assetModel.image;
+            self.backImageView.image = assetModel.cutImage;
         }
         else
         {
-            [[IJSImageManager shareManager] getOriginalPhotoWithAsset:assetModel.asset completion:^(UIImage *photo, NSDictionary *info) {
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    weakSelf.backImageView.image = photo;
-                });
-            }];
+            if (assetModel.analysisImage)
+            {
+                self.backImageView.image = assetModel.analysisImage;
+            }
+            else
+            {
+                [[IJSImageManager shareManager] getOriginalPhotoWithAsset:assetModel.asset completion:^(UIImage *photo, NSDictionary *info) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        weakSelf.backImageView.image = photo;
+                        assetModel.analysisImage =photo;
+                    });
+                }];
+            }
         }
         self.gifView.hidden = YES;
         self.videoView.hidden = YES;
@@ -163,15 +170,23 @@
         }
         else
         {
-            if (assetModel.image)
+            if (assetModel.cutImage)
             {
-                self.backImageView.image = assetModel.image;
+                self.backImageView.image = assetModel.cutImage;
             }
             else
             {
-                [[IJSImageManager shareManager] getOriginalPhotoWithAsset:assetModel.asset completion:^(UIImage *photo, NSDictionary *info) {
-                    weakSelf.backImageView.image = photo;
-                }];
+                if (assetModel.analysisImage)
+                {
+                    self.backImageView.image = assetModel.analysisImage;
+                }
+                else
+                {
+                    [[IJSImageManager shareManager] getOriginalPhotoWithAsset:assetModel.asset completion:^(UIImage *photo, NSDictionary *info) {
+                        weakSelf.backImageView.image = photo;
+                        assetModel.analysisImage = photo;
+                    }];
+                }
             }
             self.gifView.hidden = YES;
             self.videoView.hidden = YES;
@@ -184,29 +199,13 @@
 
 - (void)layoutSubviews
 {
-    //        if (self.assetModel.type == JSAssetModelMediaTypeVideo)
-    //        {
-    //            [self _setBackViewFrame:self.videoView height:self.assetModel.assetHeight];
-    //        }
-    //        else if (self.assetModel.type == JSAssetModelMediaTypePhoto)
-    //        {
-    //            [self _setBackViewFrame:self.backImageView height:self.assetModel.assetHeight];
-    //        }
-    //        else if (self.assetModel.type == JSAssetModelMediaTypePhotoGif)
-    //        {
-    //            [self _setBackViewFrame:self.gifView height:self.assetModel.assetHeight];
-    //        }
-    //        else if (self.assetModel.type == JSAssetModelMediaTypeLivePhoto)
-    //        {
-    //             [self _setBackViewFrame:self.livePhoto height:self.assetModel.assetHeight];
-    //        }
 }
 
 // 设置大小
 - (void)_setBackViewFrame:(UIView *)view height:(CGFloat)height
 {
     view.frame = CGRectMake(0, 0, JSScreenWidth, height);
-    view.center = CGPointMake(JSScreenWidth / 2, JSScreenHeight / 2);
+    view.js_centerY = self.scrollView.js_height *0.5;
 }
 // 给view添加手势
 - (void)_addTapWithView:(UIView *)view

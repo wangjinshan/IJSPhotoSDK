@@ -44,5 +44,4 @@
 #define miniZoomScale 1
 #define maxZoomScale 2
 
-
 #endif /* IJSConst_h */

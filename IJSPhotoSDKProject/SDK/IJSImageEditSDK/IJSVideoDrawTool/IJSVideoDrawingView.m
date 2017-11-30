@@ -35,25 +35,25 @@
 
 - (void)_createdUI
 {
-    UIImageView *backImageView = [[UIImageView alloc] initWithFrame:self.bounds];
+    UIImageView *backImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.js_width, self.js_height)];
     [self addSubview:backImageView];
     self.backImageView = backImageView;
     backImageView.userInteractionEnabled = YES;
-    
-    IJSDrawingView *drawingView = [[IJSDrawingView alloc] initWithFrame:CGRectMake(0, 0, self.drawingViewSize.width, self.drawingViewSize.height)];
+
+    IJSDrawingView *drawingView = [[IJSDrawingView alloc] initWithFrame:CGRectMake(0, 0, self.js_width, self.js_height)];
     drawingView.backgroundColor = [UIColor clearColor];
     [self addSubview:drawingView];
     self.drawingView = drawingView;
-    
-    IJSDToolBarView *toolBarView = [[IJSDToolBarView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 30)];
+
+    IJSDToolBarView *toolBarView = [[IJSDToolBarView alloc] initWithFrame:CGRectMake(0, 0, self.js_width, 30)];
     toolBarView.backgroundColor = [UIColor clearColor];
     [self addSubview:toolBarView];
     self.toolBarView = toolBarView;
-    
+
     IJSDColorView *colorView = [[IJSDColorView alloc] initWithFrame:CGRectMake(0, self.frame.size.height - 140, JSScreenWidth, 140)];
     [self addSubview:colorView];
     self.colorView = colorView;
-    
+
     [self _addTap]; //手势
 }
 
@@ -78,17 +78,17 @@
 - (void)_action
 {
     __weak typeof(self) weakSelf = self;
-    
+
     self.colorView.rCallBack = ^(CGFloat width, UIColor *color) {
         weakSelf.drawingView.pathColor = color;
         weakSelf.drawingView.pathWidth = width;
-        
+
     };
     self.colorView.gCallBack = ^(CGFloat width, UIColor *color) {
         weakSelf.drawingView.pathColor = color;
         weakSelf.drawingView.pathWidth = width;
     };
-    
+
     self.colorView.bCallBack = ^(CGFloat width, UIColor *color) {
         weakSelf.drawingView.pathColor = color;
         weakSelf.drawingView.pathWidth = width;
@@ -97,7 +97,7 @@
         weakSelf.drawingView.pathColor = color;
         weakSelf.drawingView.pathWidth = width;
     };
-    
+
     self.toolBarView.cancleCallBack = ^{
     };
     // 正在绘制
@@ -116,7 +116,7 @@
         }
         [weakSelf _hiddenToolView:NO];
     };
-    
+
     self.toolBarView.cleanAllCallBack = ^{
         [weakSelf.drawingView cleanAllPath];
     };
@@ -133,9 +133,9 @@
         picker.delegate = weakSelf;
         [weakSelf.controller presentViewController:picker animated:YES completion:nil];
     };
-    
+
     self.toolBarView.savePhotoCallBack = ^{
-        
+
         UIGraphicsBeginImageContextWithOptions(weakSelf.drawingView.frame.size, NO, 0);
         CGContextRef context = UIGraphicsGetCurrentContext();
         [weakSelf.backImageView drawRect:weakSelf.drawingView.frame];
@@ -150,8 +150,8 @@
             //  必须加这个方法 - (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo;
             UIImageWriteToSavedPhotosAlbum(image, weakSelf, @selector(image:didFinishSavingWithError:contextInfo:), nil);
             dispatch_async(dispatch_get_main_queue(), ^{
-                
-            });
+
+                           });
         });
         [weakSelf.controller dismissViewControllerAnimated:true completion:nil];
     };
@@ -171,7 +171,7 @@
     exportView.backgroundColor = [UIColor clearColor];
     exportView.drawImage = selectedImage;
     [self addSubview:exportView];
-    
+
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -188,16 +188,13 @@
 
 - (void)layoutSubviews
 {
-    _drawingView.center = CGPointMake(self.superview.center.x, self.superview.center.y - IJSVideoEditNavigationHeight); //
+//    _drawingView.center = CGPointMake(self.superview.center.x, self.superview.center.y - IJSVideoEditNavigationHeight); //
 }
 #pragma mark - 隐藏
--(void)_hiddenToolView:(BOOL)state
+- (void)_hiddenToolView:(BOOL)state
 {
     self.toolBarView.hidden = state;
     self.colorView.hidden = state;
 }
-
-
-
 
 @end

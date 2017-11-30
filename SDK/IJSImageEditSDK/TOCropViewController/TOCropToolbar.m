@@ -602,8 +602,8 @@
     else
     {
         [_rotateClockwiseButton removeFromSuperview];
-#pragma warn ----未知---------------
-//        _rotateClockwiseButton = nil;
+#pragma warn-- --未知-- ------------ -
+        //        _rotateClockwiseButton = nil;
     }
 
     [self setNeedsLayout];

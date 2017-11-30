@@ -24,6 +24,5 @@
  */
 - (instancetype)initWithFrame:(CGRect)frame widthPerSecond:(CGFloat)widthPerSecond themeColor:(UIColor *)themeColor slideWidth:(CGFloat)slideWidth assetDuration:(CGFloat)assetDuration;
 
-@property (nonatomic, assign) CGFloat www; // 参数说明
 
 @end

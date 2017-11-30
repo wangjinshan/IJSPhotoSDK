@@ -79,7 +79,7 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
 // 获取相机胶卷的相册得到PHAsset对象放到IJSAlbumModel中
 - (void)getCameraRollAlbumContentImage:(BOOL)contentImage contentVideo:(BOOL)contentVideo completion:(void (^)(IJSAlbumModel *model))completion
 {
-//    __block IJSAlbumModel *model;
+    //    __block IJSAlbumModel *model;
     if (iOS8Later)
     {
         PHFetchOptions *option = [[PHFetchOptions alloc] init];
@@ -98,7 +98,7 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
         {
             if (![collection isKindOfClass:[PHAssetCollection class]])
             {
-               continue; // 有可能是PHCollectionList类的的对象，过滤掉
+                continue; // 有可能是PHCollectionList类的的对象，过滤掉
             }
             if ([self isCameraRollAlbum:collection.localizedTitle])
             {
@@ -440,7 +440,7 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
                 result = [self fixOrientation:result];
                 if (completion)
                 {
-                   completion(result, info, [[info objectForKey:PHImageResultIsDegradedKey] boolValue]);
+                    completion(result, info, [[info objectForKey:PHImageResultIsDegradedKey] boolValue]);
                 }
             }
             // Download image from iCloud / 从iCloud下载图片
@@ -526,7 +526,7 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
                 BOOL isDegraded = [[info objectForKey:PHImageResultIsDegradedKey] boolValue];
                 if (completion)
                 {
-                  completion(result, info, isDegraded);
+                    completion(result, info, isDegraded);
                 }
             }
         }];
@@ -543,7 +543,7 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (completion)
                 {
-                  completion(originalImage, nil, NO);
+                    completion(originalImage, nil, NO);
                 }
             });
         });
@@ -683,7 +683,7 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
         AVPlayerItem *playerItem = [[AVPlayerItem alloc] initWithURL:videoURL];
         if (completion && playerItem)
         {
-           completion(playerItem, nil);
+            completion(playerItem, nil);
         }
     }
 }
@@ -698,7 +698,7 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
         [[PHImageManager defaultManager] requestAVAssetForVideo:asset options:option resultHandler:^(AVAsset *_Nullable asset, AVAudioMix *_Nullable audioMix, NSDictionary *_Nullable info) {
             if (completion)
             {
-               completion(asset, audioMix, info);
+                completion(asset, audioMix, info);
             }
         }];
     }
@@ -715,7 +715,7 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
         [[PHImageManager defaultManager] requestExportSessionForVideo:asset options:option exportPreset:AVAssetExportPresetMediumQuality resultHandler:^(AVAssetExportSession *_Nullable exportSession, NSDictionary *_Nullable info) {
             if (completion)
             {
-               completion(exportSession, info);
+                completion(exportSession, info);
             }
         }];
     }
@@ -758,7 +758,7 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
                 isExisted = YES; // PHAssetColllection
                 if (completion)
                 {
-                  completion(collection, nil, isExisted);
+                    completion(collection, nil, isExisted);
                 }
                 break;
             }
@@ -767,7 +767,7 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
         {
             if (completion)
             {
-              completion(nil, nil, NO);
+                completion(nil, nil, NO);
             }
         }
         return isExisted;
@@ -800,13 +800,13 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
                 // 系统允许存在同名的相册多个,回调以便利的最后一个作为返回值
                 if (completion)
                 {
-                   completion(group, nil, isExisted);
+                    completion(group, nil, isExisted);
                 }
             }
         } failureBlock:^(NSError *error) {
             if (completion)
             {
-              completion(nil, error, error ? NO : YES);
+                completion(nil, error, error ? NO : YES);
             }
         }];
     }
@@ -841,7 +841,7 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
                     // 创建相册成功,并返回
                     if (completion)
                     {
-                       completion([PHAssetCollection fetchAssetCollectionsWithLocalIdentifiers:@[photoID] options:nil].firstObject, error, error ? NO : YES);
+                        completion([PHAssetCollection fetchAssetCollectionsWithLocalIdentifiers:@[photoID] options:nil].firstObject, error, error ? NO : YES);
                     }
                 }
                 else
@@ -878,16 +878,16 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
                     }
                     if (!haveHDRGroup)
                     {
-                          haveHDRGroup = YES;
+                        haveHDRGroup = YES;
                         [assetsLibrary addAssetsGroupAlbumWithName:albumName resultBlock:^(ALAssetsGroup *group) {
                             // 此处有坑 ios8 之后创建过的相册删除再创建就会创建失败 group为空
                             if (group)
                             {
-                                  [groups addObject:group];
+                                [groups addObject:group];
                             }
                             if (completion)
                             {
-                                 completion(group, nil, YES);
+                                completion(group, nil, YES);
                             }
                         } failureBlock:nil];
                     }
@@ -1113,11 +1113,11 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
         } error:&error];
         if (completion)
         {
-             completion([PHAsset fetchAssetsWithLocalIdentifiers:@[assetID] options:nil], error, YES);
+            completion([PHAsset fetchAssetsWithLocalIdentifiers:@[assetID] options:nil], error, YES);
         }
         if (error)
         {
-          return nil;
+            return nil;
         }
         return [PHAsset fetchAssetsWithLocalIdentifiers:@[assetID] options:nil];
     }
@@ -1129,7 +1129,7 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
         [weakLibrary writeVideoAtPathToSavedPhotosAlbum:videoUrl completionBlock:^(NSURL *assetURL, NSError *error) {
             if (completion)
             {
-               completion(assetURL, error, error ? NO : YES);
+                completion(assetURL, error, error ? NO : YES);
             }
         }];
     }
@@ -1459,7 +1459,7 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
         }
         else if (phAsset.mediaType == PHAssetMediaTypeAudio)
         {
-              type = JSAssetModelMediaTypeAudio;
+            type = JSAssetModelMediaTypeAudio;
         }
         else if (phAsset.mediaType == PHAssetMediaTypeImage)
         {
@@ -1467,7 +1467,7 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
             {
                 if (phAsset.mediaSubtypes == PHAssetMediaSubtypePhotoLive)
                 {
-                       type = JSAssetModelMediaTypeLivePhoto;
+                    type = JSAssetModelMediaTypeLivePhoto;
                 }
             }
             // Gif
@@ -1482,11 +1482,11 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
         }
         if (!allowPickingImage && type == JSAssetModelMediaTypePhoto)
         {
-             return nil;
+            return nil;
         }
         if (!allowPickingImage && type == JSAssetModelMediaTypePhotoGif)
         {
-             return nil;
+            return nil;
         }
 
         if (!allowPickingImage && type == JSAssetModelMediaTypeLivePhoto)
@@ -1650,7 +1650,7 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
 
     CGImageRef cgimg = CGBitmapContextCreateImage(ctx);
     UIImage *img = [UIImage imageWithCGImage:cgimg];
-    
+
     if (ctx)
     {
         CGContextRelease(ctx);
@@ -1704,7 +1704,7 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
         AVMutableVideoComposition *videoComposition = [self _fixedCompositionWithAsset:videoAsset];
         if (videoComposition.renderSize.width)
         {
-            session.videoComposition = videoComposition;  // 修正视频转向
+            session.videoComposition = videoComposition; // 修正视频转向
         }
         //导出
         __block NSError *error;
@@ -1761,7 +1761,6 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
                     break;
             }
         }];
-
     }
 }
 

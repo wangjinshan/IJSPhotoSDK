@@ -56,23 +56,38 @@
     _assetModel = assetModel;
     [self.playerLayer removeFromSuperlayer];
     __weak typeof(self) weakSelf = self;
-    //正常模式进来
-    [[IJSImageManager shareManager] getVideoWithAsset:assetModel.asset networkAccessAllowed:assetModel.networkAccessAllowed progressHandler:^(double progress, NSError *error, BOOL *stop, NSDictionary *info) {
-    } completion:^(AVPlayerItem *playerItem, NSDictionary *info) {
-        // 注意必须在主线程中操作
+    if (assetModel.analysisPlayer)
+    {
         dispatch_async(dispatch_get_main_queue(), ^{
-            weakSelf.player = [AVPlayer playerWithPlayerItem:playerItem];
+            weakSelf.player = assetModel.analysisPlayer;
             AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:_player];
             playerLayer.frame = CGRectMake(0, 0, weakSelf.js_width, weakSelf.js_height);
             [weakSelf.backVideoView.layer addSublayer:playerLayer];
             weakSelf.playerLayer = playerLayer;
         });
-    }];
+    }
+    else
+    {
+        [[IJSImageManager shareManager] getVideoWithAsset:assetModel.asset networkAccessAllowed:assetModel.networkAccessAllowed progressHandler:^(double progress, NSError *error, BOOL *stop, NSDictionary *info) {
+        } completion:^(AVPlayerItem *playerItem, NSDictionary *info) {
+            // 注意必须在主线程中操作
+            dispatch_async(dispatch_get_main_queue(), ^{
+                weakSelf.player = [AVPlayer playerWithPlayerItem:playerItem];
+                assetModel.analysisPlayer = weakSelf.player;
+                AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:_player];
+                playerLayer.frame = CGRectMake(0, 0, weakSelf.js_width, weakSelf.js_height);
+                [weakSelf.backVideoView.layer addSublayer:playerLayer];
+                weakSelf.playerLayer = playerLayer;
+               
+            });
+        }];
+    }
 }
 
 - (void)layoutSubviews
 {
     self.backVideoView.frame = CGRectMake(0, 0, self.js_width, self.js_height);
+
     self.playButton.frame = CGRectMake(0, 0, 80, 80);
     self.playButton.center = self.backVideoView.center;
 }

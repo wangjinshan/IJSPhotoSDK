@@ -9,18 +9,19 @@
 #import "IJSMapViewThumbCell.h"
 #import "IJSExtension.h"
 #import <IJSFoundation/IJSFoundation.h>
-@interface IJSMapViewThumbCell()
-@property(nonatomic,weak) UIImageView *thumbImageView;  // 缩略图
+
+@interface IJSMapViewThumbCell ()
+@property (nonatomic, weak) UIImageView *thumbImageView; // 缩略图
 @end
 
 @implementation IJSMapViewThumbCell
 
--(instancetype)initWithFrame:(CGRect)frame
+- (instancetype)initWithFrame:(CGRect)frame
 {
-    self =[super initWithFrame:frame];
+    self = [super initWithFrame:frame];
     if (self)
     {
-        UIImageView *thumbImageView =[[UIImageView alloc]initWithFrame:CGRectMake(5, 5, self.js_width - 10, self.js_height -10)];
+        UIImageView *thumbImageView = [[UIImageView alloc] initWithFrame:CGRectMake(5, 5, self.js_width - 10, self.js_height - 10)];
         [self addSubview:thumbImageView];
         thumbImageView.contentMode = UIViewContentModeScaleAspectFit;
         self.thumbImageView = thumbImageView;
@@ -28,8 +29,7 @@
     return self;
 }
 
-
--(void)setImageModel:(IJSMapViewModel *)imageModel
+- (void)setImageModel:(IJSMapViewModel *)imageModel
 {
     _imageModel = imageModel;
     self.thumbImageView.image = [UIImage imageWithContentsOfFile:imageModel.imageDataArr[10]];
@@ -39,13 +39,8 @@
     }
     else
     {
-        self.backgroundColor =[UIColor whiteColor];
+        self.backgroundColor = [UIColor whiteColor];
     }
 }
-
-
-
-
-
 
 @end

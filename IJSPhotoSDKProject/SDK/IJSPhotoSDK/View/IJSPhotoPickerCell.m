@@ -108,12 +108,13 @@
     __weak typeof(self) weakSelf = self;
 
     // 选择性加载图片裁剪的图片
-    if (model.image)
+    if (model.cutImage)
     {
-        _backImageView.image = model.image;
+        _backImageView.image = model.cutImage;
     }
     else
     {
+    
         [[IJSImageManager shareManager] getPhotoWithAsset:model.asset photoWidth:self.js_width completion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
 
             if (!iOS8Later)

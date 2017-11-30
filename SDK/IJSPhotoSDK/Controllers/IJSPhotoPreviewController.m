@@ -26,29 +26,29 @@
 static NSString *const IJSShowCellID = @"IJSPreviewImageCell";
 static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
 
-@interface IJSPhotoPreviewController () <UICollectionViewDelegate, UICollectionViewDataSource, UIViewControllerPreviewingDelegate,IJSPreviewImageCellDelegate>
+@interface IJSPhotoPreviewController () <UICollectionViewDelegate, UICollectionViewDataSource, UIViewControllerPreviewingDelegate, IJSPreviewImageCellDelegate>
 
-@property(nonatomic,assign) BOOL toHiddToolStatus;  // 改变工具的状态
-@property(nonatomic,assign) BOOL buttonSelected;   // button的改变状态
-@property(nonatomic,assign) BOOL selectedCollectionHidden;  // 隐藏选中的selected
-@property(nonatomic,assign) BOOL isFirstAppear;  // 第一次出现
-@property(nonatomic,assign) BOOL isPlaying;   //正在播放
-@property (nonatomic, weak) UIButton *editButton;                              /* 编辑 */
-@property (nonatomic, weak) UIButton *finishButton;                            /* 完成 */
-@property (nonatomic, weak) UICollectionView *showCollectioView;               /* collection */
-@property (nonatomic, strong) NSMutableArray *imageDataArr;                    /* 解析的数据 */
-@property (nonatomic, weak) UIView *toolBarView;                               /* 工具条 */
-@property (nonatomic, weak) UIButton *rightButton;                             /* 导航条后边的button */
-@property (nonatomic, weak) UICollectionView *selectedCollection;              /* 用户选中了的collectionview */
-@property (nonatomic, assign) NSIndexPath *didClinkIndex;                      /* 记录一下上点击的坐标 */
-@property (nonatomic, weak) IJSPreviewImageCell *touchCell;                    /* 当前可见的cell */
-@property (nonatomic, weak) UIGestureRecognizer *gesture;                      /* 3dtouch */
-@property (nonatomic, strong) UIButton *videoPlayButton;                       /* 播放视频的button */
-@property (nonatomic, strong) AVPlayer *player;                                /* 播放控制器 */
-@property(nonatomic,assign) BOOL isDoing;  // 正在处理,稍等
-@property(nonatomic,strong) IJSLodingView *lodingView;  // lodingView
-@property (nonatomic, strong) NSTimer *listenPlayerTimer;           // 监听的时间
-@property(nonatomic,assign) CGFloat videoDuraing;  // 视频长度
+@property (nonatomic, assign) BOOL toHiddToolStatus;              // 改变工具的状态
+@property (nonatomic, assign) BOOL buttonSelected;                // button的改变状态
+@property (nonatomic, assign) BOOL selectedCollectionHidden;      // 隐藏选中的selected
+@property (nonatomic, assign) BOOL isFirstAppear;                 // 第一次出现
+@property (nonatomic, assign) BOOL isPlaying;                     //正在播放
+@property (nonatomic, weak) UIButton *editButton;                 /* 编辑 */
+@property (nonatomic, weak) UIButton *finishButton;               /* 完成 */
+@property (nonatomic, weak) UICollectionView *showCollectioView;  /* collection */
+@property (nonatomic, strong) NSMutableArray *imageDataArr;       /* 解析的数据 */
+@property (nonatomic, weak) UIView *toolBarView;                  /* 工具条 */
+@property (nonatomic, weak) UIButton *rightButton;                /* 导航条后边的button */
+@property (nonatomic, weak) UICollectionView *selectedCollection; /* 用户选中了的collectionview */
+@property (nonatomic, assign) NSIndexPath *didClinkIndex;         /* 记录一下上点击的坐标 */
+@property (nonatomic, weak) IJSPreviewImageCell *touchCell;       /* 当前可见的cell */
+@property (nonatomic, weak) UIGestureRecognizer *gesture;         /* 3dtouch */
+@property (nonatomic, strong) UIButton *videoPlayButton;          /* 播放视频的button */
+@property (nonatomic, strong) AVPlayer *player;                   /* 播放控制器 */
+@property (nonatomic, assign) BOOL isDoing;                       // 正在处理,稍等
+@property (nonatomic, strong) IJSLodingView *lodingView;          // lodingView
+@property (nonatomic, strong) NSTimer *listenPlayerTimer;         // 监听的时间
+@property (nonatomic, assign) CGFloat videoDuraing;               // 视频长度
 @end
 
 @implementation IJSPhotoPreviewController
@@ -81,7 +81,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     {
         _selectedCollectionHidden = YES;
     }
-    
+
     [self _createdUI];
 }
 - (void)viewWillDisappear:(BOOL)animated
@@ -100,7 +100,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     {
         if (self.isPreviewButton)
         {
-           return self.previewAssetModelArr.count; //预览模式
+            return self.previewAssetModelArr.count; //预览模式
         }
         return self.allAssetModelArr.count;
     }
@@ -112,7 +112,6 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
 
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-
     if (collectionView == self.showCollectioView)
     {
         IJSPreviewImageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:IJSShowCellID forIndexPath:indexPath];
@@ -125,7 +124,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
         {
             assetModel = self.allAssetModelArr[indexPath.row];
         }
-        assetModel.networkAccessAllowed = ((IJSImagePickerController *)self.navigationController).networkAccessAllowed;
+        assetModel.networkAccessAllowed = ((IJSImagePickerController *) self.navigationController).networkAccessAllowed;
         cell.assetModel = assetModel;
         if (iOS9Later)
         {
@@ -136,7 +135,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
         }
         if (assetModel.type == JSAssetModelMediaTypeVideo)
         {
-          cell.cellDelegate = self;
+            cell.cellDelegate = self;
         }
         return cell;
     }
@@ -155,7 +154,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
             model.isPreviewButton = NO;
         }
         cell.selectedModel = model;
-        
+
         return cell;
     }
     return nil;
@@ -180,7 +179,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     }
 }
 #pragma mark - IJSPreviewImageCellDelegate 代理方法
--(void)didClickCellToHiddenNavigationAndToosWithCell:(IJSPreviewImageCell *)cell hiddenToolsStatus:(BOOL)hiddenToolsStatus
+- (void)didClickCellToHiddenNavigationAndToosWithCell:(IJSPreviewImageCell *)cell hiddenToolsStatus:(BOOL)hiddenToolsStatus
 {
     self.videoPlayButton = cell.videoView.playButton;
     self.player = cell.videoView.player;
@@ -199,7 +198,6 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     [[IJSImageManager shareManager] getAVAssetWithPHAsset:cell.assetModel.asset completion:^(AVAsset *asset, AVAudioMix *audioMix, NSDictionary *info) {
         self.videoDuraing = CMTimeGetSeconds([asset duration]);
     }];
-    
 }
 #pragma mark - 滚动结束
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
@@ -374,7 +372,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     showCollectioView.dataSource = self;
     showCollectioView.delegate = self;
     self.showCollectioView = showCollectioView;
-    
+
     self.showCollectioView.contentOffset = CGPointMake(JSScreenWidth * self.pushSelectedIndex - 1, 0);
     NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.pushSelectedIndex inSection:0];
     [self.showCollectioView scrollToItemAtIndexPath:indexpath atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
@@ -460,7 +458,6 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     {
         [rightButton setBackgroundImage:[IJSFImageGet loadImageWithBundle:@"JSPhotoSDK" subFile:nil grandson:nil imageName:@"preview_number_icon@2x" imageType:@"png"] forState:UIControlStateNormal];
         [rightButton setTitle:@"1" forState:UIControlStateNormal];
-        
     }
     else
     { // 正常进来
@@ -495,7 +492,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     if (_isFirstAppear && self.isPreviewButton)
     {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            NSIndexPath *indexPath =[NSIndexPath indexPathForRow:0 inSection:0];
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
             [self _resetUpSelectedDidClick:indexPath];
         });
     }
@@ -526,7 +523,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     __weak typeof(self) weakSelf = self;
     __block IJSAssetModel *model;
     __block NSUInteger index = 0;
-    model = [self _selectedCurrentModel:model];   //判断选中当前的模型数据
+    model = [self _selectedCurrentModel:model]; //判断选中当前的模型数据
     if (model.type != JSAssetModelMediaTypeVideo)
     {
         // 判断数据
@@ -534,11 +531,11 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
         {
             [self _selectImageButtonAction:nil]; // 选择添加
         }
-        [self _selectedCurrentModel:model];  //判断选中当前的模型数据
-        [self.selectedModels enumerateObjectsUsingBlock:^(IJSAssetModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [self _selectedCurrentModel:model]; //判断选中当前的模型数据
+        [self.selectedModels enumerateObjectsUsingBlock:^(IJSAssetModel *_Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
             if (obj.onlyOneTag == model.onlyOneTag)
             {
-                model = obj;  // 统一内存地址
+                model = obj; // 统一内存地址
                 index = idx;
             }
         }];
@@ -550,11 +547,11 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
             return;
         }
         self.isDoing = YES;
-        
+
         IJSLodingView *lodingView = [IJSLodingView showLodingViewAddedTo:self.view title:@"正在加载... ..."];
-        
-        [[IJSImageManager shareManager]getVideoOutputPathWithAsset:model.asset completion:^(NSURL *outputPath, NSError *error, IJSImageState state) {
-             [lodingView removeFromSuperview];
+
+        [[IJSImageManager shareManager] getVideoOutputPathWithAsset:model.asset completion:^(NSURL *outputPath, NSError *error, IJSImageState state) {
+            [lodingView removeFromSuperview];
             weakSelf.isDoing = NO;
             if (error)
             {
@@ -570,23 +567,23 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
                 dispatch_async(dispatch_get_main_queue(), ^{
                     AVAsset *asset = [AVAsset assetWithURL:outputPath];
                     Float64 duration = CMTimeGetSeconds([asset duration]);
-                    CGFloat minCut = ((IJSImagePickerController *) weakSelf.navigationController).minVideoCut ? :4;
-                    CGFloat maxCut = ((IJSImagePickerController *) weakSelf.navigationController).maxVideoCut ? :10;
+                    CGFloat minCut = ((IJSImagePickerController *) weakSelf.navigationController).minVideoCut ?: 4;
+                    CGFloat maxCut = ((IJSImagePickerController *) weakSelf.navigationController).maxVideoCut ?: 10;
                     if (duration >= minCut && duration <= maxCut)
                     {
                         IJSVideoEditController *videoEditVc = [[IJSVideoEditController alloc] init];
                         videoEditVc.outputPath = outputPath;
-                        videoEditVc.mapImageArr = [(IJSImagePickerController *)weakSelf.navigationController mapImageArr]; //贴图数据
+                        videoEditVc.mapImageArr = [(IJSImagePickerController *) weakSelf.navigationController mapImageArr]; //贴图数据
                         [weakSelf.navigationController pushViewController:videoEditVc animated:YES];
                     }
                     else
                     {
                         IJSVideoCutController *videoCutVc = [[IJSVideoCutController alloc] init];
-                        videoCutVc.minCutTime = ((IJSImagePickerController *)weakSelf.navigationController).minVideoCut;
-                        videoCutVc.maxCutTime = ((IJSImagePickerController *)weakSelf.navigationController).maxVideoCut;
+                        videoCutVc.minCutTime = ((IJSImagePickerController *) weakSelf.navigationController).minVideoCut;
+                        videoCutVc.maxCutTime = ((IJSImagePickerController *) weakSelf.navigationController).maxVideoCut;
                         videoCutVc.avasset = asset;
                         videoCutVc.assetModel = model;
-                        videoCutVc.mapImageArr = [(IJSImagePickerController *)weakSelf.navigationController mapImageArr]; //贴图数据
+                        videoCutVc.mapImageArr = [(IJSImagePickerController *) weakSelf.navigationController mapImageArr]; //贴图数据
                         [weakSelf.navigationController pushViewController:videoCutVc animated:YES];
                     }
                 });
@@ -595,7 +592,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     }
     else
     {
-        NSIndexPath *currentIndex =[NSIndexPath indexPathForRow:index inSection:0];
+        NSIndexPath *currentIndex = [NSIndexPath indexPathForRow:index inSection:0];
         // 执行点击操作
         if (model.image) // 上次已经编辑过,直接编辑编辑过的图片
         {
@@ -627,7 +624,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
                             [weakSelf.showCollectioView reloadData]; // 重载
                             [weakSelf.selectedCollection reloadData];
                             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                                 [weakSelf _resetUpSelectedDidClick:currentIndex];
+                                [weakSelf _resetUpSelectedDidClick:currentIndex];
                             });
                         }];
                         managerVc.mapImageArr = [(IJSImagePickerController *) weakSelf.navigationController mapImageArr];
@@ -640,7 +637,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
 }
 #pragma mark - 执行刷新选择UI的操作
 /// 执行刷新选择UI的操作
--(void)_resetUpSelectedDidClick:(NSIndexPath *)indexPath
+- (void)_resetUpSelectedDidClick:(NSIndexPath *)indexPath
 {
     _isFirstAppear = NO;
     NSArray *cellArr = [self.selectedCollection visibleCells];
@@ -666,15 +663,15 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     {
         self.showCollectioView.contentOffset = CGPointMake(JSScreenWidth * model.onlyOneTag, 0);
     }
-    [self _resetAssetCellStatus:cell];   //加边框
+    [self _resetAssetCellStatus:cell];                      //加边框
     [self _resetRightButtonStatus:model.cellButtonNnumber]; // 刷新导航条
 }
 /// 选则需要的模型
--(IJSAssetModel *)_selectedCurrentModel:(IJSAssetModel *)model
+- (IJSAssetModel *)_selectedCurrentModel:(IJSAssetModel *)model
 {
     NSIndexPath *firstIndexPath = [[self.showCollectioView indexPathsForVisibleItems] firstObject];
     if (self.isPreviewButton) //预览模式下
-    {  //获取的是不变的数据
+    {                         //获取的是不变的数据
         model = self.previewAssetModelArr[firstIndexPath.row];
     }
     else
@@ -722,12 +719,12 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
         else
         {
             // 不满足最小要求就警告
-            if (vc.minImagesCount && vc.selectedModels.count < vc.minImagesCount )
+            if (vc.minImagesCount && vc.selectedModels.count < vc.minImagesCount)
             {
                 NSString *title = [NSString stringWithFormat:[NSBundle localizedStringForKey:@"Select a minimum of %zd photos"], vc.minImagesCount];
                 [vc showAlertWithTitle:title];
                 return;
-            } 
+            }
             // 当前显示的是非视频资源
             if (vc.allowPickingOriginalPhoto) // 原图
             {
@@ -743,7 +740,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     else
     { // 已经选中了多图
         // 不满足最小要求就警告
-        if (vc.minImagesCount && vc.selectedModels.count < vc.minImagesCount )
+        if (vc.minImagesCount && vc.selectedModels.count < vc.minImagesCount)
         {
             NSString *title = [NSString stringWithFormat:[NSBundle localizedStringForKey:@"Select a minimum of %zd photos"], vc.minImagesCount];
             [vc showAlertWithTitle:title];
@@ -787,11 +784,11 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
             return;
         }
         _isDoing = YES;
-        IJSImagePickerController *imagePick = (IJSImagePickerController *)self.navigationController;
+        IJSImagePickerController *imagePick = (IJSImagePickerController *) self.navigationController;
         [[IJSImageManager shareManager] getAVAssetWithPHAsset:model.asset completion:^(AVAsset *asset, AVAudioMix *audioMix, NSDictionary *info) {
             Float64 duration = CMTimeGetSeconds([asset duration]);
             NSInteger maxTime = 10;
-            
+
             if (imagePick.minVideoCut || imagePick.maxVideoCut)
             {
                 if (duration >= imagePick.minVideoCut && duration <= imagePick.maxVideoCut)
@@ -804,7 +801,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
                 }
             }
             else
-            {  // 没有设置就导出原视频
+            { // 没有设置就导出原视频
                 maxTime = duration;
             }
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -824,16 +821,16 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
                 {
                     if ([item isKindOfClass:[NSNumber class]])
                     {
-                        return ;
+                        return;
                     }
                 }
                 [self _didGetAllPhotos:nil asset:assets infos:infoArr isSelectOriginalPhoto:YES avPlayers:avPlayers sourceType:IJSPVideoType];
             }];
-            
+
         }];
     }
     else
-    { // 图片
+    {                    // 图片
         if (model.image) // 裁剪过了
         {
             [photos replaceObjectAtIndex:index withObject:model.image];
@@ -903,7 +900,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
         {
             if ([item isKindOfClass:[NSNumber class]])
             {
-               return;
+                return;
             }
         }
         [self _didGetAllPhotos:photos asset:assets infos:infoArr isSelectOriginalPhoto:YES avPlayers:nil sourceType:IJSPImageType];
@@ -939,7 +936,6 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
 //设置返回的数据
 - (void)_didGetAllPhotos:(NSArray *)photos asset:(NSArray *)asset infos:(NSArray *)infos isSelectOriginalPhoto:(BOOL)isSelectOriginalPhoto avPlayers:(NSArray *)avPlayers sourceType:(IJSPExportSourceType)sourceType
 {
-   
     _isDoing = NO;
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.lodingView removeFromSuperview];
@@ -948,10 +944,10 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
             IJSImagePickerController *vc = (IJSImagePickerController *) self.navigationController;
             if (vc.didFinishUserPickingImageHandle)
             {
-                vc.didFinishUserPickingImageHandle(photos, avPlayers, asset, infos, isSelectOriginalPhoto,sourceType);
+                vc.didFinishUserPickingImageHandle(photos, avPlayers, asset, infos, isSelectOriginalPhoto, sourceType);
             }
             // 代理方式
-            if ([vc.imagePickerDelegate respondsToSelector:@selector(imagePickerController:isSelectOriginalPhoto:didFinishPickingPhotos:assets:infos:avPlayers: sourceType:)])
+            if ([vc.imagePickerDelegate respondsToSelector:@selector(imagePickerController:isSelectOriginalPhoto:didFinishPickingPhotos:assets:infos:avPlayers:sourceType:)])
             {
                 [vc.imagePickerDelegate imagePickerController:vc isSelectOriginalPhoto:isSelectOriginalPhoto didFinishPickingPhotos:photos assets:asset infos:infos avPlayers:avPlayers sourceType:sourceType];
             }
@@ -965,7 +961,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     _isFirstAppear = NO;
     NSInteger index = self.showCollectioView.contentOffset.x / JSScreenWidth;
     if (self.isPreviewButton)
-    {        //1, 处理预览模式下的逻辑
+    {                                                //1, 处理预览模式下的逻辑
         if (self.rightButton.titleLabel.text == nil) //增加
         {
             IJSAssetModel *model = self.previewAssetModelArr[index];
@@ -981,7 +977,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
             NSIndexPath *indexPath = [NSIndexPath indexPathForItem:self.selectedModels.count - 1 inSection:0];
             if (self.selectedModels.count <= 5)
             {
-               self.selectedCollection.contentOffset = CGPointMake(-0.5, 0);
+                self.selectedCollection.contentOffset = CGPointMake(-0.5, 0);
             }
             [self.selectedCollection scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionNone animated:YES];
 
@@ -1016,11 +1012,11 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
             }
         }
     }
-    else  // 2, 正常点击跳转的逻辑处理
+    else // 2, 正常点击跳转的逻辑处理
     {
         if (_rightButton.titleLabel.text == nil) //没有选中 选中添加
         {
-            if (self.selectedModels.count < ((IJSImagePickerController *)self.navigationController).maxImagesCount) //还没有超标
+            if (self.selectedModels.count < ((IJSImagePickerController *) self.navigationController).maxImagesCount) //还没有超标
             {
                 IJSAssetModel *model = self.allAssetModelArr[index];
                 [self.selectedModels addObject:model];
@@ -1039,11 +1035,11 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
             }
             else
             { //超标了
-        
-                NSString *editTitle =[NSString stringWithFormat:@"%@",[NSBundle localizedStringForKey:@"Please edit the selected picture"]];
-                NSString *countTitle = [NSString stringWithFormat:[NSBundle localizedStringForKey:@"Select a maximum of %zd photos"], ((IJSImagePickerController *)self.navigationController).maxImagesCount];
-                NSString *alertTitle =[NSString stringWithFormat:@"%@,%@",countTitle,editTitle];
-                [((IJSImagePickerController *)self.navigationController) showAlertWithTitle:alertTitle];
+
+                NSString *editTitle = [NSString stringWithFormat:@"%@", [NSBundle localizedStringForKey:@"Please edit the selected picture"]];
+                NSString *countTitle = [NSString stringWithFormat:[NSBundle localizedStringForKey:@"Select a maximum of %zd photos"], ((IJSImagePickerController *) self.navigationController).maxImagesCount];
+                NSString *alertTitle = [NSString stringWithFormat:@"%@,%@", countTitle, editTitle];
+                [((IJSImagePickerController *) self.navigationController) showAlertWithTitle:alertTitle];
             }
         }
         else
@@ -1236,24 +1232,13 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
 // 播放中
 - (void)listenPlayerTimerResetTimer
 {
- CGFloat current = CMTimeGetSeconds([self.player currentTime]);
+    CGFloat current = CMTimeGetSeconds([self.player currentTime]);
     if (current >= self.videoDuraing)
     {
         CMTime time = CMTimeMakeWithSeconds(0, self.player.currentTime.timescale);
         [self.player seekToTime:time toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
     }
 }
-
-
-
-
-
-
-
-
-
-
-
 
 - (void)didReceiveMemoryWarning
 {

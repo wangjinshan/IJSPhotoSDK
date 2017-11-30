@@ -14,7 +14,7 @@
 
 @property (nonatomic, copy) void (^mapViewExpoetViewTapCallBack)(void);              // 单击回调
 @property (nonatomic, copy) void (^mapViewExpoetViewPanCallBack)(CGPoint viewPoint); // 平移返回父类的相对位置
-@property (nonatomic, weak) UIImage *backImage;                                    // 背景图对象的方法
+@property (nonatomic, weak) UIImage *backImage;                                      // 背景图对象的方法
 
 // 创建
 + (instancetype)initExportViewWithFrame:(CGRect)frame backImage:(UIImage *)image;

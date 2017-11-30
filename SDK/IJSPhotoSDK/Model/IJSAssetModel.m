@@ -44,8 +44,4 @@
     return imageHeight;
 }
 
-
-
-
-
 @end

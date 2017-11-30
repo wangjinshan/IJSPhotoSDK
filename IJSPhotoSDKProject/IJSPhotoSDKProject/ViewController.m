@@ -14,7 +14,6 @@
 #import "IJSVideoTestController.h"
 #import "IJSMapViewModel.h"
 #import <IJSFoundation/IJSFoundation.h>
-
 #import <Photos/Photos.h>
 
 static NSString *const cellID = @"cellID";
@@ -23,8 +22,11 @@ static NSString *const cellID = @"cellID";
 
 @property (weak, nonatomic) IBOutlet UIImageView *backImageView;
 @property (nonatomic, strong) NSMutableArray<UIImage *> *imageArr; // 图片数组
-@property (nonatomic, strong) UITableView *myTableview; // 参数说明
-@property(nonatomic,strong) NSMutableArray *mapDataArr;  // 参数说明
+@property (nonatomic, strong) UITableView *myTableview;            // 参数说明
+@property (nonatomic, strong) NSMutableArray *mapDataArr;          // 参数说明
+
+@property (weak, nonatomic) IBOutlet UIButton *pushActionBt;
+
 
 @end
 
@@ -34,13 +36,19 @@ static NSString *const cellID = @"cellID";
 {
     [super viewDidLoad];
     [self createTableViewUI];
+    [self.view bringSubviewToFront:self.pushActionBt];
+    //    NSString *str = [[NSBundle mainBundle] pathForResource:@"01" ofType:@"mp4"];
+    //    NSURL *url = [NSURL fileURLWithPath:str];
+    //    [[IJSImageManager shareManager] saveVideoIntoSystemAlbumFromVideoUrl:url completion:^(id assetCollection, NSError *error, BOOL isExistedOrIsSuccess) {
+    //        NSLog(@"----%@",error);
+    //    }];
     
-//    NSString *str = [[NSBundle mainBundle] pathForResource:@"01" ofType:@"mp4"];
-//    NSURL *url = [NSURL fileURLWithPath:str];
-//    [[IJSImageManager shareManager] saveVideoIntoSystemAlbumFromVideoUrl:url completion:^(id assetCollection, NSError *error, BOOL isExistedOrIsSuccess) {
-//        NSLog(@"----%@",error);
-//    }];
-
+   
+    
+ 
+    
+    
+    
 }
 
 #pragma mark 懒加载区域
@@ -55,7 +63,7 @@ static NSString *const cellID = @"cellID";
 
 - (void)createTableViewUI
 {
-    UITableView *tableview = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStylePlain];
+    UITableView *tableview = [[UITableView alloc] initWithFrame:CGRectMake(0, 100, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStylePlain];
     [self.view addSubview:tableview];
 
     tableview.delegate = self;
@@ -90,10 +98,10 @@ static NSString *const cellID = @"cellID";
 - (IBAction)shareAction:(id)sender
 {
     __weak typeof(self) weakSelf = self;
-
-    IJSImagePickerController *imageVc = [[IJSImagePickerController alloc] initWithMaxImagesCount:3 delegate:self];
+    IJSImagePickerController *imageVc = [[IJSImagePickerController alloc] initWithMaxImagesCount:9 columnNumber:3 delegate:self];
     imageVc.minImagesCount = 1;
     imageVc.minVideoCut = 3;
+    imageVc.maxVideoCut = 10;
     imageVc.didFinishUserPickingImageHandle = ^(NSArray<UIImage *> *photos, NSArray *avPlayers, NSArray *assets, NSArray<NSDictionary *> *infos, BOOL isSelectOriginalPhoto, IJSPExportSourceType sourceType) {
         if (sourceType == IJSPImageType)
         {
@@ -102,47 +110,43 @@ static NSString *const cellID = @"cellID";
         }
         else
         {
-            IJSVideoTestController *testVc =[[IJSVideoTestController alloc] init];
+            IJSVideoTestController *testVc = [[IJSVideoTestController alloc] init];
             AVAsset *avaseet = [AVAsset assetWithURL:avPlayers.firstObject];
             testVc.avasset = avaseet;
             [weakSelf presentViewController:testVc animated:YES completion:nil];
         }
     };
-   
-    NSString *bundlePath = [[NSBundle mainBundle]pathForResource:@"JSPhotoSDK" ofType:@"bundle"];
-    NSString *filePath =[bundlePath stringByAppendingString:@"/Expression"];
+
+    NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"JSPhotoSDK" ofType:@"bundle"];
+    NSString *filePath = [bundlePath stringByAppendingString:@"/Expression"];
     [IJSFFilesManager ergodicFilesFromFolderPath:filePath completeHandler:^(NSInteger fileCount, NSInteger fileSzie, NSMutableArray *filePath) {
-        IJSMapViewModel *model =[[IJSMapViewModel alloc]initWithImageDataModel:filePath];
+        IJSMapViewModel *model = [[IJSMapViewModel alloc] initWithImageDataModel:filePath];
         [self.mapDataArr addObject:model];
-        imageVc.mapImageArr  = self.mapDataArr;
+        imageVc.mapImageArr = self.mapDataArr;
         [self presentViewController:imageVc animated:YES completion:nil];
     }];
 }
--(void)imagePickerController:(IJSImagePickerController *)picker isSelectOriginalPhoto:(BOOL)isSelectOriginalPhoto didFinishPickingPhotos:(NSArray<UIImage *> *)photos assets:(NSArray *)assets infos:(NSArray<NSDictionary *> *)infos avPlayers:(NSArray *)avPlayers sourceType:(IJSPExportSourceType)sourceType
+- (void)imagePickerController:(IJSImagePickerController *)picker isSelectOriginalPhoto:(BOOL)isSelectOriginalPhoto didFinishPickingPhotos:(NSArray<UIImage *> *)photos assets:(NSArray *)assets infos:(NSArray<NSDictionary *> *)infos avPlayers:(NSArray *)avPlayers sourceType:(IJSPExportSourceType)sourceType
 {
     if (sourceType == IJSPVideoType)
     {
-//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//            IJSVideoTestController *testVc =[[IJSVideoTestController alloc] init];
-//            AVAsset *avaseet = [AVAsset assetWithURL:avPlayers.firstObject];
-//            testVc.avasset = avaseet;
-//            [self presentViewController:testVc animated:YES completion:nil];
-//        });
+        //        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        //            IJSVideoTestController *testVc =[[IJSVideoTestController alloc] init];
+        //            AVAsset *avaseet = [AVAsset assetWithURL:avPlayers.firstObject];
+        //            testVc.avasset = avaseet;
+        //            [self presentViewController:testVc animated:YES completion:nil];
+        //        });
     }
 }
 #pragma mark 懒加载区域
--(NSMutableArray *)mapDataArr
+- (NSMutableArray *)mapDataArr
 {
     if (_mapDataArr == nil)
     {
-        _mapDataArr =[NSMutableArray array];
+        _mapDataArr = [NSMutableArray array];
     }
     return _mapDataArr;
 }
-
-
-
-
 
 - (void)didReceiveMemoryWarning
 {
@@ -255,51 +259,5 @@ static NSString *const cellID = @"cellID";
  
  */
 // 最小值
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 @end

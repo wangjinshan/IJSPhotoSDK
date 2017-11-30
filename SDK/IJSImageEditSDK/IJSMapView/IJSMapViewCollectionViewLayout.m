@@ -10,25 +10,24 @@
 #import "IJSExtension.h"
 #import "IJSMapViewUIMacro.h"
 
-@interface IJSMapViewCollectionViewLayout()
+@interface IJSMapViewCollectionViewLayout ()
 
-@property(nonatomic,assign) int line;  // 行数
-@property(nonatomic,assign) int item;  // 列数
-@property(nonatomic,assign) long pageNumber;  // 页数
+@property (nonatomic, assign) int line;        // 行数
+@property (nonatomic, assign) int item;        // 列数
+@property (nonatomic, assign) long pageNumber; // 页数
 @property (nonatomic, assign) NSInteger pageCount;
 @property (nonatomic, strong) NSMutableArray *leftArray;
 @property (nonatomic, strong) NSMutableDictionary *heigthDic;
 @property (nonatomic, strong) NSMutableArray *attributes;
 @property (nonatomic, strong) NSMutableArray *indexPathsToAnimate;
-@property(nonatomic,assign) CGFloat itemSpacing;  // 列间距
-@property(nonatomic,assign) CGFloat lineSpacing;  // 行间距
+@property (nonatomic, assign) CGFloat itemSpacing; // 列间距
+@property (nonatomic, assign) CGFloat lineSpacing; // 行间距
 
 @end
 
-
 @implementation IJSMapViewCollectionViewLayout
 
--(instancetype)init
+- (instancetype)init
 {
     self = [super init];
     if (self)
@@ -39,7 +38,7 @@
         self.pageNumber = 1;
         self.line = 2;
         self.item = 1;
-        self.itemSpacing =10;
+        self.itemSpacing = 10;
         self.lineSpacing = 10;
     }
     return self;
@@ -49,23 +48,23 @@
 {
     [super prepareLayout]; //需调用父类方法
     CGFloat itemWidth = self.itemSize.width - 1;
-    CGFloat itemHeight = self.itemSize.height -1;
-    
+    CGFloat itemHeight = self.itemSize.height - 1;
+
     CGFloat width = self.collectionView.frame.size.width;
     CGFloat height = self.collectionView.frame.size.height;
-    
+
     CGFloat contentWidth = (width - self.sectionInset.left - self.sectionInset.right); //内容宽
     if (contentWidth >= (2 * itemWidth + self.minimumInteritemSpacing))
-    { //如果列数大于2
+    {                                                                                           //如果列数大于2
         int tempLine = (contentWidth - itemWidth) / (itemWidth + self.minimumInteritemSpacing); //内容宽去除第一个item 然后计算剩余个数
-        self.item = tempLine + 1; //加回来第一个
+        self.item = tempLine + 1;                                                               //加回来第一个
         self.itemSpacing = self.minimumInteritemSpacing;
     }
     else
     { //如果列数为一行
         self.itemSpacing = 0;
     }
-    
+
     CGFloat contentHeight = (height - self.sectionInset.top - self.sectionInset.bottom);
     if (contentHeight >= (2 * itemHeight + self.minimumLineSpacing))
     { //如果行数大于2行
@@ -77,7 +76,7 @@
     { //如果行数数为一行
         self.lineSpacing = 0;
     }
-    
+
     int itemNumber = 0;
     itemNumber = itemNumber + (int) [self.collectionView numberOfItemsInSection:0]; //获取资源个数
     self.pageNumber = (itemNumber - 1) / (self.line * self.item) + 1;
@@ -94,9 +93,9 @@
     UICollectionViewLayoutAttributes *attribute = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
     CGRect frame;
     frame.size = self.itemSize;
-    long onePagenumber = self.line * self.item;   //下面计算每个cell的frame   可以自己定义
-    long lineNumber = 0; // 行数
-    long page = 0;  // 页码
+    long onePagenumber = self.line * self.item; //下面计算每个cell的frame   可以自己定义
+    long lineNumber = 0;                        // 行数
+    long page = 0;                              // 页码
     if (indexPath.item >= onePagenumber)
     {
         page = indexPath.item / onePagenumber; //计算页数不同时的左间距
@@ -107,7 +106,7 @@
         lineNumber = indexPath.item / self.item;
     }
     long lineIndex = indexPath.item % self.item;
-    frame.origin = CGPointMake(lineIndex * self.itemSize.width + (lineIndex) * self.itemSpacing + self.sectionInset.left + (indexPath.section + page) * self.collectionView.frame.size.width, lineNumber * self.itemSize.height + (lineNumber) * self.lineSpacing + self.sectionInset.top);
+    frame.origin = CGPointMake(lineIndex * self.itemSize.width + (lineIndex) *self.itemSpacing + self.sectionInset.left + (indexPath.section + page) * self.collectionView.frame.size.width, lineNumber * self.itemSize.height + (lineNumber) *self.lineSpacing + self.sectionInset.top);
 
     attribute.frame = frame;
     return attribute;
@@ -145,7 +144,7 @@
     CGFloat verticalCenter = proposedContentOffset.y + self.itemSize.height / 2;
     CGRect targetRect = CGRectMake(0, 0.0, self.collectionView.bounds.size.width, self.collectionView.bounds.size.height);
     NSArray *array = [super layoutAttributesForElementsInRect:targetRect];
-    
+
     //对当前屏幕中的UICollectionViewLayoutAttributes逐个与屏幕中心进行比较，找出最接近中心的一个
     CGPoint offPoint = proposedContentOffset;
     for (UICollectionViewLayoutAttributes *layoutAttributes in array)
@@ -170,11 +169,5 @@
 {
     return NO;
 }
-
-
-
-
-
-
 
 @end

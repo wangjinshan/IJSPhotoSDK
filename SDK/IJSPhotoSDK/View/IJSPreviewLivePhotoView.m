@@ -55,7 +55,7 @@
 
     if (iOS9_1Later)
     {
-          __weak typeof (self) weakSelf = self;
+        __weak typeof(self) weakSelf = self;
         [[IJSImageManager shareManager] getLivePhotoWithAsset:assetModel.asset photoWidth:JSScreenWidth networkAccessAllowed:YES completion:^(PHLivePhoto *livePhoto, NSDictionary *info) {
             weakSelf.backLivePhtotoView.livePhoto = livePhoto;
         } progressHandler:^(double progress, NSError *error, BOOL *stop, NSDictionary *info){

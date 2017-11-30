@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <AVFoundation/AVFoundation.h>
+#import <Photos/Photos.h>
 
 typedef NS_ENUM(NSUInteger, JSAssetModelSourceType) {
     JSAssetModelMediaTypePhoto = 0,
@@ -48,7 +50,6 @@ typedef NS_ENUM(NSUInteger, JSAssetModelSourceType) {
 /* 预览模式进来单独设置 */
 @property (nonatomic, assign) BOOL isPreviewButton;
 
-
 /**
  *  设置资源类型
  */
@@ -56,7 +57,12 @@ typedef NS_ENUM(NSUInteger, JSAssetModelSourceType) {
 + (instancetype)setAssetModelAsset:(id)asset type:(JSAssetModelSourceType)type;
 
 /*-----------------------------------裁剪图片增加的属性-------------------------------------------------------*/
-@property (nonatomic, strong) UIImage *image; // 图片参数
-/*------------------------------------裁剪视频增加的属性-------------------------------*/
+@property (nonatomic, strong) UIImage *cutImage; // 图片参数
+/*------------------------------------解析出来的图片用来缓存-------------------------------*/
+@property(nonatomic,strong) UIImage *analysisImage;  // 从相册中解析出来的图片
+@property(nonatomic,strong) NSData *analysisGif;  // 相册解析的gif图
+@property(nonatomic,strong) AVPlayer *analysisPlayer;  // 解析出来的视频资源
+@property(nonatomic,strong) PHLivePhoto *analysisLivePhoto;  // live图
+
 
 @end

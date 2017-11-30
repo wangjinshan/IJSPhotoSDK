@@ -6,6 +6,7 @@
 
 #import "TOCropToolbar.h"
 #import "IJSUConst.h"
+#import "IJSExtension.h"
 
 #define TOCROPTOOLBAR_DEBUG_SHOWING_BUTTONS_CONTAINER_RECT 0 // convenience debug toggle
 
@@ -92,11 +93,8 @@
     }
 
     _doneTextButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [_doneTextButton setTitle:NSLocalizedStringFromTableInBundle(@"Done",
-                                                                 @"TOCropViewControllerLocalizable",
-                                                                 resourceBundle,
-                                                                 nil)
-                     forState:UIControlStateNormal];
+    [_doneTextButton setTitle:[NSBundle localizedStringForKey:@"Done"] forState:UIControlStateNormal];
+  
     [_doneTextButton setTitleColor:[UIColor colorWithRed:1.0f green:0.8f blue:0.0f alpha:1.0f] forState:UIControlStateNormal];
     [_doneTextButton.titleLabel setFont:[UIFont systemFontOfSize:17.0f]];
     [_doneTextButton addTarget:self action:@selector(buttonTapped:) forControlEvents:UIControlEventTouchUpInside];
@@ -109,11 +107,8 @@
     [self addSubview:_doneIconButton];
 
     _cancelTextButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [_cancelTextButton setTitle:NSLocalizedStringFromTableInBundle(@"Cancel",
-                                                                   @"TOCropViewControllerLocalizable",
-                                                                   resourceBundle,
-                                                                   nil)
-                       forState:UIControlStateNormal];
+    [_cancelTextButton setTitle:[NSBundle localizedStringForKey:@"Cancel"] forState:UIControlStateNormal];
+
     [_cancelTextButton.titleLabel setFont:[UIFont systemFontOfSize:17.0f]];
     [_cancelTextButton addTarget:self action:@selector(buttonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_cancelTextButton];
@@ -602,8 +597,8 @@
     else
     {
         [_rotateClockwiseButton removeFromSuperview];
-#pragma warn ----未知---------------
-//        _rotateClockwiseButton = nil;
+#pragma warn-- --未知-- ------------ -
+        //        _rotateClockwiseButton = nil;
     }
 
     [self setNeedsLayout];

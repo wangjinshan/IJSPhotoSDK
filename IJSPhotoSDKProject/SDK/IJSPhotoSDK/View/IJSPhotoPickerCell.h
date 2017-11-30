@@ -28,7 +28,7 @@
 @property (nonatomic, assign) BOOL allowPickingGif;
 /* 选中照片 */
 
-@property(nonatomic,weak) id<IJSPhotoPickerCellDelegate> cellDelegate;  // 代理属性
+@property (nonatomic, weak) id<IJSPhotoPickerCellDelegate> cellDelegate; // 代理属性
 
 @end
 ///为了优化内存问题,使用代理方法
@@ -37,30 +37,6 @@
  */
 @protocol IJSPhotoPickerCellDelegate <NSObject>
 
--(void)didClickCellButtonWithButtonState:(BOOL)state buttonIndex:(NSInteger)currentIndex;
+- (void)didClickCellButtonWithButtonState:(BOOL)state buttonIndex:(NSInteger)currentIndex;
 
 @end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
