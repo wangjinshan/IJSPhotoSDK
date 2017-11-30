@@ -65,23 +65,63 @@
  */
 - (UIImage *)getImageWithOldImage;
 
-/////待测试
-//+ (CGRect)getViewBoundWith:(UIImage*)image;
-//
-//+ (UIImage*)getScaleImageWith:(UIImage*)image;
-//
-//+ (UIImage*)getImageWithOldImage:(UIImage*)image;
-//
-//+ (UIImage*)getRotationWithImage:(UIImage*)image withOrientation:(UIDeviceOrientation)orientation;
-//
-//+ (UIImage*)getUnrotationWithImage:(UIImage*)image withOrientation:(UIDeviceOrientation)orientation;
-//
-//+ (UIImage *)rotatedByDegrees:(CGFloat)degrees withImage:(UIImage*)image;
-//
-//+ (UIImage *)rotatedWithImage:(UIImage*)image;
-//
-//+ (CGSize)getCutViewSizeWith:(CGSize)bSize;
-//
-//+ (CGSize)getCutImageViewSizeWith:(CGSize)bSize cutViewSize:(CGSize)cSize;
+
++ (CGRect)getViewBoundWith:(UIImage*)image;
+
++ (UIImage*)getScaleImageWith:(UIImage*)image;
+
+/**
+ 画一张原图大小的图
+
+ @param image 原图
+ @return 画好原图大小的图
+ */
++ (UIImage*)getImageWithOldImage:(UIImage*)image;
+
+/**
+ 右朝向的图
+
+ @param image 原图
+ @param orientation 朝向
+ @return 朝向的图
+ */
++ (UIImage*)getRotationWithImage:(UIImage*)image withOrientation:(UIDeviceOrientation)orientation;
+
+/**
+ 根据图片的朝向锁定图的方向
+
+ @param image 原图
+ @param orientation 方向
+ @return 指定朝向的图
+ */
++ (UIImage*)getUnrotationWithImage:(UIImage*)image withOrientation:(UIDeviceOrientation)orientation;
+
+/**
+ 旋转图片
+
+ @param degrees 旋转角度
+ @param image 原图
+ @return 旋转后的图
+ */
++ (UIImage *)rotatedByDegrees:(CGFloat)degrees withImage:(UIImage*)image;
+
+/**
+ 向右旋转90度
+
+ @param image 原图
+ @return 旋转后的图
+ */
++ (UIImage *)rotatedWithImage:(UIImage*)image;
+
+/**
+ 屏幕等比例裁剪图片
+
+ @param bSize 裁剪的大小
+ @return 根据屏幕等比裁剪的大小
+ */
++ (CGSize)getCutViewSizeWith:(CGSize)bSize;
+
+
++ (CGSize)getCutImageViewSizeWith:(CGSize)bSize cutViewSize:(CGSize)cSize;
 
 @end

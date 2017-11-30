@@ -44,11 +44,11 @@
     // 1 开启图形上下文    // 上下文值/设置透明/比例因素: 当前点与像素的比例,写0自动适配
     UIGraphicsBeginImageContextWithOptions(originImage.size, NO, 0);
     UIBezierPath *path = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0, 0, originImage.size.width, originImage.size.height)]; // 2, 描述裁剪区域
-    [path addClip];                                                                         // 3, 设置裁剪区域
-    [originImage drawAtPoint:CGPointZero];                                                        // 4, 画图
-    originImage = UIGraphicsGetImageFromCurrentImageContext();          // 5, 取出图片
-    UIGraphicsEndImageContext();      // 6, 关闭上下文
-    [originImage imageAntialias];           // 抗锯齿
+    [path addClip];                                                                                                                 // 3, 设置裁剪区域
+    [originImage drawAtPoint:CGPointZero];                                                                                          // 4, 画图
+    originImage = UIGraphicsGetImageFromCurrentImageContext();                                                                      // 5, 取出图片
+    UIGraphicsEndImageContext();                                                                                                    // 6, 关闭上下文
+    [originImage imageAntialias];                                                                                                   // 抗锯齿
 
     return originImage;
 }
@@ -150,7 +150,7 @@
     [image drawInRect:CGRectMake(0, 0, resultSize.width, resultSize.height)];
     UIImage *scaledImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-  
+
     return scaledImage;
 }
 
@@ -172,7 +172,7 @@
         [image drawInRect:CGRectMake(0, 0, resultSize.width, resultSize.height)];
         UIImage *scaledImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
-       
+
         return scaledImage;
     }
     else if (size.width >= toSize.width && size.height < toSize.height)
@@ -182,7 +182,7 @@
         [image drawInRect:CGRectMake(0, 0, resultSize.width, resultSize.height)];
         UIImage *scaledImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
-        
+
         return scaledImage;
     }
     else
@@ -202,7 +202,7 @@
         [image drawInRect:CGRectMake(0, 0, resultSize.width, resultSize.height)];
         UIImage *scaledImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
-        
+
         return scaledImage;
     }
 }
@@ -369,11 +369,11 @@ static inline CGFloat DegreesToRadians(CGFloat degrees)
 {
     // self == OrginImage
     //1,获取BitmapData
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();  // 创建颜色空间,需要释放内存
-//    CGColorSpaceRef colorSpace = CGImageGetColorSpace(self.CGImage);
-    CGImageRef imgRef = self.CGImage;          // 图片转换
-    CGFloat width = CGImageGetWidth(imgRef);   //图片宽
-    CGFloat height = CGImageGetHeight(imgRef); //高
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB(); // 创建颜色空间,需要释放内存
+                                                                //    CGColorSpaceRef colorSpace = CGImageGetColorSpace(self.CGImage);
+    CGImageRef imgRef = self.CGImage;                           // 图片转换
+    CGFloat width = CGImageGetWidth(imgRef);                    //图片宽
+    CGFloat height = CGImageGetHeight(imgRef);                  //高
 
     // 2, 创建图片上下文(解析图片信息，绘制图片 开辟内存空间，这块空间用于处理马赛克图片
     /*
@@ -456,7 +456,7 @@ static inline CGFloat DegreesToRadians(CGFloat degrees)
                                                        width * bytesPerRow,
                                                        colorSpace,
                                                        kCGImageAlphaPremultipliedLast);
-  
+
     CGContextDrawImage(outputContext, CGRectMake(0.0f, 0.0f, width, height), mosaicImageRef); //  //绘制图片
     CGImageRef resultImageRef = CGBitmapContextCreateImage(outputContext);                    // //创建图片
     UIImage *resultImage = nil;

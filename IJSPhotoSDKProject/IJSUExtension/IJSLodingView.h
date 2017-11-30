@@ -10,7 +10,7 @@
 
 @interface IJSLodingView : UIView
 /**
- * 加载
+ * 加载 ,最后 需要remove 这个view
  */
 + (instancetype)showLodingViewAddedTo:(UIView *)view title:(NSString *)title;
 
