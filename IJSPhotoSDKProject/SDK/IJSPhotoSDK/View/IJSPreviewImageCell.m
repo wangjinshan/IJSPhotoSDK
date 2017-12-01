@@ -21,7 +21,8 @@
 @property (nonatomic, weak) IJSPreviewLivePhotoView *livePhoto;
 /* 单击隐藏的状态 */
 @property (nonatomic, assign) BOOL hiddenToolsStatus;
-
+/* 图片请求的ID */
+@property (nonatomic, assign) PHImageRequestID imageRequestID;
 @end
 
 @implementation IJSPreviewImageCell
@@ -113,25 +114,25 @@
     __weak typeof(self) weakSelf = self;
     if (assetModel.type == JSAssetModelMediaTypePhoto)
     {
+        self.backImageView.image = nil;    // 先置空解决图片乱跳的问题
         if (assetModel.cutImage) //编辑完成的image
         {
             self.backImageView.image = assetModel.cutImage;
         }
         else
         {
-            if (assetModel.analysisImage)
+            if (assetModel.asset && self.imageRequestID)
             {
-                self.backImageView.image = assetModel.analysisImage;
+                [[PHImageManager defaultManager] cancelImageRequest:self.imageRequestID];  // 取消加载
             }
-            else
-            {
-                [[IJSImageManager shareManager] getOriginalPhotoWithAsset:assetModel.asset completion:^(UIImage *photo, NSDictionary *info) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        weakSelf.backImageView.image = photo;
-                        assetModel.analysisImage =photo;
-                    });
-                }];
-            }
+            self.imageRequestID = [[IJSImageManager shareManager] getPhotoWithAsset:assetModel.asset completion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
+                weakSelf.backImageView.image = photo;
+                if (!isDegraded)
+                {
+                    self.imageRequestID = 0;
+                }
+            }];
+            
         }
         self.gifView.hidden = YES;
         self.videoView.hidden = YES;
@@ -176,17 +177,17 @@
             }
             else
             {
-                if (assetModel.analysisImage)
+                if (assetModel.asset && self.imageRequestID)
                 {
-                    self.backImageView.image = assetModel.analysisImage;
+                    [[PHImageManager defaultManager] cancelImageRequest:self.imageRequestID];  // 取消加载
                 }
-                else
-                {
-                    [[IJSImageManager shareManager] getOriginalPhotoWithAsset:assetModel.asset completion:^(UIImage *photo, NSDictionary *info) {
-                        weakSelf.backImageView.image = photo;
-                        assetModel.analysisImage = photo;
-                    }];
-                }
+                self.imageRequestID = [[IJSImageManager shareManager] getPhotoWithAsset:assetModel.asset completion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
+                    weakSelf.backImageView.image = photo;
+                    if (!isDegraded)
+                    {
+                        self.imageRequestID = 0;
+                    }
+                }];
             }
             self.gifView.hidden = YES;
             self.videoView.hidden = YES;

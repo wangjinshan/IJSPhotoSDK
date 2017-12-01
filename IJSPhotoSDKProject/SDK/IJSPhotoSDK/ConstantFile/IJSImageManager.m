@@ -19,7 +19,6 @@ static CGFloat JSScreenScale;         //缩放比例
 static CGSize assetGridThumbnailSize; //预览照片的大小
 
 @interface IJSImageManager ()
-@property (nonatomic, strong) ALAssetsLibrary *assetLibrary;
 
 @end
 
@@ -30,6 +29,8 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         manager = [[self alloc] init];
+        manager.cachingImageManager = [[PHCachingImageManager alloc] init];
+        manager.cachingImageManager.allowsCachingHighQualityImages = YES;
         // 测试发现，如果scale在plus真机上取到3.0，内存会增大特别多。故这里写死成2.0
         JSScreenScale = 2.0;
         if (JSScreenWidth > 700)
@@ -101,69 +102,71 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
 // 获取所有的照片信息
 - (void)getAllAlbumsContentImage:(BOOL)contentImage contentVideo:(BOOL)contentVideo completion:(void (^)(NSArray<IJSAlbumModel *> *models))completion
 {
-    NSMutableArray *albumArr = [NSMutableArray array];
-    PHFetchOptions *option = [[PHFetchOptions alloc] init];
-    if (!contentVideo)
-    {
-        option.predicate = [NSPredicate predicateWithFormat:@"mediaType == %ld", PHAssetMediaTypeImage];
-    }
-    if (!contentImage)
-    {
-        option.predicate = [NSPredicate predicateWithFormat:@"mediaType == %ld", PHAssetMediaTypeVideo];
-    }
-    if (!self.sortAscendingByModificationDate)
-    {
-        option.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:self.sortAscendingByModificationDate]];
-    }
-    // 用户照片
-    PHFetchResult<PHAssetCollection *> *myPhotoStreamAlbum = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeAlbumMyPhotoStream options:nil]; //用户的 iCloud 照片流
-    PHFetchResult<PHCollection *> *topLevelUserCollections = [PHCollectionList fetchTopLevelUserCollectionsWithOptions:nil];
-    PHFetchResult<PHAssetCollection *> *syncedAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeAlbumSyncedAlbum options:nil];
-    PHFetchResult<PHAssetCollection *> *sharedAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeAlbumCloudShared options:nil]; //用户使用 iCloud 共享的相册
-    // 智能相册
-    PHFetchResult<PHAssetCollection *> *smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
-    
-    NSArray *allAlbums = @[myPhotoStreamAlbum, smartAlbums, topLevelUserCollections, syncedAlbums, sharedAlbums];
-    for (PHFetchResult *fetchResult in allAlbums)
-    {
-        for (PHAssetCollection *collection in fetchResult)
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        NSMutableArray *albumArr = [NSMutableArray array];
+        PHFetchOptions *option = [[PHFetchOptions alloc] init];
+        if (!contentVideo)
         {
-            // 有可能是PHCollectionList类的的对象，过滤掉
-            if (![collection isKindOfClass:[PHAssetCollection class]])
+            option.predicate = [NSPredicate predicateWithFormat:@"mediaType == %ld", PHAssetMediaTypeImage];
+        }
+        if (!contentImage)
+        {
+            option.predicate = [NSPredicate predicateWithFormat:@"mediaType == %ld", PHAssetMediaTypeVideo];
+        }
+        if (!self.sortAscendingByModificationDate)
+        {
+            option.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:self.sortAscendingByModificationDate]];
+        }
+        // 用户照片
+        PHFetchResult<PHAssetCollection *> *myPhotoStreamAlbum = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeAlbumMyPhotoStream options:nil]; //用户的 iCloud 照片流
+        PHFetchResult<PHCollection *> *topLevelUserCollections = [PHCollectionList fetchTopLevelUserCollectionsWithOptions:nil];
+        PHFetchResult<PHAssetCollection *> *syncedAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeAlbumSyncedAlbum options:nil];
+        PHFetchResult<PHAssetCollection *> *sharedAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeAlbumCloudShared options:nil]; //用户使用 iCloud 共享的相册
+        // 智能相册
+        PHFetchResult<PHAssetCollection *> *smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
+        
+        NSArray *allAlbums = @[myPhotoStreamAlbum, smartAlbums, topLevelUserCollections, syncedAlbums, sharedAlbums];
+        for (PHFetchResult *fetchResult in allAlbums)
+        {
+            for (PHAssetCollection *collection in fetchResult)
             {
-                continue;
-            }
-            PHFetchResult<PHAsset *> *fetchResult = [PHAsset fetchAssetsInAssetCollection:collection options:option];
-            if (fetchResult.count < 1)
-            {
-                continue; // 过滤无照片的相册
-            }
-            if ([collection.localizedTitle containsString:@"Deleted"] || [collection.localizedTitle isEqualToString:@"最近删除"])
-            {
-                continue;
-            }
-            if ([self isCameraRollAlbum:collection.localizedTitle]) // 相机胶卷
-            {
-                [albumArr insertObject:[self modelWithResult:fetchResult name:collection.localizedTitle] atIndex:0];
-            }
-            else // 非相机胶卷
-            {
-                [albumArr addObject:[self modelWithResult:fetchResult name:collection.localizedTitle]];
+                // 有可能是PHCollectionList类的的对象，过滤掉
+                if (![collection isKindOfClass:[PHAssetCollection class]])
+                {
+                    continue;
+                }
+                PHFetchResult<PHAsset *> *fetchResult = [PHAsset fetchAssetsInAssetCollection:collection options:option];
+                if (fetchResult.count < 1)
+                {
+                    continue; // 过滤无照片的相册
+                }
+                if ([collection.localizedTitle containsString:@"Deleted"] || [collection.localizedTitle isEqualToString:@"最近删除"])
+                {
+                    continue;
+                }
+                if ([self isCameraRollAlbum:collection.localizedTitle]) // 相机胶卷
+                {
+                    [albumArr insertObject:[self modelWithResult:fetchResult name:collection.localizedTitle] atIndex:0];
+                }
+                else // 非相机胶卷
+                {
+                    [albumArr addObject:[self modelWithResult:fetchResult name:collection.localizedTitle]];
+                }
             }
         }
-    }
-    
-    if (completion && albumArr.count > 0)
-    {
-        completion(albumArr);
-    }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completion && albumArr.count > 0)
+            {
+                completion(albumArr);
+            }
+        });
+    });
 }
 #pragma mark 解析相册资源为 PHAsset 对象
 - (void)getAssetsFromFetchResult:(PHFetchResult *)result allowPickingVideo:(BOOL)allowPickingVideo allowPickingImage:(BOOL)allowPickingImage completion:(void (^)(NSArray<IJSAssetModel *> *models))completion
 {
-    NSMutableArray *photoArr = [NSMutableArray array];
-    if ([result isKindOfClass:[PHFetchResult class]]) //  8之后
-    {
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        NSMutableArray *photoArr = [NSMutableArray array];
         PHFetchResult *fetResult = (PHFetchResult *) result;
         [fetResult enumerateObjectsUsingBlock:^(id _Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
             IJSAssetModel *model = [self _setModelWithAsset:obj allowPickingVideo:allowPickingVideo allowPickingImage:allowPickingImage];
@@ -172,11 +175,13 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
                 [photoArr addObject:model];
             }
         }];
-        if (completion)
-        {
-            completion(photoArr);
-        }
-    }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completion)
+            {
+                completion(photoArr);
+            }
+        });
+    });
 }
 
 - (void)getAssetFromFetchResult:(id)result atIndex:(NSInteger)index allowPickingVideo:(BOOL)allowPickingVideo allowPickingImage:(BOOL)allowPickingImage completion:(void (^)(IJSAssetModel *model))completion
@@ -211,22 +216,20 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
 
 /*-----------------------------------获取封面-------------------------------------------------------*/
 #pragma mark 通过模型解析相册资源获取封面照片
-- (void)getPostImageWithAlbumModel:(IJSAlbumModel *)model completion:(void (^)(UIImage *postImage))completion
+- (PHImageRequestID)getPostImageWithAlbumModel:(IJSAlbumModel *)model completion:(void (^)(UIImage *postImage))completion
 {
-    if (iOS8Later)
+    id asset = [model.result lastObject];
+    if (!self.sortAscendingByModificationDate) //非时间排序
     {
-        id asset = [model.result lastObject];
-        if (!self.sortAscendingByModificationDate) //非时间排序
-        {
-            asset = [model.result firstObject];
-        }
-        [[IJSImageManager shareManager] getPhotoWithAsset:asset photoWidth:thumbImageViewWidth completion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
-            if (completion)
-            {
-                completion(photo);
-            }
-        }];
+        asset = [model.result firstObject];
     }
+    PHImageRequestID imageRequestID = [[IJSImageManager shareManager] getPhotoWithAsset:asset photoWidth:thumbImageViewWidth completion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
+        if (completion)
+        {
+            completion(photo);
+        }
+    }];
+    return imageRequestID;
 }
 /*-----------------------------------获取照片-------------------------------------------------------*/
 #pragma mark 解析相册资源
@@ -255,7 +258,7 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
     }
     return [[IJSImageManager shareManager] getPhotoWithAsset:asset photoWidth:fullScreenWidth completion:completion progressHandler:progressHandler networkAccessAllowed:networkAccessAllowed];
 }
-// 总接口
+// 获取照片总接口
 - (PHImageRequestID)getPhotoWithAsset:(PHAsset *)asset photoWidth:(CGFloat)photoWidth completion:(void (^)(UIImage *photo, NSDictionary *info, BOOL isDegraded))completion progressHandler:(void (^)(double progress, NSError *error, BOOL *stop, NSDictionary *info))progressHandler networkAccessAllowed:(BOOL)networkAccessAllowed
 {
     CGSize imageSize;
@@ -285,7 +288,7 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
     __block UIImage *image;
     PHImageRequestOptions *option = [[PHImageRequestOptions alloc] init];
     option.resizeMode = PHImageRequestOptionsResizeModeFast;
-    int32_t imageRequestID = [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:imageSize contentMode:PHImageContentModeAspectFill options:option resultHandler:^(UIImage *result, NSDictionary *info) {
+    PHImageRequestID imageRequestID = [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:imageSize contentMode:PHImageContentModeAspectFill options:option resultHandler:^(UIImage *result, NSDictionary *info) {
         if (result)
         {
             image = result;
@@ -332,39 +335,45 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
 }
 /*-----------------------------------获取原图-------------------------------------------------------*/
 #pragma mark 获取原图
-- (void)getOriginalPhotoWithAsset:(PHAsset *)asset completion:(void (^)(UIImage *photo, NSDictionary *info))completion
+- (PHImageRequestID)getOriginalPhotoWithAsset:(PHAsset *)asset completion:(void (^)(UIImage *photo, NSDictionary *info))completion
 {
-    [self getOriginalPhotoWithAsset:asset newCompletion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
+    PHImageRequestID imageRequestID = [self getOriginalPhotoWithAsset:asset newCompletion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
         if (completion)
         {
             completion(photo, info);
         }
     }];
+    return imageRequestID;
 }
 
-- (void)getOriginalPhotoWithAsset:(PHAsset *)asset newCompletion:(void (^)(UIImage *photo, NSDictionary *info, BOOL isDegraded))completion
+- (PHImageRequestID)getOriginalPhotoWithAsset:(PHAsset *)asset newCompletion:(void (^)(UIImage *photo, NSDictionary *info, BOOL isDegraded))completion
 {
     PHImageRequestOptions *option = [[PHImageRequestOptions alloc] init];
     option.networkAccessAllowed = YES;
-    [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:PHImageManagerMaximumSize contentMode:PHImageContentModeAspectFit options:option resultHandler:^(UIImage *_Nullable result, NSDictionary *_Nullable info) {
-        BOOL downloadFinined = (![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey]);
-        if (downloadFinined && result)
-        {
-            result = [self fixOrientation:result]; // 修复方向
-            BOOL isDegraded = [[info objectForKey:PHImageResultIsDegradedKey] boolValue];
-            if (completion)
-            {
-                completion(result, info, isDegraded);
-            }
-        }
-    }];
+    PHImageRequestID imageRequestID = [[PHImageManager defaultManager] requestImageForAsset:asset
+                                                                                 targetSize:PHImageManagerMaximumSize
+                                                                                contentMode:PHImageContentModeAspectFit
+                                                                                    options:option
+                                                                              resultHandler:^(UIImage *_Nullable result, NSDictionary *_Nullable info) {
+                                                                                  BOOL downloadFinined = (![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey]);
+                                                                                  if (downloadFinined && result)
+                                                                                  {
+                                                                                      result = [self fixOrientation:result]; // 修复方向
+                                                                                      BOOL isDegraded = [[info objectForKey:PHImageResultIsDegradedKey] boolValue];
+                                                                                      if (completion)
+                                                                                      {
+                                                                                          completion(result, info, isDegraded);
+                                                                                      }
+                                                                                  }
+                                                                              }];
+    return imageRequestID;
 }
 
-- (void)getOriginalPhotoDataWithAsset:(PHAsset *)asset completion:(void (^)(NSData *data, NSDictionary *info, BOOL isDegraded))completion
+- (PHImageRequestID)getOriginalPhotoDataWithAsset:(PHAsset *)asset completion:(void (^)(NSData *data, NSDictionary *info, BOOL isDegraded))completion
 {
     PHImageRequestOptions *option = [[PHImageRequestOptions alloc] init];
     option.networkAccessAllowed = YES;
-    [[PHImageManager defaultManager] requestImageDataForAsset:asset options:option resultHandler:^(NSData *_Nullable imageData, NSString *_Nullable dataUTI, UIImageOrientation orientation, NSDictionary *_Nullable info) {
+    PHImageRequestID imageRequestID = [[PHImageManager defaultManager] requestImageDataForAsset:asset options:option resultHandler:^(NSData *_Nullable imageData, NSString *_Nullable dataUTI, UIImageOrientation orientation, NSDictionary *_Nullable info) {
         BOOL downloadFinined = (![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey]);
         if (downloadFinined && imageData)
         {
@@ -373,6 +382,7 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
                 completion(imageData, info, isDegraded);
         }
     }];
+    return imageRequestID;
 }
 // livephoto
 #pragma mark 获取LivePhoto
@@ -453,7 +463,7 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
 
 /*-----------------------------------获取视频-------------------------------------------------------*/
 #pragma mark 获取视频
-- (void)getVideoWithAsset:(PHAsset *)asset networkAccessAllowed:(BOOL)networkAccessAllowed progressHandler:(void (^)(double progress, NSError *error, BOOL *stop, NSDictionary *info))progressHandler completion:(void (^)(AVPlayerItem *playerItem, NSDictionary *info))completion
+- (PHImageRequestID)getVideoWithAsset:(PHAsset *)asset networkAccessAllowed:(BOOL)networkAccessAllowed progressHandler:(void (^)(double progress, NSError *error, BOOL *stop, NSDictionary *info))progressHandler completion:(void (^)(AVPlayerItem *playerItem, NSDictionary *info))completion
 {
     PHVideoRequestOptions *option = [[PHVideoRequestOptions alloc] init];
     option.networkAccessAllowed = networkAccessAllowed;
@@ -465,51 +475,57 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
             }
         });
     };
-    [[PHImageManager defaultManager] requestPlayerItemForVideo:asset options:option resultHandler:^(AVPlayerItem *playerItem, NSDictionary *info) {
+    PHImageRequestID imageRequestID =  [[PHImageManager defaultManager] requestPlayerItemForVideo:asset options:option resultHandler:^(AVPlayerItem *playerItem, NSDictionary *info) {
         if (completion)
+        {
             completion(playerItem, info);
+        }
     }];
+    return imageRequestID;
 }
 /// 获取视频-----没有进行视频方向的旋转
-- (void)getAVAssetWithPHAsset:(PHAsset *)asset completion:(void (^)(AVAsset *asset, AVAudioMix *audioMix, NSDictionary *info))completion
+- (PHImageRequestID)getAVAssetWithPHAsset:(PHAsset *)asset completion:(void (^)(AVAsset *asset, AVAudioMix *audioMix, NSDictionary *info))completion
 {
     PHVideoRequestOptions *option = [[PHVideoRequestOptions alloc] init];
     option.deliveryMode = PHVideoRequestOptionsDeliveryModeFastFormat; // 速度最快
     option.networkAccessAllowed = NO;                                  // 不加载网络请求
-    [[PHImageManager defaultManager] requestAVAssetForVideo:asset options:option resultHandler:^(AVAsset *_Nullable asset, AVAudioMix *_Nullable audioMix, NSDictionary *_Nullable info) {
+    PHImageRequestID imageRequestID = [[PHImageManager defaultManager] requestAVAssetForVideo:asset options:option resultHandler:^(AVAsset *_Nullable asset, AVAudioMix *_Nullable audioMix, NSDictionary *_Nullable info) {
         if (completion)
         {
             completion(asset, audioMix, info);
         }
     }];
+    return imageRequestID;
 }
 /// 获取导出的视频
-- (void)getExportSessionWithPhAsset:(PHAsset *)asset completion:(void (^)(AVAssetExportSession *exportSession, NSDictionary *info))completion
+- (PHImageRequestID)getExportSessionWithPhAsset:(PHAsset *)asset completion:(void (^)(AVAssetExportSession *exportSession, NSDictionary *info))completion
 {
     PHVideoRequestOptions *option = [[PHVideoRequestOptions alloc] init];
     option.deliveryMode = PHVideoRequestOptionsDeliveryModeFastFormat; // 速度最快
     option.networkAccessAllowed = NO;                                  // 不加载网络请求
     // exportPreset 控制导出的视频质量
-    [[PHImageManager defaultManager] requestExportSessionForVideo:asset options:option exportPreset:AVAssetExportPresetMediumQuality resultHandler:^(AVAssetExportSession *_Nullable exportSession, NSDictionary *_Nullable info) {
+    PHImageRequestID imageRequestID = [[PHImageManager defaultManager] requestExportSessionForVideo:asset options:option exportPreset:AVAssetExportPresetMediumQuality resultHandler:^(AVAssetExportSession *_Nullable exportSession, NSDictionary *_Nullable info) {
         if (completion)
         {
             completion(exportSession, info);
         }
     }];
+    return imageRequestID;
 }
 
 /*-----------------------------------导出视频-------------------------------------------------------*/
 #pragma mark 导出视频
-- (void)getVideoOutputPathWithAsset:(PHAsset *)asset completion:(void (^)(NSURL *outputPath, NSError *error, IJSImageState state))completion
+- (PHImageRequestID)getVideoOutputPathWithAsset:(PHAsset *)asset completion:(void (^)(NSURL *outputPath, NSError *error, IJSImageState state))completion
 {
     PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
     options.version = PHVideoRequestOptionsVersionOriginal;
     options.deliveryMode = PHVideoRequestOptionsDeliveryModeAutomatic;
     options.networkAccessAllowed = YES;
-    [[PHImageManager defaultManager] requestAVAssetForVideo:asset options:options resultHandler:^(AVAsset *avasset, AVAudioMix *audioMix, NSDictionary *info) {
+    PHImageRequestID imageRequestID = [[PHImageManager defaultManager] requestAVAssetForVideo:asset options:options resultHandler:^(AVAsset *avasset, AVAudioMix *audioMix, NSDictionary *info) {
         AVURLAsset *videoAsset = (AVURLAsset *) avasset;
         [self _startExportVideoWithVideoAsset:videoAsset completion:completion];
     }];
+    return imageRequestID;
 }
 #pragma mark 判断相册是否存在
 - (BOOL)isExistFolder:(NSString *)folderName completion:(void (^)(id assetCollection, NSError *error, BOOL isExistedOrIsSuccess))completion
@@ -783,6 +799,29 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
     PHAsset *phAsset = (PHAsset *) asset;
     return CGSizeMake(phAsset.pixelWidth, phAsset.pixelHeight);
 }
+/*-------------------------------------------------------------------------缓存-------------------------------*/
+#pragma mark 缓存
+-(void)startCachingImagesFormAssets:(NSArray<PHAsset *> *)assets targetSize:(CGSize)targetSize
+{
+    [self.cachingImageManager startCachingImagesForAssets:assets
+                                               targetSize:targetSize
+                                              contentMode:PHImageContentModeAspectFit
+                                                  options:nil];
+}
+-(void)stopCachingImagesFormAssets:(NSArray<PHAsset *> *)assets targetSize:(CGSize)targetSize
+{
+    [self.cachingImageManager stopCachingImagesForAssets:assets
+                                              targetSize:targetSize
+                                             contentMode:PHImageContentModeAspectFit
+                                                 options:nil];
+}
+- (void)stopCachingImagesFormAllAssets
+{
+    [self.cachingImageManager stopCachingImagesForAllAssets];
+}
+
+/*-------------------------------------------------------------------------set-------------------------------*/
+#pragma mark get  set 方法
 // 设置资源的唯一标识
 - (NSString *)getAssetIdentifier:(id)asset
 {

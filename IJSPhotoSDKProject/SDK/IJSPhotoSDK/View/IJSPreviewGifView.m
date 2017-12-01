@@ -42,19 +42,12 @@
 {
     _assetModel = assetModel;
     __weak typeof(self) weakSelf = self;
-    if (assetModel.analysisGif)
-    {
-       [weakSelf.backWebView loadData:assetModel.analysisGif MIMEType:@"image/gif" textEncodingName:@"" baseURL:[NSURL URLWithString:@""]];
-    }
-    else
-    {
-        [[IJSImageManager shareManager] getOriginalPhotoDataWithAsset:assetModel.asset completion:^(NSData *data, NSDictionary *info, BOOL isDegraded) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                 [weakSelf.backWebView loadData:data MIMEType:@"image/gif" textEncodingName:@"" baseURL:[NSURL URLWithString:@""]];
-                assetModel.analysisGif = data;
-            });
-        }];
-    }
+    [[IJSImageManager shareManager] getOriginalPhotoDataWithAsset:assetModel.asset completion:^(NSData *data, NSDictionary *info, BOOL isDegraded) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf.backWebView loadData:data MIMEType:@"image/gif" textEncodingName:@"" baseURL:[NSURL URLWithString:@""]];
+        });
+    }];
+    
 }
 
 - (void)layoutSubviews

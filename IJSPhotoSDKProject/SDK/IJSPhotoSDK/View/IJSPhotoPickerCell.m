@@ -14,7 +14,6 @@
 #import "IJSImagePickerController.h"
 
 #import "IJSConst.h"
-#import <IJSFoundation/IJSFoundation.h>
 #import "IJSExtension.h"
 
 @interface IJSPhotoPickerCell ()
@@ -101,10 +100,8 @@
     {
         self.livePhotoButton.hidden = YES;
     }
-    if (iOS8Later)
-    {
-        self.representedAssetIdentifier = [[IJSImageManager shareManager] getAssetIdentifier:model.asset];
-    }
+    
+    self.representedAssetIdentifier = [[IJSImageManager shareManager] getAssetIdentifier:model.asset]; //设置资源唯一标识
     __weak typeof(self) weakSelf = self;
 
     // 选择性加载图片裁剪的图片
@@ -114,14 +111,12 @@
     }
     else
     {
-    
-        [[IJSImageManager shareManager] getPhotoWithAsset:model.asset photoWidth:self.js_width completion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
-
-            if (!iOS8Later)
-            {
-                weakSelf.backImageView.image = photo;
-                return;
-            }
+        if (self.imageRequestID)
+        {
+            [[PHImageManager defaultManager] cancelImageRequest:self.imageRequestID];
+        }
+        self.imageRequestID =  [[IJSImageManager shareManager] getPhotoWithAsset:model.asset photoWidth:self.js_width completion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
+            
             if ([weakSelf.representedAssetIdentifier isEqualToString:[[IJSImageManager shareManager] getAssetIdentifier:model.asset]])
             {
                 weakSelf.backImageView.image = photo;
@@ -136,7 +131,6 @@
             }
         } progressHandler:nil networkAccessAllowed:NO];
     }
-
     // 改变button的状态
     _select = model.isSelectedModel;
     _selectButton.selected = model.isSelectedModel;

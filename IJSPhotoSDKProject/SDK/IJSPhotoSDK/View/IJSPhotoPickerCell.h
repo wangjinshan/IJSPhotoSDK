@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <Photos/Photos.h>
+
 #import "IJSAssetModel.h"
 #define MarginTop 2
 #define ButtonHeight 30

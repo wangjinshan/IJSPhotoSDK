@@ -124,4 +124,25 @@
 
 + (CGSize)getCutImageViewSizeWith:(CGSize)bSize cutViewSize:(CGSize)cSize;
 
+/**
+ 加载GIF图
+
+ @param data GIF资源
+ @return 可以动态的图
+ */
++ (UIImage *)getAnimatedGIFWithData:(NSData *)data;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @end

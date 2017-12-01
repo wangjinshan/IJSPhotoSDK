@@ -318,8 +318,8 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
         {
             [self _cleanAssetCellStatus:allCell];
         }
-
-        NSInteger index = self.showCollectioView.contentOffset.x / JSScreenWidth;
+        // 其他开发者提出的建议修复 多图预览选中滑动上下图标不对应问题
+        NSInteger index = self.showCollectioView.contentOffset.x / JSScreenWidth + 0.5;
 
         if (self.isPreviewButton)
         {

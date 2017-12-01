@@ -105,50 +105,6 @@ static NSString *const cellID = @"cellID";
     [self.navigationController pushViewController:vc animated:YES];
 }
 
-// 添加编辑模式
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return NO;
-}
-//左滑动出现的文字
-- (NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    //    UITableViewRowAction *cancle = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:[NSBundle localizedStringForKey:@"Cancel"] handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
-    //
-    //        // 收回左滑出现的按钮(退出编辑模式)
-    //        tableView.editing = NO;
-    //    }];
-    //    cancle.backgroundColor =[UIColor blueColor];
-    //
-    //    UITableViewRowAction *delete = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:[NSBundle localizedStringForKey:@"Delete"] handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
-    //        if (iOS8Later)
-    //        {
-    //            IJSAlbumModel *model = self.albumListArr[indexPath.row];
-    //            [[IJSImageManager shareManager]deleteAlbum:model.name completion:^(id assetCollection, NSError *error, BOOL isExistedOrIsSuccess) {
-    //                if (!error)
-    //                {
-    //                     [(IJSImagePickerController *)self.navigationController showAlertWithTitle:@"功能搁置"];
-    //                }else{
-    //                     [(IJSImagePickerController *)self.navigationController showAlertWithTitle:@"功能搁置"];
-    //                }
-    //            }];
-    //        }else{
-    //
-    //        }
-    //        tableView.editing = NO;
-    //    }];
-    return nil;
-    //    return @[cancle, delete];
-}
-//删除所做的动作
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // 从数据源中删除
-    //    [_data removeObjectAtIndex:indexPath.row];
-    // 从列表中删除
-    //    [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-}
-
 #pragma mark 获取相册列表
 - (void)_configImageData
 {
@@ -235,5 +191,64 @@ static NSString *const cellID = @"cellID";
         }
     }];
 };
+#pragma mark 后期开发使用
+// 添加编辑模式
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return NO;
+}
+//左滑动出现的文字
+- (NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    //    UITableViewRowAction *cancle = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:[NSBundle localizedStringForKey:@"Cancel"] handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
+    //
+    //        // 收回左滑出现的按钮(退出编辑模式)
+    //        tableView.editing = NO;
+    //    }];
+    //    cancle.backgroundColor =[UIColor blueColor];
+    //
+    //    UITableViewRowAction *delete = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:[NSBundle localizedStringForKey:@"Delete"] handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
+    //        if (iOS8Later)
+    //        {
+    //            IJSAlbumModel *model = self.albumListArr[indexPath.row];
+    //            [[IJSImageManager shareManager]deleteAlbum:model.name completion:^(id assetCollection, NSError *error, BOOL isExistedOrIsSuccess) {
+    //                if (!error)
+    //                {
+    //                     [(IJSImagePickerController *)self.navigationController showAlertWithTitle:@"功能搁置"];
+    //                }else{
+    //                     [(IJSImagePickerController *)self.navigationController showAlertWithTitle:@"功能搁置"];
+    //                }
+    //            }];
+    //        }else{
+    //
+    //        }
+    //        tableView.editing = NO;
+    //    }];
+    return nil;
+    //    return @[cancle, delete];
+}
+//删除所做的动作
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // 从数据源中删除
+    //    [_data removeObjectAtIndex:indexPath.row];
+    // 从列表中删除
+    //    [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @end

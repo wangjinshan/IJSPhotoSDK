@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <Photos/Photos.h>
-#import <AssetsLibrary/AssetsLibrary.h>
+
 
 @class IJSAlbumModel;
 @class IJSAssetModel;
@@ -71,7 +71,7 @@ typedef void (^completionHandler)(id assetCollection, NSError *error, BOOL isExi
 
 /*-----------------------------------解析PHAsset返回为具体的图片数据缩-- 略图-------------------------------------------------------*/
 // 通过模型解析相册资源获取封面照片
-- (void)getPostImageWithAlbumModel:(IJSAlbumModel *)model completion:(void (^)(UIImage *postImage))completion;
+- (PHImageRequestID)getPostImageWithAlbumModel:(IJSAlbumModel *)model completion:(void (^)(UIImage *postImage))completion;
 /**
  *  将PHAsset数据解析成能够看见的参数
  */
@@ -93,9 +93,9 @@ typedef void (^completionHandler)(id assetCollection, NSError *error, BOOL isExi
 /**
  *  该方法会先返回缩略图，再返回原图，如果info[PHImageResultIsDegradedKey] 为 YES，则表明当前返回的是缩略图，否则是原图
  */
-- (void)getOriginalPhotoWithAsset:(PHAsset *)asset completion:(void (^)(UIImage *photo, NSDictionary *info))completion;
-- (void)getOriginalPhotoWithAsset:(PHAsset *)asset newCompletion:(void (^)(UIImage *photo, NSDictionary *info, BOOL isDegraded))completion;
-- (void)getOriginalPhotoDataWithAsset:(PHAsset *)asset completion:(void (^)(NSData *data, NSDictionary *info, BOOL isDegraded))completion;
+- (PHImageRequestID)getOriginalPhotoWithAsset:(PHAsset *)asset completion:(void (^)(UIImage *photo, NSDictionary *info))completion;
+- (PHImageRequestID)getOriginalPhotoWithAsset:(PHAsset *)asset newCompletion:(void (^)(UIImage *photo, NSDictionary *info, BOOL isDegraded))completion;
+- (PHImageRequestID)getOriginalPhotoDataWithAsset:(PHAsset *)asset completion:(void (^)(NSData *data, NSDictionary *info, BOOL isDegraded))completion;
 
 /*-----------------------------------获取livephoto-------------------------------------------------------*/
 
@@ -103,9 +103,9 @@ typedef void (^completionHandler)(id assetCollection, NSError *error, BOOL isExi
 - (PHImageRequestID)getLivePhotoWithAsset:(PHAsset *)asset photoWidth:(CGFloat)photoWidth networkAccessAllowed:(BOOL)networkAccessAllowed completion:(void (^)(PHLivePhoto *livePhoto, NSDictionary *info))completion progressHandler:(void (^)(double progress, NSError *error, BOOL *stop, NSDictionary *info))progressHandler;
 
 /*-----------------------------------获取视频-------------------------------------------------------*/
-- (void)getVideoWithAsset:(PHAsset *)asset networkAccessAllowed:(BOOL)networkAccessAllowed progressHandler:(void (^)(double progress, NSError *error, BOOL *stop, NSDictionary *info))progressHandler completion:(void (^)(AVPlayerItem *playerItem, NSDictionary *info))completion;
-- (void)getAVAssetWithPHAsset:(PHAsset *)asset completion:(void (^)(AVAsset *asset, AVAudioMix *audioMix, NSDictionary *info))completion;
-- (void)getExportSessionWithPhAsset:(PHAsset *)asset completion:(void (^)(AVAssetExportSession *exportSession, NSDictionary *info))completion;
+- (PHImageRequestID)getVideoWithAsset:(PHAsset *)asset networkAccessAllowed:(BOOL)networkAccessAllowed progressHandler:(void (^)(double progress, NSError *error, BOOL *stop, NSDictionary *info))progressHandler completion:(void (^)(AVPlayerItem *playerItem, NSDictionary *info))completion;
+- (PHImageRequestID)getAVAssetWithPHAsset:(PHAsset *)asset completion:(void (^)(AVAsset *asset, AVAudioMix *audioMix, NSDictionary *info))completion;
+- (PHImageRequestID)getExportSessionWithPhAsset:(PHAsset *)asset completion:(void (^)(AVAssetExportSession *exportSession, NSDictionary *info))completion;
 /*----------------------------------导出-----------------------------------------*/
 /**
  导出视频
@@ -113,7 +113,7 @@ typedef void (^completionHandler)(id assetCollection, NSError *error, BOOL isExi
  @param asset PHasset 对象
  @param completion outputPath 视频路径 error具体错误 state 具体的错误值
  */
-- (void)getVideoOutputPathWithAsset:(PHAsset *)asset completion:(void (^)(NSURL *outputPath, NSError *error, IJSImageState state))completion;
+- (PHImageRequestID)getVideoOutputPathWithAsset:(PHAsset *)asset completion:(void (^)(NSURL *outputPath, NSError *error, IJSImageState state))completion;
 
 /*-----------------------------------其他操作-------------------------------------------------------*/
 /// 下面的方法中返回值仅实用ios8 之后
@@ -193,5 +193,31 @@ typedef void (^completionHandler)(id assetCollection, NSError *error, BOOL isExi
 @property (nonatomic, assign) BOOL allowPickingOriginalPhoto;
 /* 是否允许网络获取,默认是NO */
 @property (nonatomic, assign) BOOL networkAccessAllowed;
+
+/**
+ 缓存属性
+ */
+@property (nonatomic, strong) PHCachingImageManager *cachingImageManager;
+
+/**
+ 开始缓存
+
+ @param assets 需要缓存的数组
+ @param targetSize 目标大小
+ */
+-(void)startCachingImagesFormAssets:(NSArray<PHAsset *> *)assets targetSize:(CGSize)targetSize;
+
+/**
+ 结束缓存
+
+ @param assets 需要缓存的数组
+ @param targetSize 目标大小
+ */
+-(void)stopCachingImagesFormAssets:(NSArray<PHAsset *> *)assets targetSize:(CGSize)targetSize ;
+
+/**
+ 取消所有的缓存
+ */
+- (void)stopCachingImagesFormAllAssets;
 
 @end

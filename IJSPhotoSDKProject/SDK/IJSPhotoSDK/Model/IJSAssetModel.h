@@ -21,7 +21,7 @@ typedef NS_ENUM(NSUInteger, JSAssetModelSourceType) {
 
 @interface IJSAssetModel : NSObject
 
-@property (nonatomic, strong) id asset;                    /*PHAsset or ALAsset*/
+@property (nonatomic, strong) PHAsset *asset;                    /*PHAsset */
 @property (nonatomic, assign) JSAssetModelSourceType type; /*资源类型*/
 @property (nonatomic, copy) NSString *timeLength;
 
@@ -58,11 +58,6 @@ typedef NS_ENUM(NSUInteger, JSAssetModelSourceType) {
 
 /*-----------------------------------裁剪图片增加的属性-------------------------------------------------------*/
 @property (nonatomic, strong) UIImage *cutImage; // 图片参数
-/*------------------------------------解析出来的图片用来缓存-------------------------------*/
-@property(nonatomic,strong) UIImage *analysisImage;  // 从相册中解析出来的图片
-@property(nonatomic,strong) NSData *analysisGif;  // 相册解析的gif图
-@property(nonatomic,strong) AVPlayer *analysisPlayer;  // 解析出来的视频资源
-@property(nonatomic,strong) PHLivePhoto *analysisLivePhoto;  // live图
 
 
 @end

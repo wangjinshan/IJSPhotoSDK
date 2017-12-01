@@ -56,32 +56,18 @@
     _assetModel = assetModel;
     [self.playerLayer removeFromSuperlayer];
     __weak typeof(self) weakSelf = self;
-    if (assetModel.analysisPlayer)
-    {
+    weakSelf.player = nil;
+    [[IJSImageManager shareManager] getVideoWithAsset:assetModel.asset networkAccessAllowed:assetModel.networkAccessAllowed progressHandler:^(double progress, NSError *error, BOOL *stop, NSDictionary *info) {
+    } completion:^(AVPlayerItem *playerItem, NSDictionary *info) {
+        // 注意必须在主线程中操作
         dispatch_async(dispatch_get_main_queue(), ^{
-            weakSelf.player = assetModel.analysisPlayer;
+            weakSelf.player = [AVPlayer playerWithPlayerItem:playerItem];
             AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:_player];
             playerLayer.frame = CGRectMake(0, 0, weakSelf.js_width, weakSelf.js_height);
             [weakSelf.backVideoView.layer addSublayer:playerLayer];
             weakSelf.playerLayer = playerLayer;
         });
-    }
-    else
-    {
-        [[IJSImageManager shareManager] getVideoWithAsset:assetModel.asset networkAccessAllowed:assetModel.networkAccessAllowed progressHandler:^(double progress, NSError *error, BOOL *stop, NSDictionary *info) {
-        } completion:^(AVPlayerItem *playerItem, NSDictionary *info) {
-            // 注意必须在主线程中操作
-            dispatch_async(dispatch_get_main_queue(), ^{
-                weakSelf.player = [AVPlayer playerWithPlayerItem:playerItem];
-                assetModel.analysisPlayer = weakSelf.player;
-                AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:_player];
-                playerLayer.frame = CGRectMake(0, 0, weakSelf.js_width, weakSelf.js_height);
-                [weakSelf.backVideoView.layer addSublayer:playerLayer];
-                weakSelf.playerLayer = playerLayer;
-               
-            });
-        }];
-    }
+    }];
 }
 
 - (void)layoutSubviews

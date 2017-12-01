@@ -516,11 +516,16 @@ static NSString *const CellID = @"pickerID";
 // 数据解析
 - (void)_createrData
 {
+    NSMutableArray *cancleArr  = [[NSMutableArray alloc] init];
     [[IJSImageManager shareManager] getAssetsFromFetchResult:self.albumModel.result allowPickingVideo:YES allowPickingImage:YES completion:^(NSArray<IJSAssetModel *> *models) {
         self.assetModelArr = [NSMutableArray arrayWithArray:models];
         [self.assetModelArr enumerateObjectsUsingBlock:^(IJSAssetModel *_Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
             obj.onlyOneTag = idx;
+            [cancleArr addObject:obj.asset];
         }];
+        // 开始缓存
+        [[IJSImageManager shareManager] startCachingImagesFormAssets:cancleArr targetSize:CGSizeMake(self.itemHeight, self.itemHeight)];
+        
         [self.showCollectioView reloadData];
         if (self.assetModelArr.count != 0)
         {
@@ -601,6 +606,7 @@ static NSString *const CellID = @"pickerID";
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
+    JSLog(@"相册--IJSPhotoPickerController--出现了内存增加的问题");
 }
 
 // 刷新数据
