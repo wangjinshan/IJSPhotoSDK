@@ -1,5 +1,9 @@
 # IJSPhotoSDK
 ios多图选择,高仿微信发朋友圈的功能
+
+# 服务QQ: 1096452045 
+#简书地址: http://www.jianshu.com/u/874b526fa570
+
 #    IJSPhotoSDK  集成文档
 
 ### 项目介绍:
