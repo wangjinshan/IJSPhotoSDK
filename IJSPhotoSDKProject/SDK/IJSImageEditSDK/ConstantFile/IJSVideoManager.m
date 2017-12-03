@@ -455,9 +455,48 @@ static IJSVideoManager *manager;
     }
     NSDateFormatter *formater = [[NSDateFormatter alloc] init];
     [formater setDateFormat:@"yyyy-MM-dd-HH:mm:ss"];
-    NSString *outputPath = [NSHomeDirectory() stringByAppendingFormat:@"/tmp/output-%@.mp4", [formater stringFromDate:[NSDate date]]]; // 创建输出的路径
+    NSString *tmpPath =[NSHomeDirectory() stringByAppendingPathComponent:@"tmp"];
+    
+    // NSHomeDirectory()：应用程序目录， @"tmp/temp"：在tmp文件夹下创建temp 文件夹
+    NSString *filePath=[tmpPath stringByAppendingPathComponent:@"IJSImageEditSDK"];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL isDir = NO;
+    // fileExistsAtPath 判断一个文件或目录是否有效，isDirectory判断是否一个目录
+    BOOL existed = [fileManager fileExistsAtPath:filePath isDirectory:&isDir];
+    if ( !(isDir == YES && existed == YES) )
+    {        // 在 tmp 目录下创建一个 temp 目录
+        [fileManager createDirectoryAtPath:filePath withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+    NSString *outputPath =[filePath stringByAppendingPathComponent:[NSString stringWithFormat:@"/output-%@.mp4",[formater stringFromDate:[NSDate date]]]];
+//    NSString *outputPath = [NSHomeDirectory() stringByAppendingFormat:@"/tmp/output-%@.mp4", [formater stringFromDate:[NSDate date]]]; // 创建输出的路径
     NSURL *outputURL = [NSURL fileURLWithPath:outputPath];
     return outputURL;
 }
+
+/// 获取视频裁剪完成保存的文件路径
++(void)cleanAllVideo
+{
+    NSString *path = [NSHomeDirectory() stringByAppendingString:@"/tmp/IJSImageEditSDK"];
+   NSFileManager *fileManager = [NSFileManager defaultManager];
+    [fileManager removeItemAtPath:path error:nil];
+}
+///获取视频保存路径
++(NSString *)getAllVideoPath
+{
+    return  [NSHomeDirectory() stringByAppendingString:@"/tmp/IJSImageEditSDK"];
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @end

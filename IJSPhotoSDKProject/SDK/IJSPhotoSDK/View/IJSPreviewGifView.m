@@ -45,18 +45,26 @@
 - (void)setAssetModel:(IJSAssetModel *)assetModel
 {
     _assetModel = assetModel;
-    if (assetModel.imageRequestID)
-    {
-        [[PHImageManager defaultManager] cancelImageRequest:assetModel.imageRequestID];  // 取消加载
-    }
-    assetModel.imageRequestID = [[IJSImageManager shareManager] getOriginalPhotoDataWithAsset:assetModel.asset completion:^(NSData *data, NSDictionary *info, BOOL isDegraded) {
-        [self.backWebView loadData:data MIMEType:@"image/gif" textEncodingName:@"" baseURL:[NSURL URLWithString:@""]];
-        if (!isDegraded)
-        {
-            assetModel.imageRequestID = 0;
-        }
-    }];
     
+    if (assetModel.cutImage) //编辑完成的image
+    {
+        NSData *imageData = UIImagePNGRepresentation(assetModel.cutImage);
+        [self.backWebView loadData:imageData MIMEType:@"image/gif" textEncodingName:@"" baseURL:[NSURL URLWithString:@""]];
+    }
+    else
+    {
+        if (assetModel.imageRequestID)
+        {
+            [[PHImageManager defaultManager] cancelImageRequest:assetModel.imageRequestID];  // 取消加载
+        }
+        assetModel.imageRequestID = [[IJSImageManager shareManager] getOriginalPhotoDataWithAsset:assetModel.asset completion:^(NSData *data, NSDictionary *info, BOOL isDegraded) {
+            [self.backWebView loadData:data MIMEType:@"image/gif" textEncodingName:@"" baseURL:[NSURL URLWithString:@""]];
+            if (!isDegraded)
+            {
+                assetModel.imageRequestID = 0;
+            }
+        }];
+    }
 }
 
 - (void)layoutSubviews

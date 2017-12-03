@@ -39,7 +39,7 @@
     self.view.backgroundColor = [UIColor blackColor];
     self.edgesForExtendedLayout = UIRectEdgeNone;
     self.isPlaying = YES;
-
+    self.canEdit = YES;
     [self _setupUI];        // 重置UI
     [self _didclickAction]; //点击事件
 }
@@ -174,10 +174,28 @@
             }
             else
             {
-                IJSVideoEditController *videoEditVc = [[IJSVideoEditController alloc] init];
-                videoEditVc.outputPath = outputPath;
-                videoEditVc.mapImageArr = weakSelf.mapImageArr;
-                [weakSelf.navigationController pushViewController:videoEditVc animated:YES];
+                if (weakSelf.canEdit)
+                {
+                    IJSVideoEditController *videoEditVc = [[IJSVideoEditController alloc] init];
+                    videoEditVc.outputPath = outputPath;
+                    videoEditVc.mapImageArr = weakSelf.mapImageArr;
+                    [weakSelf.navigationController pushViewController:videoEditVc animated:YES];
+                }
+                else
+                {
+                    if ([weakSelf.delegate respondsToSelector:@selector(didFinishCutVideoWithController:outputPath:error:state:)])
+                    {
+                        [weakSelf.delegate didFinishCutVideoWithController:weakSelf outputPath:outputPath error:nil state:state];
+                    }
+                    if (weakSelf.navigationController)
+                    {
+                        [weakSelf.navigationController popViewControllerAnimated:YES];
+                    }
+                    else
+                    {
+                        [weakSelf dismissViewControllerAnimated:YES completion:nil];
+                    }
+                }
             }
             weakSelf.isDoing = NO;
         }];

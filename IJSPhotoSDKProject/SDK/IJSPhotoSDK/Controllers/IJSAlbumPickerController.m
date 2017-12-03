@@ -109,8 +109,10 @@ static NSString *const cellID = @"cellID";
 - (void)_configImageData
 {
     __weak typeof(self) weakSelf = self;
+    UIView *loadView =  [IJSLodingView showLodingViewAddedTo:self.view title:[NSBundle localizedStringForKey:@"Processing..."]];
     [[IJSImageManager shareManager] getAllAlbumsContentImage:YES contentVideo:YES completion:^(NSArray<IJSAlbumModel *> *models) {
         weakSelf.albumListArr = models;
+        [loadView removeFromSuperview];
         if (!weakSelf.tableView)
         {
             [weakSelf _createTableViewUI];

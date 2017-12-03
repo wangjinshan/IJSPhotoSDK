@@ -600,6 +600,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
                         videoCutVc.maxCutTime = ((IJSImagePickerController *) weakSelf.navigationController).maxVideoCut;
                         videoCutVc.avasset = asset;
                         videoCutVc.assetModel = model;
+                        videoCutVc.canEdit = YES;  // 可以进入编辑界面
                         videoCutVc.mapImageArr = [(IJSImagePickerController *) weakSelf.navigationController mapImageArr]; //贴图数据
                         [weakSelf.navigationController pushViewController:videoCutVc animated:YES];
                     }
@@ -1052,7 +1053,6 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
             }
             else
             { //超标了
-
                 NSString *editTitle = [NSString stringWithFormat:@"%@", [NSBundle localizedStringForKey:@"Please edit the selected picture"]];
                 NSString *countTitle = [NSString stringWithFormat:[NSBundle localizedStringForKey:@"Select a maximum of %zd photos"], ((IJSImagePickerController *) self.navigationController).maxImagesCount];
                 NSString *alertTitle = [NSString stringWithFormat:@"%@,%@", countTitle, editTitle];

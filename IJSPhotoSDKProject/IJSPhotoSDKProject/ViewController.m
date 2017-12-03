@@ -15,6 +15,7 @@
 #import "IJSMapViewModel.h"
 #import <IJSFoundation/IJSFoundation.h>
 #import <Photos/Photos.h>
+#import "IJSVideoManager.h"
 
 static NSString *const cellID = @"cellID";
 
@@ -92,7 +93,7 @@ static NSString *const cellID = @"cellID";
 - (IBAction)shareAction:(id)sender
 {
     __weak typeof(self) weakSelf = self;
-    IJSImagePickerController *imageVc = [[IJSImagePickerController alloc] initWithMaxImagesCount:5 columnNumber:4 delegate:self];
+    IJSImagePickerController *imageVc = [[IJSImagePickerController alloc] initWithMaxImagesCount:9 columnNumber:4 delegate:self];
     imageVc.minImagesCount = 1;
     imageVc.minVideoCut = 3;
     imageVc.maxVideoCut = 10;
@@ -108,6 +109,7 @@ static NSString *const cellID = @"cellID";
             AVAsset *avaseet = [AVAsset assetWithURL:avPlayers.firstObject];
             testVc.avasset = avaseet;
             [weakSelf presentViewController:testVc animated:YES completion:nil];
+            
         }
     };
 
@@ -124,12 +126,12 @@ static NSString *const cellID = @"cellID";
 {
     if (sourceType == IJSPVideoType)
     {
-        //        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        //            IJSVideoTestController *testVc =[[IJSVideoTestController alloc] init];
-        //            AVAsset *avaseet = [AVAsset assetWithURL:avPlayers.firstObject];
-        //            testVc.avasset = avaseet;
-        //            [self presentViewController:testVc animated:YES completion:nil];
-        //        });
+      //作为测试
+     NSString *path = [IJSVideoManager getAllVideoPath];
+        NSLog(@"%@",path);
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(15 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [IJSVideoManager cleanAllVideo];  // 清理缓存
+        });
     }
 }
 #pragma mark 懒加载区域
@@ -147,111 +149,6 @@ static NSString *const cellID = @"cellID";
     [super didReceiveMemoryWarning];
 }
 
-/*
- if (centerOffSetX - CGRectGetMaxX(self.leftOverlayView.frame) - (centerOffSetX  - CGRectGetMinX(self.rightOverlayView.frame))  <  self.limitLenght)
- {
- centerOffSetX = CGRectGetMaxX(self.leftOverlayView.frame) + self.limitLenght + self.rightOverlayView.js_width /2;
- }
- 
- else if (centerOffSetX - self.leftViewMaxOverlyWidth * 0.5 > self.rightViewMaxOverlyWidth) //超过最大值
- {
- centerOffSetX = self.rightViewMaxOverlyWidth + self.leftViewMaxOverlyWidth * 0.5;
- }
- self.rightOverlayView.center = CGPointMake(centerOffSetX, self.leftOverlayView.center.y);
- self.rightStartPoint = point;
- break;
 
- 
- #pragma mark 手势方法
- - (void)leftPanAction:(UIPanGestureRecognizer *)gesture
- {
- if (self.widthPerSecond == 0)
- {
- NSLog(@"加载loding,解析数据中");
- return;
- }
- 
- //    switch (gesture.state)
- //    {
- //        case UIGestureRecognizerStateBegan:
- //            self.leftStartPoint = [gesture locationInView:self];
- //            break;
- //        case UIGestureRecognizerStateChanged:
- //        {
- //            CGPoint point = [gesture locationInView:self];
- //            int offSet = point.x - self.leftStartPoint.x; // 偏移量
- //            CGPoint center = self.leftOverlayView.center;
- //            CGFloat centerOffSetX = center.x += offSet; // 中心点偏移量 负数
- //
- //            CGFloat maxWidth = CGRectGetMinX(self.rightOverlayView.frame) - self.limitLength; // 最大宽度
- //
- //            if (self.leftViewMaxOverlyWidth * 0.5 + centerOffSetX < self.slideWidth + 0.1 * JSScreenWidth) // 最小值,调整最左边则 上下 slideWidth + 调整值
- //            {
- //                centerOffSetX = (-self.leftViewMaxOverlyWidth * 0.5) + self.slideWidth + 0.1 * JSScreenWidth;
- //            }
- //            else if (self.leftViewMaxOverlyWidth * 0.5 + centerOffSetX > maxWidth)
- //            {
- //                centerOffSetX = (-self.leftViewMaxOverlyWidth * 0.5) + maxWidth;
- //            }
- //
- //            self.leftOverlayView.center = CGPointMake(centerOffSetX, self.leftOverlayView.center.y);
- //            self.leftStartPoint = point;
- //            [self _updateBoderFrame];  //更新白板子的坐标
- //            break;
- //        }
- //        case UIGestureRecognizerStateEnded:
- //            [self getVideoLenghtThenNotifyDelegate];
- //            break;
- //        default:
- //            break;
- //    }
- }
- - (void)rightPanAction:(UIPanGestureRecognizer *)gesture
- {
- if (self.widthPerSecond == 0)
- {
- NSLog(@"加载loding,解析数据中");
- return;
- }
- //    switch (gesture.state)
- //    {
- //        case UIGestureRecognizerStateBegan:
- //            self.rightStartPoint = [gesture locationInView:self];
- //            break;
- //        case UIGestureRecognizerStateChanged:
- //        {
- //            CGPoint point = [gesture locationInView:self];
- //            int offSet = point.x - self.rightStartPoint.x; // 偏移量
- //            CGPoint center = self.rightOverlayView.center;
- //
- //            CGFloat centerOffSetX = center.x += offSet; // 移动后的中心点的值
- //
- //            CGFloat maxX = self.assetDuration <= self.maxLength + 0.5 ? CGRectGetMaxX(self.backScrollView.frame) : CGRectGetWidth(self.frame) - self.slideWidth; //  最后边值
- //
- //            if (centerOffSetX - CGRectGetMaxX(self.leftOverlayView.frame) - (centerOffSetX - CGRectGetMinX(self.rightOverlayView.frame)) < self.limitLength)
- //            {
- //                centerOffSetX = CGRectGetMaxX(self.leftOverlayView.frame) + self.limitLength + self.rightOverlayView.js_width * 0.5;
- //            }
- //            else if (centerOffSetX - self.leftViewMaxOverlyWidth * 0.5 > maxX) //超过最大值
- //            {
- //                centerOffSetX = maxX + self.leftViewMaxOverlyWidth * 0.5;
- //            }
- //
- //            self.rightOverlayView.center = CGPointMake(centerOffSetX, self.leftOverlayView.center.y);
- //            self.rightStartPoint = point;
- //             [self _updateBoderFrame];   //更新白板子
- //            break;
- //        }
- //        case UIGestureRecognizerStateEnded:
- //            [self getVideoLenghtThenNotifyDelegate];
- //            break;
- //        default:
- //            break;
- //    }
- }
- 
- 
- */
-// 最小值
 
 @end

@@ -26,4 +26,9 @@
  */
 - (void)setupUIForVideoEditController;
 
+/**
+ 复原所有button的初始未选中状态
+ */
+-(void)resetButtonState;
+
 @end

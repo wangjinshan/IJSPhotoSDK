@@ -35,12 +35,12 @@
 
 - (void)_createdUI
 {
-    UIImageView *backImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.js_width, self.js_height)];
+    UIImageView *backImageView = [[UIImageView alloc] initWithFrame:self.bounds];
     [self addSubview:backImageView];
     self.backImageView = backImageView;
     backImageView.userInteractionEnabled = YES;
 
-    IJSDrawingView *drawingView = [[IJSDrawingView alloc] initWithFrame:CGRectMake(0, 0, self.js_width, self.js_height)];
+    IJSDrawingView *drawingView =  [[IJSDrawingView alloc] initWithFrame:CGRectMake(0, 0, self.drawingViewSize.width, self.drawingViewSize.height)];
     drawingView.backgroundColor = [UIColor clearColor];
     [self addSubview:drawingView];
     self.drawingView = drawingView;
@@ -188,7 +188,7 @@
 
 - (void)layoutSubviews
 {
-//    _drawingView.center = CGPointMake(self.superview.center.x, self.superview.center.y - IJSVideoEditNavigationHeight); //
+    _drawingView.center = CGPointMake(self.superview.center.x, self.superview.center.y - IJSVideoEditNavigationHeight); //
 }
 #pragma mark - 隐藏
 - (void)_hiddenToolView:(BOOL)state

@@ -94,4 +94,34 @@ typedef void (^cutVideoCompletionBlock)(NSURL *outputPath, NSError *error, IJSVi
  */
 + (CGSize)getVideSizeFromAvasset:(AVAsset *)videoAsset;
 
+/**
+ 清楚所有视频路径
+ */
++(void)cleanAllVideo;
+
+/**
+ 获取视频保存路径
+
+ @return 视频保存文件夹
+ */
++(NSString *)getAllVideoPath;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @end

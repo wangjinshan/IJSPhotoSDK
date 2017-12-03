@@ -19,7 +19,6 @@
 #import "IJSIImputTextExportView.h"
 #import "IJSIImputTextView.h"
 #import "IJSLodingView.h"
-#import "IJSVideoManager.h"
 #import "IJSImagePickerController.h"
 #import "IJSVideoTrimView.h"
 #import "IJSMapView.h"
@@ -102,10 +101,6 @@
         playView.js_height = JSScreenHeight - IJSGStatusBarAndNavigationBarHeight - IJSGNavigationBarHeight - IJSGTabbarSafeBottomMargin;
         playView.js_top = IJSGStatusBarAndNavigationBarHeight;
     }
-    if (!IJSGiPhoneX)
-    {
-        playView.frame = CGRectMake(0, IJSGNavigationBarHeight, JSScreenWidth, JSScreenHeight - IJSGNavigationBarHeight - IJSGNavigationBarHeight);
-    }
     _temporaryPlayViewRect = playView.frame;
     // 涂鸦层
     // 工具站位视图
@@ -138,7 +133,7 @@
     trimView.delegate = self;
     [trimView getVideoLenghtThenNotifyDelegate]; // 通知代理获取视频开始数据
 
-    ///裁剪控制器
+   //裁剪控制器
     IJSImageNavigationView *trimNavigation = [[IJSImageNavigationView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(trimView.frame), JSScreenWidth, CGRectGetHeight(cutHodelView.frame) - CGRectGetHeight(trimView.frame))];
     [cutHodelView addSubview:trimNavigation];
     trimNavigation.backgroundColor = [UIColor clearColor];
@@ -180,22 +175,22 @@
     /// 工具条事件
     // 画笔
     self.toolView.panButtonBlock = ^(UIButton *button) {
-        weakSelf.placeholderToolView.hidden = YES;
         [weakSelf _hiddenVideoDrawingViewSubView:NO];
         [weakSelf _videoDrawToolSubViewUnableUserInteractionEnabled:YES];
+        weakSelf.placeholderToolView.hidden = YES;
     };
     // 贴图
     self.toolView.smileButtonBlock = ^(UIButton *button) {
-        weakSelf.placeholderToolView.hidden = NO;
         [weakSelf _hiddenVideoDrawingViewSubView:YES];
         [weakSelf _videoDrawToolSubViewUnableUserInteractionEnabled:NO];
+        weakSelf.placeholderToolView.hidden = NO;
         weakSelf.mapView.hidden = NO; // 传图
     };
     // 文字
     self.toolView.textButtonBlock = ^(UIButton *button) {
+        [weakSelf _hiddenVideoDrawingViewSubView:YES];
         [weakSelf _videoDrawToolSubViewUnableUserInteractionEnabled:NO];
         weakSelf.placeholderToolView.hidden = YES;
-        [weakSelf _hiddenVideoDrawingViewSubView:NO];
         weakSelf.imputTextView.hidden = NO;
         if (weakSelf.navigationController)
         {
@@ -204,22 +199,14 @@
     };
     // 裁剪
     self.toolView.clipButtonBlock = ^(UIButton *button) {
-        [weakSelf.player pause];
-        if (IJSGiPhoneX)
-        {
-            weakSelf.playView.frame = CGRectMake(0, IJSGNavigationBarHeight, JSScreenWidth, JSScreenHeight - IJSVideoSecondCuttrimViewHeight -IJSGTabbarSafeBottomMargin);
-        }
-        else
-        {
-          weakSelf.playView.frame = CGRectMake(0, 0, JSScreenWidth , JSScreenHeight - IJSVideoSecondCuttrimViewHeight);
-        }
+        [weakSelf _hiddenVideoDrawingViewSubView:YES]; //隐藏画板
+        [weakSelf _videoDrawToolSubViewUnableUserInteractionEnabled:NO];  // 不允许交互
         weakSelf.cutHodelView.hidden = NO;
         weakSelf.placeholderToolView.hidden = YES;
         [weakSelf.navigationController setNavigationBarHidden:YES animated:YES];
         weakSelf.toolView.hidden = YES;  // 隐藏工具条
-        [weakSelf _hiddenVideoDrawingViewSubView:YES];
-        [weakSelf _videoDrawToolSubViewUnableUserInteractionEnabled:NO];
         [weakSelf.view bringSubviewToFront:weakSelf.cutHodelView];
+         [weakSelf resetTrimView];  //重新加预览条
     };
 
     //裁剪时候取消
@@ -228,8 +215,6 @@
         weakSelf.playView.frame =weakSelf.temporaryPlayViewRect;
         [weakSelf.navigationController setNavigationBarHidden:NO animated:YES];
         weakSelf.toolView.hidden = NO;  // 不隐藏工具条
-        [weakSelf _hiddenVideoDrawingViewSubView:YES];
-        [weakSelf _videoDrawToolSubViewUnableUserInteractionEnabled:YES];
     };
     // 裁剪完成了
     self.trimNavigation.finishBlock = ^{
@@ -239,8 +224,7 @@
             weakSelf.playView.center = weakSelf.view.center;
             [weakSelf.navigationController setNavigationBarHidden:NO animated:YES];
             weakSelf.toolView.hidden = NO;  // 不隐藏工具条
-            [weakSelf _hiddenVideoDrawingViewSubView:YES];
-            [weakSelf _videoDrawToolSubViewUnableUserInteractionEnabled:YES];
+            [weakSelf.player pause];
         });
         if (weakSelf.isDoing)
         {
@@ -266,6 +250,7 @@
                 weakSelf.resultAvasset = [AVAsset assetWithURL:outputPath];
                 [weakSelf _setupPlayer];
                 weakSelf.videoDuraing = CMTimeGetSeconds([weakSelf.resultAvasset duration]);
+                
             }
         }];
     };
@@ -303,22 +288,40 @@
             }
             else
             {
-                [weakSelf dismissViewControllerAnimated:YES completion:^{
-
-                    IJSImagePickerController *imagePickVc = (IJSImagePickerController *) weakSelf.navigationController;
-                    if (imagePickVc.didFinishUserPickingImageHandle)
-                    {
-                        imagePickVc.didFinishUserPickingImageHandle(nil, @[outputPath], nil, nil, NO, IJSPVideoType);
-                    }
-                    if ([imagePickVc.imagePickerDelegate respondsToSelector:@selector(imagePickerController:isSelectOriginalPhoto:didFinishPickingPhotos:assets:infos:avPlayers:sourceType:)])
-                    {
-                        [imagePickVc.imagePickerDelegate imagePickerController:imagePickVc isSelectOriginalPhoto:NO didFinishPickingPhotos:nil assets:nil infos:nil avPlayers:@[outputPath] sourceType:IJSPVideoType];
-                    }
-                }];
+                if (weakSelf.navigationController)
+                {
+                    [weakSelf.navigationController dismissViewControllerAnimated:YES completion:^{
+                       [weakSelf _outputVideoPath:outputPath error:error state:state];
+                    }];
+                }
+                else
+                {
+                    [weakSelf dismissViewControllerAnimated:YES completion:^{
+                        [weakSelf _outputVideoPath:outputPath error:error state:state];
+                    }];
+                }
             }
         }];
     }];
 }
+/// 私有方法
+-(void)_outputVideoPath:(NSURL *)outputPath error:(NSError *)error state:(IJSVideoState)state
+{
+    IJSImagePickerController *imagePickVc = (IJSImagePickerController *) self.navigationController;
+    if (imagePickVc.didFinishUserPickingImageHandle)
+    {
+        imagePickVc.didFinishUserPickingImageHandle(nil, @[outputPath], nil, nil, NO, IJSPVideoType);
+    }
+    if ([imagePickVc.imagePickerDelegate respondsToSelector:@selector(imagePickerController:isSelectOriginalPhoto:didFinishPickingPhotos:assets:infos:avPlayers:sourceType:)])
+    {
+        [imagePickVc.imagePickerDelegate imagePickerController:imagePickVc isSelectOriginalPhoto:NO didFinishPickingPhotos:nil assets:nil infos:nil avPlayers:@[outputPath] sourceType:IJSPVideoType];
+    }
+    if ([self.delegate respondsToSelector:@selector(didFinishEditVideoWithController:outputPath:error:state:)])
+    {
+        [self.delegate didFinishEditVideoWithController:self outputPath:outputPath error:error state:state];
+    }
+}
+
 
 #pragma mark 懒加载区域
 //画笔
@@ -350,7 +353,6 @@
             NSMutableArray *mapDataArr = ((IJSImagePickerController *) (self.navigationController)).mapImageArr;
             IJSMapView *mapView = [[IJSMapView alloc] initWithFrame:CGRectMake(0, 0, JSScreenWidth, JSScreenHeight * 230 / 667) imageData:mapDataArr];
             [self.placeholderToolView addSubview:mapView];
-            [self.view bringSubviewToFront:self.placeholderToolView];
             _mapView = mapView;
             // 点击回调添加图片
             mapView.didClickItemCallBack = ^(NSInteger index, UIImage *indexImage) {
@@ -362,6 +364,7 @@
             };
         }
     }
+     [self.view bringSubviewToFront:self.placeholderToolView];
     return _mapView;
 }
 
@@ -495,7 +498,17 @@
 {
     self.videoDrawView.drawingView.userInteractionEnabled = state;
 }
-
+/// 新建一个预览图
+-(void)resetTrimView
+{
+    [self.trimView removeFromSuperview];
+    IJSImagePickerController *imagePick = (IJSImagePickerController *) self.navigationController;
+    IJSVideoTrimView *trimView = [[IJSVideoTrimView alloc] initWithFrame:CGRectMake(0, 0, JSScreenWidth, IJSVideoSecondCuttrimViewHeight * 0.7) minCutTime:imagePick.minVideoCut ?: 4 maxCutTime:imagePick.maxVideoCut ?: 10 assetDuration:CMTimeGetSeconds([self.resultAvasset duration]) avAsset:self.resultAvasset];
+    [self.cutHodelView addSubview:trimView];
+    self.trimView = trimView;
+    trimView.delegate = self;
+    [trimView getVideoLenghtThenNotifyDelegate]; // 通知代理获取视频开始数据
+}
 /*------------------------------------逻辑处理-------------------------------*/
 #pragma mark 绘制DrawViewd的所有子视图成图片
 - (void)_completeCallback:(void (^)(UIImage *image))completeCallback

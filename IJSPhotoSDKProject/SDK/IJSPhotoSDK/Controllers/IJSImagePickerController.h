@@ -156,7 +156,7 @@ typedef NS_ENUM(NSUInteger, IJSPExportSourceType) {
  @param avPlayers 音视频数据
  @param sourceType 资源类型
  */
-- (void)imagePickerController:(IJSImagePickerController *)picker isSelectOriginalPhoto:(BOOL)isSelectOriginalPhoto didFinishPickingPhotos:(NSArray<UIImage *> *)photos assets:(NSArray *)assets infos:(NSArray<NSDictionary *> *)infos avPlayers:(NSArray *)avPlayers sourceType:(IJSPExportSourceType)sourceType;
+- (void)imagePickerController:(IJSImagePickerController *)picker isSelectOriginalPhoto:(BOOL)isSelectOriginalPhoto didFinishPickingPhotos:(NSArray<UIImage *> *)photos assets:(NSArray *)assets infos:(NSArray<NSDictionary *> *)infos avPlayers:(NSArray<NSURL *> *)avPlayers sourceType:(IJSPExportSourceType)sourceType;
 
 /**
  取消选择图片

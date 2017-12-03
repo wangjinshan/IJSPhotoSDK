@@ -135,6 +135,7 @@
 
         weakSelf.currentModel = IJSIDrawMode;
         [weakSelf _hiddenplaceholderToolViewSubView];
+         [weakSelf _hiddenPlaceholderToolView:NO];
         weakSelf.placeholderToolView.frame = CGRectMake(0, JSScreenHeight - ToolBarMarginBottom - ColorButtonViewWidth, JSScreenWidth, ColorButtonViewWidth);
         if (IJSGiPhoneX)
         {
@@ -191,6 +192,7 @@
     // 裁剪
     self.toolsView.clipButtonBlock = ^(UIButton *button) {
         weakSelf.currentModel = IJSIClipMode;
+         [weakSelf _hiddenPlaceholderToolView:YES];
         [weakSelf _completeCallback:^(UIImage *image) {
             TOCropViewController *cropViewController = [[TOCropViewController alloc] initWithCroppingStyle:TOCropViewCroppingStyleDefault image:image];
             cropViewController.delegate = weakSelf;
@@ -396,7 +398,6 @@
         {
             NSMutableArray *imageData = ((IJSImagePickerController *) (self.presentingViewController)).mapImageArr;
             IJSMapView *mapView = [[IJSMapView alloc] initWithFrame:CGRectMake(0, 0, JSScreenWidth, JSScreenHeight * 230 / 667) imageData:imageData];
-            
             [self.placeholderToolView addSubview:mapView];
             [self.view bringSubviewToFront:self.placeholderToolView];
             _mapView = mapView;
@@ -717,8 +718,6 @@
 #pragma mark 解析回调的数据处理
 - (void)_completeCallback:(void (^)(UIImage *image))completeCallback
 {
-    //    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-
     CGFloat WS = self.backImageView.js_width / self.drawingView.js_width;
     CGFloat HS = self.backImageView.js_height / self.drawingView.js_height;
 
@@ -757,7 +756,6 @@
             completeCallback(image);
         }
     });
-    //    });
 }
 
 #pragma mark UIScrollViewDelegaete

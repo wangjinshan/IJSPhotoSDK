@@ -501,8 +501,8 @@
 		74E201B91FCC3E04003444C6 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				74E201BC1FCC3E04003444C6 /* IJSImageManagerController.m */,
 				74E201C01FCC3E04003444C6 /* IJSImageManagerController.h */,
+				74E201BC1FCC3E04003444C6 /* IJSImageManagerController.m */,
 				74E201BA1FCC3E04003444C6 /* IJSImageEditController.h */,
 				74E201BE1FCC3E04003444C6 /* IJSImageEditController.m */,
 				74E201C11FCC3E04003444C6 /* IJSVideoCutController.h */,

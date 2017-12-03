@@ -456,7 +456,8 @@ static NSString *const CellID = @"pickerID";
     {
         [vc.imagePickerDelegate imagePickerControllerWhenDidCancle];
     }
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:^{
+    }];
 }
 
 /*-----------------------------------UI-------------------------------------------------------*/
@@ -540,7 +541,9 @@ static NSString *const CellID = @"pickerID";
 - (void)_createrData
 {
     NSMutableArray *cancleArr  = [[NSMutableArray alloc] init];
+    UIView *loadView =  [IJSLodingView showLodingViewAddedTo:self.view title:[NSBundle localizedStringForKey:@"Processing..."]];
     [[IJSImageManager shareManager] getAssetsFromFetchResult:self.albumModel.result allowPickingVideo:YES allowPickingImage:YES completion:^(NSArray<IJSAssetModel *> *models) {
+        [loadView removeFromSuperview];
         self.assetModelArr = [NSMutableArray arrayWithArray:models];
         [self.assetModelArr enumerateObjectsUsingBlock:^(IJSAssetModel *_Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
             obj.onlyOneTag = idx;

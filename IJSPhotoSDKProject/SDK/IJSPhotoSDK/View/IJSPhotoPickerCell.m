@@ -52,7 +52,7 @@
 {
     if (_backImageView == nil)
     {
-        UIImageView *backImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, MarginTop, self.js_width,self.js_height)];
+        UIImageView *backImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.js_width,self.js_height)];
         backImageView.backgroundColor = [UIColor whiteColor];
         backImageView.clipsToBounds = YES;
         backImageView.contentMode = UIViewContentModeScaleAspectFill;

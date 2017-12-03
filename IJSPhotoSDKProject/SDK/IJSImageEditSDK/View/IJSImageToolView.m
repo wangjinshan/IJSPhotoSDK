@@ -164,5 +164,25 @@
     self.textButton.js_left = marginLeft * 3 + buttonSzieWidth * 2;
     self.clipButton.js_left = marginLeft * 4 + buttonSzieWidth * 3;
 }
+/*-----------------------------------------------护肤button的默认状态-------------------------------*/
+-(void)resetButtonState
+{
+    for (UIView *buttonView in self.toolBarView.subviews)
+    {
+        if ([buttonView isKindOfClass:[UIButton class]])
+        {
+            ((UIButton *) buttonView).selected = NO;
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
 
 @end

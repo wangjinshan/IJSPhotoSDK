@@ -14,6 +14,8 @@
 #import "IJSAssetModel.h"
 #import "IJSVideoManager.h"
 
+@protocol IJSVideoCutControllerDelegate;
+
 @interface IJSVideoCutController : UIViewController
 
 @property (nonatomic, strong) AVAsset *avasset; // 编辑的资源
@@ -25,6 +27,14 @@
 
 @property (nonatomic, strong) NSMutableArray *mapImageArr; // 贴图数据
 
-@property (nonatomic, assign) BOOL secondCut; // 二次裁剪界面
+@property (nonatomic, assign) BOOL canEdit; // 进入编辑界面
+
+@property(nonatomic,weak) id<IJSVideoCutControllerDelegate > delegate;  // 代理属性
+
+@end
+
+@protocol IJSVideoCutControllerDelegate <NSObject>
+
+-(void)didFinishCutVideoWithController:(IJSVideoCutController *)controller  outputPath:(NSURL *)outputPath error:(NSError *)error state:(IJSVideoState)state;
 
 @end
