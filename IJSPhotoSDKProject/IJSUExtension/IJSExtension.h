@@ -23,4 +23,9 @@
 
 #import "IJSLodingView.h"
 
+#import "UIImageView+IJSGif.h"
+
+
+
+
 #endif /* IJSExtension_h */

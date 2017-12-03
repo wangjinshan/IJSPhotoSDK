@@ -21,8 +21,7 @@
 @property (nonatomic, weak) IJSPreviewLivePhotoView *livePhoto;
 /* 单击隐藏的状态 */
 @property (nonatomic, assign) BOOL hiddenToolsStatus;
-/* 图片请求的ID */
-@property (nonatomic, assign) PHImageRequestID imageRequestID;
+
 @end
 
 @implementation IJSPreviewImageCell
@@ -121,15 +120,15 @@
         }
         else
         {
-            if (assetModel.asset && self.imageRequestID)
+            if (assetModel.asset && assetModel.imageRequestID)
             {
-                [[PHImageManager defaultManager] cancelImageRequest:self.imageRequestID];  // 取消加载
+                [[PHImageManager defaultManager] cancelImageRequest:assetModel.imageRequestID];  // 取消加载
             }
-            self.imageRequestID = [[IJSImageManager shareManager] getPhotoWithAsset:assetModel.asset completion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
+            assetModel.imageRequestID = [[IJSImageManager shareManager] getPhotoWithAsset:assetModel.asset completion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
                 weakSelf.backImageView.image = photo;
                 if (!isDegraded)
                 {
-                    self.imageRequestID = 0;
+                    assetModel.imageRequestID = 0;
                 }
             }];
             
@@ -177,15 +176,15 @@
             }
             else
             {
-                if (assetModel.asset && self.imageRequestID)
+                if (assetModel.asset && assetModel.imageRequestID)
                 {
-                    [[PHImageManager defaultManager] cancelImageRequest:self.imageRequestID];  // 取消加载
+                    [[PHImageManager defaultManager] cancelImageRequest:assetModel.imageRequestID];  // 取消加载
                 }
-                self.imageRequestID = [[IJSImageManager shareManager] getPhotoWithAsset:assetModel.asset completion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
+                assetModel.imageRequestID = [[IJSImageManager shareManager] getPhotoWithAsset:assetModel.asset completion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
                     weakSelf.backImageView.image = photo;
                     if (!isDegraded)
                     {
-                        self.imageRequestID = 0;
+                        assetModel.imageRequestID = 0;
                     }
                 }];
             }

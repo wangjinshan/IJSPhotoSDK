@@ -11,8 +11,7 @@
 #import "IJSImageManager.h"
 
 @interface IJSSelectedCell()
-/* 图片请求的ID */
-@property (nonatomic, assign) PHImageRequestID imageRequestID;
+
 
 @end
 
@@ -43,15 +42,15 @@
     else
     {
         __weak typeof(self) weakSelf = self;
-        if (self.imageRequestID)
+        if (selectedModel.imageRequestID)
         {
-            [[PHImageManager defaultManager] cancelImageRequest:self.imageRequestID];  // 取消加载
+            [[PHImageManager defaultManager] cancelImageRequest:selectedModel.imageRequestID];  // 取消加载
         }
-        self.imageRequestID =  [[IJSImageManager shareManager] getPhotoWithAsset:selectedModel.asset completion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
+        selectedModel.imageRequestID =  [[IJSImageManager shareManager] getPhotoWithAsset:selectedModel.asset completion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
             weakSelf.backImageView.image = photo;
             if (!isDegraded)
             {
-                self.imageRequestID = 0;
+                selectedModel.imageRequestID = 0;
             }
         }];
     }

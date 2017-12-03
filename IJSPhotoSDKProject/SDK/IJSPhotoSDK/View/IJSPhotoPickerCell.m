@@ -43,51 +43,80 @@
     self = [super initWithFrame:frame];
     if (self)
     {
-        [self _createrUI:frame];
+//        [self _createrUI:frame];
     }
     return self;
 }
-
-- (void)_createrUI:(CGRect)frame
+#pragma mark 懒加载区域
+-(UIImageView *)backImageView
 {
-    UIImageView *backImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, MarginTop, frame.size.width, frame.size.height)];
-    backImageView.backgroundColor = [UIColor whiteColor];
-    backImageView.clipsToBounds = YES;
-    backImageView.contentMode = UIViewContentModeScaleAspectFill;
-    [self.contentView addSubview:backImageView];
-    self.backImageView = backImageView;
+    if (_backImageView == nil)
+    {
+        UIImageView *backImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, MarginTop, self.js_width,self.js_height)];
+        backImageView.backgroundColor = [UIColor whiteColor];
+        backImageView.clipsToBounds = YES;
+        backImageView.contentMode = UIViewContentModeScaleAspectFill;
+        [self.contentView addSubview:backImageView];
+        _backImageView = backImageView;
+    }
+    return _backImageView;
+}
 
-    UIButton *selectButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    selectButton.frame = CGRectMake(frame.size.width - ButtonHeight, 0, ButtonHeight, ButtonHeight);
-    [selectButton setBackgroundImage:[IJSFImageGet loadImageWithBundle:@"JSPhotoSDK" subFile:nil grandson:nil imageName:@"photo_def_previewVc@2x" imageType:@"png"] forState:UIControlStateNormal];
-    [selectButton setBackgroundImage:[IJSFImageGet loadImageWithBundle:@"JSPhotoSDK" subFile:nil grandson:nil imageName:@"photo_number_icon@2x" imageType:@"png"] forState:UIControlStateSelected];
-    [selectButton addTarget:self action:@selector(selectPhotoButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    [self.contentView addSubview:selectButton];
-    self.selectButton = selectButton;
-
-    UIButton *livePhotoButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    livePhotoButton.frame = CGRectMake(2, 0, ButtonHeight, ButtonHeight);
-    [livePhotoButton setImage:[IJSFImageGet loadImageWithBundle:@"JSPhotoSDK" subFile:nil grandson:nil imageName:@"live@2x" imageType:@"png"] forState:UIControlStateNormal];
-    //    [livePhotoButton addTarget:self action:@selector(seeLivePhoto:) forControlEvents:UIControlEventTouchUpInside];
-    [self.contentView addSubview:livePhotoButton];
-    self.livePhotoButton = livePhotoButton;
-
-    UIButton *videoButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    videoButton.frame = CGRectMake(0, frame.size.height - 10, frame.size.width, 10);
-    [videoButton setImage:[IJSFImageGet loadImageWithBundle:@"JSPhotoSDK" subFile:nil grandson:nil imageName:@"VideoSendIcon@2x" imageType:@"png"] forState:UIControlStateNormal];
-    [videoButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    videoButton.titleLabel.font = [UIFont systemFontOfSize:12];
-    videoButton.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
-    videoButton.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 30);
-    videoButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
-    [self.contentView addSubview:videoButton];
-    self.videoButton = videoButton;
-
-    UIView *maskView = [[UIView alloc] initWithFrame:backImageView.frame];
-    maskView.backgroundColor = [IJSFColor colorWithR:230 G:230 B:230 alpha:0.8];
-    [self.contentView addSubview:maskView];
-    self.maskView = maskView;
-    maskView.hidden = YES;
+-(UIButton *)selectButton
+{
+    if (_selectButton == nil)
+    {
+        UIButton *selectButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        selectButton.frame = CGRectMake(self.js_width - ButtonHeight, 0, ButtonHeight, ButtonHeight);
+        [selectButton setBackgroundImage:[IJSFImageGet loadImageWithBundle:@"JSPhotoSDK" subFile:nil grandson:nil imageName:@"photo_def_previewVc@2x" imageType:@"png"] forState:UIControlStateNormal];
+        [selectButton setBackgroundImage:[IJSFImageGet loadImageWithBundle:@"JSPhotoSDK" subFile:nil grandson:nil imageName:@"photo_number_icon@2x" imageType:@"png"] forState:UIControlStateSelected];
+        [selectButton addTarget:self action:@selector(selectPhotoButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+        [self.contentView addSubview:selectButton];
+        _selectButton = selectButton;
+    }
+    return _selectButton;
+}
+-(UIButton *)livePhotoButton
+{
+    if (_livePhotoButton == nil)
+    {
+        UIButton *livePhotoButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        livePhotoButton.frame = CGRectMake(2, 0, ButtonHeight, ButtonHeight);
+        [livePhotoButton setImage:[IJSFImageGet loadImageWithBundle:@"JSPhotoSDK" subFile:nil grandson:nil imageName:@"live@2x" imageType:@"png"] forState:UIControlStateNormal];
+        [self.contentView addSubview:livePhotoButton];
+        _livePhotoButton = livePhotoButton;
+    }
+    return _livePhotoButton;
+}
+-(UIButton *)videoButton
+{
+    if (_videoButton == nil)
+    {
+        UIButton *videoButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        videoButton.frame = CGRectMake(0, self.js_height - 10, self.js_width, 10);
+        [videoButton setImage:[IJSFImageGet loadImageWithBundle:@"JSPhotoSDK" subFile:nil grandson:nil imageName:@"VideoSendIcon@2x" imageType:@"png"] forState:UIControlStateNormal];
+        [videoButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        videoButton.titleLabel.font = [UIFont systemFontOfSize:12];
+        videoButton.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
+        videoButton.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 30);
+        videoButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
+        [self.contentView addSubview:videoButton];
+        _videoButton = videoButton;
+    }
+    return _videoButton;
+}
+-(UIView *)maskView
+{
+    if (_maskView == nil)
+    {
+        UIView *maskView = [[UIView alloc] initWithFrame:_backImageView.frame];
+        maskView.backgroundColor = [IJSFColor colorWithR:230 G:230 B:230 alpha:0.8];
+        [self.contentView addSubview:maskView];
+        _maskView = maskView;
+        maskView.hidden = YES;
+        [self bringSubviewToFront:maskView];
+    }
+    return _maskView;
 }
 
 #pragma mark 数据解析
@@ -111,11 +140,11 @@
     }
     else
     {
-        if (self.imageRequestID)
+        if (model.imageRequestID)
         {
-            [[PHImageManager defaultManager] cancelImageRequest:self.imageRequestID];
+            [[PHImageManager defaultManager] cancelImageRequest:model.imageRequestID];
         }
-        self.imageRequestID =  [[IJSImageManager shareManager] getPhotoWithAsset:model.asset photoWidth:self.js_width completion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
+        model.imageRequestID =  [[IJSImageManager shareManager] getPhotoWithAsset:model.asset photoWidth:self.js_width completion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
             
             if ([weakSelf.representedAssetIdentifier isEqualToString:[[IJSImageManager shareManager] getAssetIdentifier:model.asset]])
             {
@@ -123,11 +152,11 @@
             }
             else
             {
-                [[PHImageManager defaultManager] cancelImageRequest:weakSelf.imageRequestID];
+                [[PHImageManager defaultManager] cancelImageRequest:model.imageRequestID];
             }
             if (!isDegraded)
             {
-                weakSelf.imageRequestID = 0;
+                model.imageRequestID = 0;
             }
         } progressHandler:nil networkAccessAllowed:NO];
     }
@@ -167,29 +196,30 @@
 {
     _type = type;
     self.allowPickingGif = NO;
+     self.backImageView.hidden = NO;
     if (type == JSAssetModelMediaTypePhoto) // image
     {
-        _livePhotoButton.hidden = YES;
-        _videoButton.hidden = YES;
-        _selectButton.hidden = NO;
+        self.livePhotoButton.hidden = YES;
+        self.videoButton.hidden = YES;
+        self.selectButton.hidden = NO;
     }
     else if (type == JSAssetModelMediaTypeLivePhoto) // LivePhoto
     {
-        _selectButton.hidden = NO;
-        _videoButton.hidden = YES;
-        _livePhotoButton.hidden = NO;
+        self.selectButton.hidden = NO;
+        self.videoButton.hidden = YES;
+        self.livePhotoButton.hidden = NO;
     }
     else if (type == JSAssetModelMediaTypePhotoGif) //Gif
     {
-        _livePhotoButton.hidden = YES;
-        _videoButton.hidden = YES;
-        _selectButton.hidden = NO;
+        self.livePhotoButton.hidden = YES;
+        self.videoButton.hidden = YES;
+        self.selectButton.hidden = NO;
     }
     else //  video
     {
-        _selectButton.hidden = YES;
-        _livePhotoButton.hidden = YES;
-        _videoButton.hidden = NO;
+        self.selectButton.hidden = YES;
+        self.livePhotoButton.hidden = YES;
+        self.videoButton.hidden = NO;
     }
 }
 
@@ -198,17 +228,16 @@
 - (void)selectPhotoButtonClick:(UIButton *)button
 {
     // 添加弹跳动画
-    [button addSpringAnimation];
+     [button addSpringAnimation];
     _select = !_select; //改变button的状态 刷新ui
-    if ([self.cellDelegate respondsToSelector:@selector(didClickCellButtonWithButtonState:buttonIndex:)])
+    if ([self.cellDelegate respondsToSelector:@selector(didClickCellButtonWithButton:ButtonState:buttonIndex:)])
     {
-        [self.cellDelegate didClickCellButtonWithButtonState:_select buttonIndex:button.tag];
+        [self.cellDelegate didClickCellButtonWithButton:button ButtonState:_select buttonIndex:button.tag];
     }
 }
 
 - (void)seeLivePhoto:(UIButton *)button
 {
-    //    NSLog(@"eeee");
 }
 
 @end

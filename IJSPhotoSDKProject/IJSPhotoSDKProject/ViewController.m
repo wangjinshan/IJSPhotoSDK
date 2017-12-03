@@ -92,7 +92,7 @@ static NSString *const cellID = @"cellID";
 - (IBAction)shareAction:(id)sender
 {
     __weak typeof(self) weakSelf = self;
-    IJSImagePickerController *imageVc = [[IJSImagePickerController alloc] initWithMaxImagesCount:9 columnNumber:4 delegate:self];
+    IJSImagePickerController *imageVc = [[IJSImagePickerController alloc] initWithMaxImagesCount:5 columnNumber:4 delegate:self];
     imageVc.minImagesCount = 1;
     imageVc.minVideoCut = 3;
     imageVc.maxVideoCut = 10;

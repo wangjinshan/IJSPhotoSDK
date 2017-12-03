@@ -16,7 +16,7 @@
 /*
  *  照片管理类
  */
-
+// 导出视频的几种状态
 typedef NS_ENUM(NSUInteger, IJSImageState) {
     IJSImageExportSessionStatusUnknown,
     IJSImageExportSessionStatusWaiting,

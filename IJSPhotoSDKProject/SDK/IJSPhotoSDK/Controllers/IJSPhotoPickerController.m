@@ -65,13 +65,14 @@ static NSString *const CellID = @"pickerID";
     }
     return _hasSelectedCell;
 }
+
 /*-----------------------------------系统的方法-------------------------------------------------------*/
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     self.title = self.albumModel.name;
-     [self _createrCollectionView];
+    [self _createrCollectionView];
     [self _createrBottomToolBarUI];
     [self _handleCallBackData];
     [self _createrData];
@@ -189,7 +190,7 @@ static NSString *const CellID = @"pickerID";
     }
 }
 #pragma mark - cell的代理方法
-- (void)didClickCellButtonWithButtonState:(BOOL)state buttonIndex:(NSInteger)currentIndex
+- (void)didClickCellButtonWithButton:(UIButton *)button  ButtonState:(BOOL)state buttonIndex:(NSInteger)currentIndex
 {
     IJSAssetModel *currentModel = self.assetModelArr[currentIndex];
     IJSImagePickerController *vc = (IJSImagePickerController *) self.navigationController;
@@ -200,9 +201,13 @@ static NSString *const CellID = @"pickerID";
         if (vc.selectedModels.count < vc.maxImagesCount) // 选中的个数没有超标
         {
             [self.selectedModels addObject:currentModel];
-            vc.selectedModels = self.selectedModels;
+            vc.selectedModels = self.selectedModels;   // 指向同一个地址
             currentModel.didClickModelArr = self.selectedModels;
             currentModel.cellButtonNnumber = currentModel.didClickModelArr.count; // 给button的赋值
+            if (vc.selectedModels.count == vc.maxImagesCount)
+            {
+              [self.showCollectioView reloadData];
+            }
         }
         else // 选中超标
         {
@@ -214,7 +219,11 @@ static NSString *const CellID = @"pickerID";
     {
         currentModel.isSelectedModel = NO;
         currentModel.didMask = NO;
-
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+           [self.showCollectioView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:currentModel.onlyOneTag inSection:0]]];
+        });
+        
         NSArray *selectedModels = [NSArray arrayWithArray:vc.selectedModels]; // 处理用户回调数据
         for (IJSAssetModel *newModel in selectedModels)
         {
@@ -231,11 +240,25 @@ static NSString *const CellID = @"pickerID";
             IJSAssetModel *tempModel = currentModel.didClickModelArr[i];
             tempModel.cellButtonNnumber = i + 1;
         }
+        // 刷新返回之前的没有蒙版的状态
+        if (vc.selectedModels.count == vc.maxImagesCount - 1)
+        {
+            [self.showCollectioView reloadData];
+        }
     }
     [self _resetToorBarStatus]; // 重置 toor
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self.showCollectioView reloadData];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [UIView animateWithDuration:0 animations:^{
+            [self.showCollectioView performBatchUpdates:^{
+                for (IJSAssetModel *tempModel in self.selectedModels)
+                {
+                    [self.showCollectioView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:tempModel.onlyOneTag inSection:0]]];
+                }
+            } completion:nil];
+        }];
     });
+    
 }
 
 /*-----------------------------------点击状态-------------------------------------------------------*/
@@ -590,7 +613,7 @@ static NSString *const CellID = @"pickerID";
     return nil;
 }
 
-#pragma mark 清空数据
+#pragma mark 清空数据--返回上一级界面
 - (void)_cleanModelButtonAction
 {
     IJSImagePickerController *vc = (IJSImagePickerController *) self.navigationController;

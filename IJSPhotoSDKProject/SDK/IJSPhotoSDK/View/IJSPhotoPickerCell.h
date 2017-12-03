@@ -20,8 +20,7 @@
 
 /* 数据模型 */
 @property (nonatomic, weak) IJSAssetModel *model;
-/* 图片请求的ID */
-@property (nonatomic, assign) PHImageRequestID imageRequestID;
+
 /* type 用于显示控件*/
 @property (nonatomic, assign) JSAssetModelSourceType type;
 /* 选择gif */
@@ -37,6 +36,6 @@
  */
 @protocol IJSPhotoPickerCellDelegate <NSObject>
 
-- (void)didClickCellButtonWithButtonState:(BOOL)state buttonIndex:(NSInteger)currentIndex;
+- (void)didClickCellButtonWithButton:(UIButton *)button  ButtonState:(BOOL)state buttonIndex:(NSInteger)currentIndex;
 
 @end

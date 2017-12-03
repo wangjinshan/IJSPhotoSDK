@@ -10,6 +10,8 @@
 #import "IJSImageManager.h"
 #import "IJSAssetModel.h"
 
+#import <objc/runtime.h>
+
 @interface IJSPreviewGifView ()
 /* 背景动态图 */
 @property (nonatomic, weak) UIWebView *backWebView;
@@ -32,20 +34,27 @@
 {
     UIWebView *backWebView = [UIWebView new];
     backWebView.backgroundColor = [UIColor blackColor];
-
     self.backWebView = backWebView;
     self.backWebView.userInteractionEnabled = NO;
+    self.backWebView.scrollView.backgroundColor =[UIColor blackColor];
+    self.backWebView.opaque = NO;   // 结局不能设置背景色的问题
     [self addSubview:backWebView];
+    
 }
 
 - (void)setAssetModel:(IJSAssetModel *)assetModel
 {
     _assetModel = assetModel;
-    __weak typeof(self) weakSelf = self;
-    [[IJSImageManager shareManager] getOriginalPhotoDataWithAsset:assetModel.asset completion:^(NSData *data, NSDictionary *info, BOOL isDegraded) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.backWebView loadData:data MIMEType:@"image/gif" textEncodingName:@"" baseURL:[NSURL URLWithString:@""]];
-        });
+    if (assetModel.imageRequestID)
+    {
+        [[PHImageManager defaultManager] cancelImageRequest:assetModel.imageRequestID];  // 取消加载
+    }
+    assetModel.imageRequestID = [[IJSImageManager shareManager] getOriginalPhotoDataWithAsset:assetModel.asset completion:^(NSData *data, NSDictionary *info, BOOL isDegraded) {
+        [self.backWebView loadData:data MIMEType:@"image/gif" textEncodingName:@"" baseURL:[NSURL URLWithString:@""]];
+        if (!isDegraded)
+        {
+            assetModel.imageRequestID = 0;
+        }
     }];
     
 }
@@ -54,5 +63,15 @@
 {
     self.backWebView.frame = CGRectMake(0, 0, self.frame.size.width, self.assetModel.assetHeight);
 }
+
+
+
+
+
+
+
+
+
+
 
 @end

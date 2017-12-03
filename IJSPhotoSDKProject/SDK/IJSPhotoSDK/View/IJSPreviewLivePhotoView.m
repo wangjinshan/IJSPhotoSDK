@@ -17,8 +17,7 @@
 /* 播放视图 */
 
 @property (nonatomic, weak) PHLivePhotoView *backLivePhtotoView;
-/* 图片请求的ID */
-@property (nonatomic, assign) PHImageRequestID imageRequestID;
+
 @end
 
 @implementation IJSPreviewLivePhotoView
@@ -57,17 +56,17 @@
     if (iOS9_1Later)
     {
         __weak typeof(self) weakSelf = self;
-        if (self.imageRequestID)
+        if (assetModel.imageRequestID)
         {
-            [[PHImageManager defaultManager] cancelImageRequest:self.imageRequestID];  // 取消加载
+            [[PHImageManager defaultManager] cancelImageRequest:assetModel.imageRequestID];  // 取消加载
         }
-        [[IJSImageManager shareManager] getLivePhotoWithAsset:assetModel.asset photoWidth:JSScreenWidth networkAccessAllowed:YES completion:^(PHLivePhoto *livePhoto, NSDictionary *info) {
+        assetModel.imageRequestID = [[IJSImageManager shareManager] getLivePhotoWithAsset:assetModel.asset photoWidth:JSScreenWidth networkAccessAllowed:YES completion:^(PHLivePhoto *livePhoto, NSDictionary *info) {
             weakSelf.backLivePhtotoView.livePhoto = livePhoto;
           
         } progressHandler:^(double progress, NSError *error, BOOL *stop, NSDictionary *info){
             if (error)
             {
-                self.imageRequestID = 0;
+                assetModel.imageRequestID = 0;
             }
         }];
     }

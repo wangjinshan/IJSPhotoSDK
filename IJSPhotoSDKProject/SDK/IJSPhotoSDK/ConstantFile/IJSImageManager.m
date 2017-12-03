@@ -31,8 +31,8 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
         manager = [[self alloc] init];
         manager.cachingImageManager = [[PHCachingImageManager alloc] init];
         manager.cachingImageManager.allowsCachingHighQualityImages = YES;
-        // 测试发现，如果scale在plus真机上取到3.0，内存会增大特别多。故这里写死成2.0
-        JSScreenScale = 2.0;
+        // 测试发现，如果scale在plus真机上取到3.0，内存会增大特别多。故这里写死成
+        JSScreenScale = 2;
         if (JSScreenWidth > 700)
         {
             JSScreenScale = 1.5;
@@ -379,7 +379,9 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
         {
             BOOL isDegraded = [[info objectForKey:PHImageResultIsDegradedKey] boolValue];
             if (completion)
-                completion(imageData, info, isDegraded);
+            {
+               completion(imageData, info, isDegraded);
+            }
         }
     }];
     return imageRequestID;
@@ -723,7 +725,6 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
         return nil;
     }
     return [PHAsset fetchAssetsWithLocalIdentifiers:@[assetID] options:nil];
-    return nil;
 }
 // 保存视频资源到相机胶卷
 - (id)saveVideoIntoSystemAlbumFromVideoUrl:(NSURL *)videoUrl completion:(void (^)(id assetResult, NSError *error, BOOL isExistedOrIsSuccess))completion
@@ -743,7 +744,6 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
         return nil;
     }
     return [PHAsset fetchAssetsWithLocalIdentifiers:@[assetID] options:nil];
-    return nil;
 }
 /// 批量删除指定的资源
 - (void)deleteAssetArr:(NSArray *)assetArr completion:(completionHandler)completion
