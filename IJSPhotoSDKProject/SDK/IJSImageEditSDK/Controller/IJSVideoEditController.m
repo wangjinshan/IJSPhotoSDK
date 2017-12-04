@@ -121,13 +121,20 @@
     self.toolView = toolView;
 
     //裁剪的工具
-    UIView *cutHodelView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.js_height - IJSVideoSecondCuttrimViewHeight - IJSGTabbarSafeBottomMargin, JSScreenWidth, IJSVideoSecondCuttrimViewHeight)];
+    CGFloat ipxMargin = 0;
+    if (IJSGiPhoneX)
+    {
+        ipxMargin = 8;
+    }
+    UIView *cutHodelView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.js_height - IJSVideoSecondCuttrimViewHeight - IJSGTabbarSafeBottomMargin + ipxMargin, JSScreenWidth, IJSVideoSecondCuttrimViewHeight)];
+   
     [self.view addSubview:cutHodelView];
     self.cutHodelView = cutHodelView;
     // 裁剪器
     IJSImagePickerController *imagePick = (IJSImagePickerController *) self.navigationController;
 
     IJSVideoTrimView *trimView = [[IJSVideoTrimView alloc] initWithFrame:CGRectMake(0, 0, JSScreenWidth, IJSVideoSecondCuttrimViewHeight * 0.7) minCutTime:imagePick.minVideoCut ?: 4 maxCutTime:imagePick.maxVideoCut ?: 10 assetDuration:CMTimeGetSeconds([self.resultAvasset duration]) avAsset:self.resultAvasset];
+
     [cutHodelView addSubview:trimView];
     self.trimView = trimView;
     trimView.delegate = self;
