@@ -40,6 +40,7 @@
     self.edgesForExtendedLayout = UIRectEdgeNone;
     self.isPlaying = YES;
     self.canEdit = YES;
+    
     [self _setupUI];        // 重置UI
     [self _didclickAction]; //点击事件
 }
@@ -142,6 +143,7 @@
     };
     //完成
     self.navigationView.finishBlock = ^{
+        
         if (weakSelf.isDoing)
         {
             return;
@@ -272,5 +274,11 @@
 {
     [super didReceiveMemoryWarning];
 }
+
+
+
+
+
+
 
 @end

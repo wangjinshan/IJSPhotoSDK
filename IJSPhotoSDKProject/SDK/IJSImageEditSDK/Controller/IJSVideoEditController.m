@@ -257,7 +257,6 @@
                 weakSelf.resultAvasset = [AVAsset assetWithURL:outputPath];
                 [weakSelf _setupPlayer];
                 weakSelf.videoDuraing = CMTimeGetSeconds([weakSelf.resultAvasset duration]);
-                
             }
         }];
     };
@@ -627,5 +626,7 @@
 {
     [super didReceiveMemoryWarning];
 }
+
+
 
 @end

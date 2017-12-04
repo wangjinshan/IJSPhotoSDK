@@ -93,8 +93,7 @@ static NSString *const cellID = @"cellID";
 
 - (IBAction)shareAction:(id)sender
 {
-//    [self testMemory];
-//    return;
+
     __weak typeof(self) weakSelf = self;
     IJSImagePickerController *imageVc = [[IJSImagePickerController alloc] initWithMaxImagesCount:50 columnNumber:4 delegate:self];
     imageVc.minImagesCount = 1;
