@@ -628,31 +628,48 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
         }
         else
         {
-            [[IJSImageManager shareManager] getOriginalPhotoWithAsset:model.asset newCompletion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
-                if (isDegraded)
-                {
-                    return; // 获取不到高清图
-                }
-                if (photo)
-                {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        IJSImageManagerController *managerVc = [[IJSImageManagerController alloc] initWithEditImage:photo];
-                        [managerVc loadImageOnCompleteResult:^(UIImage *image) { //数据回传
-                            model.cutImage = image;
-                            [weakSelf.showCollectioView reloadData]; // 重载
-                            [weakSelf.selectedCollection reloadData];
-                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                                [weakSelf _resetUpSelectedDidClick:currentIndex];
-                            });
-                        }];
-                        managerVc.mapImageArr = [(IJSImagePickerController *) weakSelf.navigationController mapImageArr];
-                        [weakSelf presentViewController:managerVc animated:YES completion:nil];
-                    });
-                }
-            }];
+            IJSImagePickerController *vc = (IJSImagePickerController *) self.navigationController;
+            if (vc.allowPickingOriginalPhoto)  // 允许原图
+            {
+                [[IJSImageManager shareManager] getOriginalPhotoWithAsset:model.asset newCompletion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
+                    [weakSelf _pushImageControllerFromModel:model photo:photo isDegraded:isDegraded currentIndex:currentIndex];
+                }];
+            }
+            else   // 非原图
+            {
+                [[IJSImageManager shareManager] getPhotoWithAsset:model.asset completion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
+                    [weakSelf _pushImageControllerFromModel:model photo:photo isDegraded:isDegraded currentIndex:currentIndex];
+                }];
+            }
         }
     }
 }
+/// 跳转的私有方法
+-(void)_pushImageControllerFromModel:( IJSAssetModel *)model photo:(UIImage *)photo isDegraded:(BOOL)isDegraded currentIndex:(NSIndexPath *)currentIndex
+{
+    __weak typeof (self) weakSelf = self;
+    if (isDegraded)
+    {
+        return; // 获取不到高清图
+    }
+    if (photo)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            IJSImageManagerController *managerVc = [[IJSImageManagerController alloc] initWithEditImage:photo];
+            [managerVc loadImageOnCompleteResult:^(UIImage *image) { //数据回传
+                model.cutImage = image;
+                [weakSelf.showCollectioView reloadData]; // 重载
+                [weakSelf.selectedCollection reloadData];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [weakSelf _resetUpSelectedDidClick:currentIndex];
+                });
+            }];
+            managerVc.mapImageArr = [(IJSImagePickerController *) weakSelf.navigationController mapImageArr];
+            [weakSelf presentViewController:managerVc animated:YES completion:nil];
+        });
+    }
+}
+
 #pragma mark - 执行刷新选择UI的操作
 /// 执行刷新选择UI的操作
 - (void)_resetUpSelectedDidClick:(NSIndexPath *)indexPath
@@ -1257,6 +1274,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
+    [[IJSImageManager shareManager] stopCachingImagesFormAllAssets];
     JSLog(@"内存警告了");
 }
 

@@ -255,6 +255,13 @@
     {
         NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"JSPhotoSDK" ofType:@"bundle"];
         NSString *filePath = [bundlePath stringByAppendingString:@"/Expression"];
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        BOOL isDir = NO;
+        BOOL existed = [fileManager fileExistsAtPath:filePath isDirectory:&isDir];
+        if ( !(isDir == YES && existed == YES) )
+        {  //不存在
+            return;
+        }
         [IJSFFilesManager ergodicFilesFromFolderPath:filePath completeHandler:^(NSInteger fileCount, NSInteger fileSzie, NSMutableArray *filePath) {
             IJSMapViewModel *model = [[IJSMapViewModel alloc] initWithImageDataModel:filePath];
             [self.mapDataArr addObject:model];

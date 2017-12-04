@@ -62,7 +62,7 @@ typedef NS_ENUM(NSUInteger, IJSPExportSourceType) {
 /* 预览图默认600像素宽 */
 @property (nonatomic, assign) CGFloat photoPreviewMaxWidth;
 
-/* 是否选择原图 */
+/* 是否选择原图 注意: 选中原图不宜大于 9张否则可能出现闪退*/
 @property (nonatomic, assign) BOOL allowPickingOriginalPhoto;
 
 /* 默认为YES，如果设置为NO,用户将不能选择发送图片 */

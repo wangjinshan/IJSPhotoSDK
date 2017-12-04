@@ -355,6 +355,7 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
                                                                                 contentMode:PHImageContentModeAspectFit
                                                                                     options:option
                                                                               resultHandler:^(UIImage *_Nullable result, NSDictionary *_Nullable info) {
+                                                                                  
                                                                                   BOOL downloadFinined = (![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey]);
                                                                                   if (downloadFinined && result)
                                                                                   {

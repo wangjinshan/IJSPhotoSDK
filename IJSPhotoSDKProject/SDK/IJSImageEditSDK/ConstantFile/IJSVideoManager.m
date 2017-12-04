@@ -468,7 +468,6 @@ static IJSVideoManager *manager;
         [fileManager createDirectoryAtPath:filePath withIntermediateDirectories:YES attributes:nil error:nil];
     }
     NSString *outputPath =[filePath stringByAppendingPathComponent:[NSString stringWithFormat:@"/output-%@.mp4",[formater stringFromDate:[NSDate date]]]];
-//    NSString *outputPath = [NSHomeDirectory() stringByAppendingFormat:@"/tmp/output-%@.mp4", [formater stringFromDate:[NSDate date]]]; // 创建输出的路径
     NSURL *outputURL = [NSURL fileURLWithPath:outputPath];
     return outputURL;
 }

@@ -16,6 +16,7 @@
 #import <IJSFoundation/IJSFoundation.h>
 #import <Photos/Photos.h>
 #import "IJSVideoManager.h"
+#import "IJSAlbumModel.h"
 
 static NSString *const cellID = @"cellID";
 
@@ -92,8 +93,10 @@ static NSString *const cellID = @"cellID";
 
 - (IBAction)shareAction:(id)sender
 {
+//    [self testMemory];
+//    return;
     __weak typeof(self) weakSelf = self;
-    IJSImagePickerController *imageVc = [[IJSImagePickerController alloc] initWithMaxImagesCount:9 columnNumber:4 delegate:self];
+    IJSImagePickerController *imageVc = [[IJSImagePickerController alloc] initWithMaxImagesCount:50 columnNumber:4 delegate:self];
     imageVc.minImagesCount = 1;
     imageVc.minVideoCut = 3;
     imageVc.maxVideoCut = 10;
@@ -144,10 +147,61 @@ static NSString *const cellID = @"cellID";
     return _mapDataArr;
 }
 
+
+
+-(void)testMemory
+{
+    [[IJSImageManager shareManager] getAllAlbumsContentImage:YES contentVideo:YES completion:^(NSArray<IJSAlbumModel *> *models) {
+        
+        for (IJSAlbumModel *model in models)
+        {
+            for (PHAsset *asset in model.result)
+            {
+                [[IJSImageManager shareManager] getOriginalPhotoWithAsset:asset completion:^(UIImage *photo, NSDictionary *info) {
+                    self.backImageView.image = photo;
+                }];
+            }
+        }
+    }];
+    
+    
+}
+
+
+
+
+
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
+    JSLog("内存警告");
+    [[IJSImageManager shareManager] stopCachingImagesFormAllAssets];
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
