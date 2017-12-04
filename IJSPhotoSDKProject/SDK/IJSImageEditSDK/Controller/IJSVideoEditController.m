@@ -281,7 +281,7 @@
 
     [self _completeCallback:^(UIImage *image) {
 
-        [IJSVideoManager addWatermarkForVideoAsset:self.resultAvasset waterImage:image describe:IJSLOG completion:^(NSURL *outputPath, NSError *error, IJSVideoState state) {
+        [IJSVideoManager addWatermarkForVideoAsset:weakSelf.resultAvasset waterImage:image describe:IJSLOG completion:^(NSURL *outputPath, NSError *error, IJSVideoState state) {
             [lodingView removeFromSuperview];
             weakSelf.isDoing = NO;
             if (error)
