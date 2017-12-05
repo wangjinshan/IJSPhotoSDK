@@ -1,15 +1,21 @@
 PODS:
   - FBRetainCycleDetector (0.1.4)
+  - IJSFoundation (0.0.4)
+  - IJSUExtension (0.0.5)
   - MLeaksFinder (0.2.1):
     - FBRetainCycleDetector
 
 DEPENDENCIES:
+  - IJSFoundation
+  - IJSUExtension
   - MLeaksFinder (~> 0.2.1)
 
 SPEC CHECKSUMS:
   FBRetainCycleDetector: 46f8179bbb1c587deee3ea838a1a3ee02acf5015
+  IJSFoundation: 0ea83ad8c9279e63141ae7ff9d096004949dc66f
+  IJSUExtension: f4dc0b1c417175f89112314ddd4735a1bb6a0476
   MLeaksFinder: 0850e2f2abc7227adc4d4e2d1992b431264eb4d5
 
-PODFILE CHECKSUM: c55c464fffab3a5049df3158669214af8f8107b5
+PODFILE CHECKSUM: f9d07e6e36d8a6afc66908e691640bab180e6e17
 
 COCOAPODS: 1.3.1

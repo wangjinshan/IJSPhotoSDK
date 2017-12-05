@@ -632,10 +632,10 @@ static NSString *const CellID = @"pickerID";
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
+    
     JSLog(@"相册--IJSPhotoPickerController--出现了内存增加的问题");
 }
 
-// 刷新数据
-//         [weakSelf.showCollectioView reloadItemsAtIndexPaths:@[index]];
+
 
 @end

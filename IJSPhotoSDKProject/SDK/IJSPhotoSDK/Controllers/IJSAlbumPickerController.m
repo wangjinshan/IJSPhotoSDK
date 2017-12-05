@@ -45,12 +45,14 @@ static NSString *const cellID = @"cellID";
 {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
+    self.automaticallyAdjustsScrollViewInsets = NO;// 默认是YES
     [self _createrNavigationUI];
     [self _configImageData]; // 获取数据
 }
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.automaticallyAdjustsScrollViewInsets = NO;// 默认是YES
     [self _configImageData]; // 获取数据
 }
 
@@ -72,7 +74,7 @@ static NSString *const cellID = @"cellID";
 
 - (void)_createTableViewUI
 {
-    UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, IJSGStatusBarAndNavigationBarHeight, JSScreenWidth, JSScreenHeight - IJSGStatusBarAndNavigationBarHeight - IJSGTabbarSafeBottomMargin) style:UITableViewStylePlain];
     tableView.rowHeight = albumCellHright;
     [self.view addSubview:tableView];
     tableView.delegate = self;

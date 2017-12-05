@@ -1,7 +1,8 @@
 # IJSPhotoSDK
 ios多图选择,高仿微信发朋友圈的功能
 
-# 服务QQ: 1096452045 
+# 开发者QQ: 1096452045 
+
 #简书地址: http://www.jianshu.com/u/874b526fa570
 
 #    IJSPhotoSDK  集成文档
@@ -37,6 +38,21 @@ ios多图选择,高仿微信发朋友圈的功能
 
 ### 手动拖入的方式
 git下载地址:  https://github.com/wangjinshan/IJSPhotoSDK 
+
+### 项目目录介绍:
+目录: 
+
+```
+SDK:  1, IJSPhotoSDK: 主要处理Photokit的api封装,用于相册UI展示和选择
+      2, IJSImageEditSDK 主要用于对获取到的图片和视频资源进行裁剪涂鸦等等操作
+      3, Resources 存放必要的资源库,如果拆分sdk 这个资源还是需要依赖上
+         //以下两个是pod的项目可以pod 语句加入
+         // pod search IJSFoundation
+         // pod search IJSUExtension
+      4,IJSFoundation 主要是公共库的方法,常用方法的整合 
+      5,IJSUExtension 是开源 IJSUI的扩展,主要是系统的Category
+        
+```
 #### 1, 下载sdk并把里面的SDK文件夹直接拖入到项目中去
 #### 2, 在项目的点击事件中实现如下代码
 
@@ -48,9 +64,10 @@ git下载地址:  https://github.com/wangjinshan/IJSPhotoSDK
 #import "IJSMapViewModel.h"
 #import <IJSFoundation/IJSFoundation.h>
 #import <Photos/Photos.h>
-2,签订协议
-<IJSImagePickerControllerDelegate>
-3,获取用户选择的图片等资源可以通过 block 也可以通过代理方法
+2, 设置回调的数据,以下二者选一个
+  2.1,签订协议
+    <IJSImagePickerControllerDelegate>
+  2.2,获取用户选择的图片等资源可以通过 block 也可以通过代理方法
 如下:
 // 1 block 方法
 - (IBAction)_selectImageActin:(id)sender
@@ -117,23 +134,11 @@ pod 'IJSPhotoSDK'
 集成步骤和手动拖入的集成一样不再赘述
 集成已经完成
 
-### 项目目录介绍:
-目录: 
 
-
-```
-SDK:  1, IJSPhotoSDK主要存放项目文件和项目资源,
-         里面 IJSPhotoSDKFiles 就是项目文件 
-         Support 是UI资源
-
-        2, Required 存放必须的两个依赖库 
-        IJSFoundation 主要是公共库的方法 
-        IJSUExtension 是开源 IJSUI的扩展
-    
-```
 ### 项目头文件介绍
 
 ```
+IJSPhotoSDK
 // 控制器
 1, IJSImagePickerController.h 导航栏控制器，通过改变该控制器的一些属性来达到你想要的效果,开放的外部接口
 里面的所有属性都是用来控制选取属性的 比如可以设置 maxImagesCount = 9 最大选取个数等
@@ -147,9 +152,28 @@ SDK:  1, IJSPhotoSDK主要存放项目文件和项目资源,
 1,  IJSAlbumModel 相册模型
 2,  IJSAssetModel  照片模型
 
-```
-###  目前发现的不足:
+IJSImageEditSDK
+1, IJSImageManagerController 作为统一的接口
+2, IJSImageEditController 图片裁剪控制器
+3, IJSVideoCutController  视频裁剪
+4, IJSVideoEditController 视频编辑
+5,IJSVideoManager 视频处理api
+6, TOCropViewController  图片尺寸裁剪
 
-1, 暂时没有适配 iphone x
-2, 图片裁剪少了一次国际化
-3, 性能还需要再优化
+```
+
+### 后期维护方向
+
+1, 组装SDK: 
+ 1.1 图片视频的滤镜处理
+ 1.2 自定义相机
+ 1.3 二维码api增加
+
+2, 拆分SDK
+
+1, 照片预览器 IJSPhotoSDK
+2, 图片视频裁剪器 IJSImageEditSDK
+3, 视频图片滤镜处理 IJSFilterSDK
+4  自定义相机 IJSCameraSDK
+5, 二维码 IJSQRCodeSDK
+

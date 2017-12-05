@@ -111,7 +111,7 @@ static NSString *const cellID = @"cellID";
             AVAsset *avaseet = [AVAsset assetWithURL:avPlayers.firstObject];
             testVc.avasset = avaseet;
             [weakSelf presentViewController:testVc animated:YES completion:nil];
-            
+    
         }
     };
 
@@ -129,11 +129,17 @@ static NSString *const cellID = @"cellID";
     if (sourceType == IJSPVideoType)
     {
       //作为测试
-     NSString *path = [IJSVideoManager getAllVideoPath];
-        NSLog(@"%@",path);
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(15 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [IJSVideoManager cleanAllVideo];  // 清理缓存
-        });
+//     NSString *path = [IJSVideoManager getAllVideoPath];
+//        NSLog(@"%@",path);
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(15 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//            [IJSVideoManager cleanAllVideo];  // 清理缓存
+//        });
+        
+//        IJSVideoTestController *testVc = [[IJSVideoTestController alloc] init];
+//        AVAsset *avaseet = [AVAsset assetWithURL:avPlayers.firstObject];
+//        testVc.avasset = avaseet;
+//        [self presentViewController:testVc animated:YES completion:nil];
+        
     }
 }
 #pragma mark 懒加载区域

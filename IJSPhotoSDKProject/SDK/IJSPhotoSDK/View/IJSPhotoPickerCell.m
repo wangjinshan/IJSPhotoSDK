@@ -38,15 +38,6 @@
     BOOL _select;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self)
-    {
-//        [self _createrUI:frame];
-    }
-    return self;
-}
 #pragma mark 懒加载区域
 -(UIImageView *)backImageView
 {
@@ -123,7 +114,7 @@
 - (void)setModel:(IJSAssetModel *)model
 {
     _model = model;
-
+    self.backImageView.image = nil;
     [self.videoButton setTitle:model.timeLength forState:UIControlStateNormal];
     if (model.type != JSAssetModelMediaTypeLivePhoto)
     {
