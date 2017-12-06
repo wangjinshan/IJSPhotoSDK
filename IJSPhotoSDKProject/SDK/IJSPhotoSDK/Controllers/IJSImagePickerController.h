@@ -59,7 +59,7 @@ typedef NS_ENUM(NSUInteger, IJSPExportSourceType) {
 /* 默认828像素宽 */
 @property (nonatomic, assign) CGFloat photoWidth;
 
-/* 预览图默认600像素宽 */
+/* 预览图默认750像素宽 */
 @property (nonatomic, assign) CGFloat photoPreviewMaxWidth;
 
 /* 是否选择原图 注意: 选中原图不宜大于 9张否则可能出现闪退*/
@@ -111,30 +111,6 @@ typedef NS_ENUM(NSUInteger, IJSPExportSourceType) {
 /*-----------------------------------编辑使用的贴图数组-------------------------------------------------------*/
 @property (nonatomic, strong) NSMutableArray<IJSMapViewModel *> *mapImageArr; // 贴图数据
 
-/*-----------------------------------UI-------------------------------------------------------*/
-@property (nonatomic, copy) NSString *takePictureImageName;
-@property (nonatomic, copy) NSString *photoSelImageName;
-@property (nonatomic, copy) NSString *photoDefImageName;
-@property (nonatomic, copy) NSString *photoOriginSelImageName;
-@property (nonatomic, copy) NSString *photoOriginDefImageName;
-@property (nonatomic, copy) NSString *photoPreviewOriginDefImageName;
-@property (nonatomic, copy) NSString *photoNumberIconImageName;
-// 外观颜色 + 按钮文字
-@property (nonatomic, strong) UIColor *oKButtonTitleColorNormal;
-@property (nonatomic, strong) UIColor *oKButtonTitleColorDisabled;
-
-@property (nonatomic, strong) UIColor *naviBgColor;
-@property (nonatomic, strong) UIColor *naviTitleColor;
-@property (nonatomic, strong) UIFont *naviTitleFont;
-@property (nonatomic, strong) UIColor *barItemTextColor;
-@property (nonatomic, strong) UIFont *barItemTextFont;
-
-@property (nonatomic, copy) NSString *doneBtnTitleStr;
-@property (nonatomic, copy) NSString *cancelBtnTitleStr;
-@property (nonatomic, copy) NSString *previewBtnTitleStr;
-@property (nonatomic, copy) NSString *fullImageBtnTitleStr;
-@property (nonatomic, copy) NSString *settingBtnTitleStr;
-@property (nonatomic, copy) NSString *processHintStr;
 
 @end
 /*-----------------------------------协议-------------------------------------------------------*/

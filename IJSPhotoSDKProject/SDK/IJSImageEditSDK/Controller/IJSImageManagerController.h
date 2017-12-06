@@ -10,7 +10,6 @@
 /*
  *  图片裁剪外部开放类
  */
-typedef void (^completeBlock)(UIImage *image);
 
 @interface IJSImageManagerController : UIViewController
 
@@ -23,9 +22,9 @@ typedef void (^completeBlock)(UIImage *image);
 - (id)initWithEditImage:(UIImage *)image;
 
 /**
- *  回调
+ *  回调数据 outputPath 图片存储的路径 error错误信息
  */
-- (void)loadImageOnCompleteResult:(completeBlock)completeImage;
+- (void)loadImageOnCompleteResult:(void(^)(UIImage *image,NSURL *outputPath, NSError *error))completeImage;
 /**
  *  设置贴图数据
  */

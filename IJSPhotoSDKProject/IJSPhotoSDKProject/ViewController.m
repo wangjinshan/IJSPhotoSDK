@@ -37,6 +37,7 @@ static NSString *const cellID = @"cellID";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.view.backgroundColor =[UIColor whiteColor];
     [self createTableViewUI];
     [self.view bringSubviewToFront:self.pushActionBt];
     //    NSString *str = [[NSBundle mainBundle] pathForResource:@"01" ofType:@"mp4"];
@@ -93,7 +94,6 @@ static NSString *const cellID = @"cellID";
 
 - (IBAction)shareAction:(id)sender
 {
-
     __weak typeof(self) weakSelf = self;
     IJSImagePickerController *imageVc = [[IJSImagePickerController alloc] initWithMaxImagesCount:50 columnNumber:4 delegate:self];
     imageVc.minImagesCount = 1;

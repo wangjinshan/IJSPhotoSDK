@@ -35,10 +35,10 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
-    self.oKButtonTitleColorNormal = [UIColor colorWithRed:(83 / 255.0) green:(179 / 255.0) blue:(17 / 255.0) alpha:1.0];
-    self.oKButtonTitleColorDisabled = [UIColor colorWithRed:(83 / 255.0) green:(179 / 255.0) blue:(17 / 255.0) alpha:0.5];
-    [self _createrUI];
+    [self _createrUI];    // 设置UI
     [self _setupMapData];
+    [self configNaviTitleAppearance];
+    
 }
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -87,14 +87,16 @@
         self.networkAccessAllowed = NO;
         self.columnNumber = columnNumber;
 
-        [self configDefaultSetting]; // 初始化信息
+        [self setupDefaultData]; // 初始化信息
 
         if (![[IJSImageManager shareManager] authorizationStatusAuthorized]) // 没有授权,自定义的界面
         {
             _tipLabel = [[UILabel alloc] init];
             _tipLabel.backgroundColor = [UIColor redColor];
-            _tipLabel.frame = CGRectMake(8, 120, self.view.js_width - 16, 60);
+            _tipLabel.frame = CGRectMake(8, 200, self.view.js_width - 16, 60);
             _tipLabel.textAlignment = NSTextAlignmentCenter;
+            _tipLabel.layer.cornerRadius = 5;
+            _tipLabel.layer.masksToBounds =YES;
             _tipLabel.numberOfLines = 0;
             _tipLabel.font = [UIFont systemFontOfSize:16];
             _tipLabel.textColor = [UIColor blackColor];
@@ -110,9 +112,14 @@
             [self.view addSubview:_tipLabel];
 
             _settingBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-            [_settingBtn setTitle:self.settingBtnTitleStr forState:UIControlStateNormal];
-            _settingBtn.frame = CGRectMake(0, 180, self.view.js_width, 44);
-            _settingBtn.titleLabel.font = [UIFont systemFontOfSize:18];
+            [_settingBtn setTitle:[NSBundle localizedStringForKey:@"Setting"] forState:UIControlStateNormal];
+            _settingBtn.frame = CGRectMake(JSScreenWidth / 2 - 50, 280, 100, 44);
+            _settingBtn.titleLabel.font = [UIFont systemFontOfSize:20];
+            _settingBtn.tintColor =[UIColor blueColor];
+            _settingBtn.backgroundColor =[UIColor greenColor];
+            _settingBtn.layer.borderWidth =1;
+            _settingBtn.layer.cornerRadius = 5;
+            _settingBtn.layer.masksToBounds = YES;
             [_settingBtn addTarget:self action:@selector(_settingBtnClick) forControlEvents:UIControlEventTouchUpInside];
             [self.view addSubview:_settingBtn];
 
@@ -127,41 +134,6 @@
 }
 
 /*-----------------------------------属性初始化-------------------------------------------------------*/
-- (void)configDefaultSetting
-{
-    //    self.timeout = 15;
-    self.photoWidth = 828.0;
-    self.photoPreviewMaxWidth = 600; // 图片预览器默认的宽度
-    self.naviTitleColor = [UIColor whiteColor];
-    self.naviTitleFont = [UIFont systemFontOfSize:17];
-    self.barItemTextFont = [UIFont systemFontOfSize:15];
-    self.barItemTextColor = [UIColor whiteColor];
-    self.allowPreview = YES;
-
-    [self configDefaultImageName]; // 初始化图片信息
-    [self configDefaultBtnTitle];  // 初始化按钮信息
-}
-/// 初始化图片信息
-- (void)configDefaultImageName
-{
-    self.takePictureImageName = @"takePicture.png";
-    self.photoSelImageName = @"photo_sel_photoPickerVc.png";
-    self.photoDefImageName = @"photo_def_photoPickerVc.png";
-    self.photoNumberIconImageName = @"photo_number_icon.png";
-    self.photoPreviewOriginDefImageName = @"preview_original_def.png";
-    self.photoOriginDefImageName = @"photo_original_def.png";
-    self.photoOriginSelImageName = @"photo_original_sel.png";
-}
-/// 初始化按钮信息
-- (void)configDefaultBtnTitle
-{
-    self.doneBtnTitleStr = [NSBundle localizedStringForKey:@"Done"];
-    self.cancelBtnTitleStr = [NSBundle localizedStringForKey:@"Cancel"];
-    self.previewBtnTitleStr = [NSBundle localizedStringForKey:@"Preview"];
-    self.fullImageBtnTitleStr = [NSBundle localizedStringForKey:@"Full image"];
-    self.settingBtnTitleStr = [NSBundle localizedStringForKey:@"Setting"];
-    self.processHintStr = [NSBundle localizedStringForKey:@"Processing..."];
-}
 // 初始化时间排序的信息
 - (void)setSortAscendingByModificationDate:(BOOL)sortAscendingByModificationDate
 {
@@ -174,24 +146,7 @@
 // 监听授权状态
 - (void)_settingBtnClick
 {
-    if (iOS8Later)
-    {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
-    }
-    else
-    {
-        NSURL *privacyUrl = [NSURL URLWithString:@"prefs:root=Privacy&path=PHOTOS"];
-        if ([[UIApplication sharedApplication] canOpenURL:privacyUrl])
-        {
-            [[UIApplication sharedApplication] openURL:privacyUrl];
-        }
-        else
-        {
-            NSString *message = [NSBundle localizedStringForKey:@"Can not jump to the privacy settings page, please go to the settings page by self, thank you"];
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[NSBundle localizedStringForKey:@"Sorry"] message:message delegate:nil cancelButtonTitle:[NSBundle localizedStringForKey:@"OK"] otherButtonTitles:nil];
-            [alert show];
-        }
-    }
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
 }
 - (void)_observeAuthrizationStatusChange
 {
@@ -222,19 +177,7 @@
         }];
     }
 }
-
-- (void)_createrUI
-{
-    // 默认的外观，你可以在这个方法后重置
-    self.oKButtonTitleColorNormal = [UIColor colorWithRed:(83 / 255.0) green:(179 / 255.0) blue:(17 / 255.0) alpha:1.0];
-    self.oKButtonTitleColorDisabled = [UIColor colorWithRed:(83 / 255.0) green:(179 / 255.0) blue:(17 / 255.0) alpha:0.5];
-    if (iOS7Later)
-    {
-        self.navigationBar.barTintColor = [UIColor colorWithRed:(34 / 255.0) green:(34 / 255.0) blue:(34 / 255.0) alpha:1.0];
-        self.navigationBar.tintColor = [UIColor whiteColor];
-        self.automaticallyAdjustsScrollViewInsets = NO;
-    }
-}
+/// 跳转到相册列表页
 - (void)goAlbumViewController
 {
     IJSAlbumPickerController *vc = [[IJSAlbumPickerController alloc] init];
@@ -242,12 +185,6 @@
 }
 
 #pragma mark 点击方法
-- (void)settingBtnClick
-{
-}
-- (void)observeAuthrizationStatusChange
-{
-}
 #pragma mark - 设置map数据
 - (void)_setupMapData
 {
@@ -271,35 +208,6 @@
 }
 /*-----------------------------------get set 方法-------------------------------------------------------*/
 #pragma mark set方法
-- (void)setNaviBgColor:(UIColor *)naviBgColor
-{
-    _naviBgColor = naviBgColor;
-    self.navigationBar.barTintColor = naviBgColor;
-}
-
-- (void)setNaviTitleColor:(UIColor *)naviTitleColor
-{
-    _naviTitleColor = naviTitleColor;
-    [self configNaviTitleAppearance];
-}
-
-- (void)setNaviTitleFont:(UIFont *)naviTitleFont
-{
-    _naviTitleFont = naviTitleFont;
-    [self configNaviTitleAppearance];
-}
-
-- (void)setBarItemTextFont:(UIFont *)barItemTextFont
-{
-    _barItemTextFont = barItemTextFont;
-    [self configBarButtonItemAppearance];
-}
-
-- (void)setBarItemTextColor:(UIColor *)barItemTextColor
-{
-    _barItemTextColor = barItemTextColor;
-    [self configBarButtonItemAppearance];
-}
 - (void)setAllowPickingImage:(BOOL)allowPickingImage
 {
     _allowPickingImage = allowPickingImage;
@@ -345,8 +253,6 @@
     _maxImagesCount = maxImagesCount;
     if (maxImagesCount > 1)
     {
-        //        _showSelectBtn = YES;
-        //        _allowCrop = NO;
     }
 }
 /// 是否选择原图
@@ -386,16 +292,34 @@
 {
     _maxVideoCut = maxVideoCut;
 }
-
-// 导航条
+#pragma mark 初始化设置UI
+/*-----------------------------------------------------初始化默认设置-------------------------------*/
+/// 设置默认的数据
+-(void)setupDefaultData
+{
+    self.photoWidth = 828.0;
+    self.photoPreviewMaxWidth = 750; // 图片预览器默认的宽度
+    self.allowPreview = YES;
+}
+// 默认的外观，你可以在这个方法后重置
+- (void)_createrUI
+{
+    self.navigationBar.barTintColor = [UIColor colorWithRed:(34 / 255.0) green:(34 / 255.0) blue:(34 / 255.0) alpha:1.0];
+    self.navigationBar.tintColor = [UIColor whiteColor];
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    [self configNaviTitleAppearance]; // 中间的文字
+    [self configBarButtonItemAppearance];  //左右两边
+}
+// 导航条中间文字的颜色
 - (void)configNaviTitleAppearance
 {
     NSMutableDictionary *textAttrs = [NSMutableDictionary dictionary];
-    textAttrs[NSForegroundColorAttributeName] = self.naviTitleColor;
-    textAttrs[NSFontAttributeName] = self.naviTitleFont;
+    textAttrs[NSForegroundColorAttributeName] = [UIColor whiteColor];
+    textAttrs[NSFontAttributeName] = [UIFont systemFontOfSize:17];
     self.navigationBar.titleTextAttributes = textAttrs;
+   
 }
-
+ ///  设置导航条左右两边的按钮
 - (void)configBarButtonItemAppearance
 {
     UIBarButtonItem *barItem;
@@ -408,23 +332,16 @@
         barItem = [UIBarButtonItem appearanceWhenContainedIn:[IJSImagePickerController class], nil];
     }
     NSMutableDictionary *textAttrs = [NSMutableDictionary dictionary];
-    textAttrs[NSForegroundColorAttributeName] = self.barItemTextColor;
-    textAttrs[NSFontAttributeName] = self.barItemTextFont;
+    textAttrs[NSForegroundColorAttributeName] = [UIColor whiteColor];
+    textAttrs[NSFontAttributeName] =[UIFont systemFontOfSize:17];
     [barItem setTitleTextAttributes:textAttrs forState:UIControlStateNormal];
 }
 /// 警告
 - (void)showAlertWithTitle:(NSString *)title
 {
-    if (iOS8Later)
-    {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:nil preferredStyle:UIAlertControllerStyleAlert];
-        [alertController addAction:[UIAlertAction actionWithTitle:[NSBundle localizedStringForKey:@"OK"] style:UIAlertActionStyleDefault handler:nil]];
-        [self presentViewController:alertController animated:YES completion:nil];
-    }
-    else
-    {
-        [[[UIAlertView alloc] initWithTitle:title message:nil delegate:nil cancelButtonTitle:[NSBundle localizedStringForKey:@"OK"] otherButtonTitles:nil, nil] show];
-    }
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:nil preferredStyle:UIAlertControllerStyleAlert];
+    [alertController addAction:[UIAlertAction actionWithTitle:[NSBundle localizedStringForKey:@"OK"] style:UIAlertActionStyleDefault handler:nil]];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 #pragma mark 懒加载区域

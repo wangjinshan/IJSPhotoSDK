@@ -125,9 +125,11 @@
     __weak typeof(self) weakSelf = self;
 
     // 选择性加载图片裁剪的图片
-    if (model.cutImage)
+    if (model.outputPath)
     {
-        _backImageView.image = model.cutImage;
+        NSData *resultData = [NSData dataWithContentsOfURL:model.outputPath];
+        UIImage *resultImage = [UIImage imageWithData:resultData];
+        _backImageView.image = resultImage;
     }
     else
     {

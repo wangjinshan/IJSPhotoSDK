@@ -89,6 +89,11 @@ typedef void (^completionHandler)(id assetCollection, NSError *error, BOOL isExi
  */
 - (PHImageRequestID)getPhotoWithAsset:(PHAsset *)asset photoWidth:(CGFloat)photoWidth completion:(void (^)(UIImage *photo, NSDictionary *info, BOOL isDegraded))completion progressHandler:(void (^)(double progress, NSError *error, BOOL *stop, NSDictionary *info))progressHandler networkAccessAllowed:(BOOL)networkAccessAllowed;
 
+/**
+ 如果想缓存固定尺寸的可以通过下面的方式,图片预览界面固定死参数,处理内存控制内存问题
+ */
+- (PHImageRequestID)getPhotoWithAsset:(PHAsset *)asset targetSize:(CGSize)targetSize completion:(void (^)(UIImage *photo, NSDictionary *info, BOOL isDegraded))completion progressHandler:(void (^)(double progress, NSError *error, BOOL *stop, NSDictionary *info))progressHandler networkAccessAllowed:(BOOL)networkAccessAllowed;
+
 /*-----------------------------------获取原图-------------------------------------------------------*/
 /**
  *  该方法会先返回缩略图，再返回原图，如果info[PHImageResultIsDegradedKey] 为 YES，则表明当前返回的是缩略图，否则是原图

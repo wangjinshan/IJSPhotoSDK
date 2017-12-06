@@ -110,17 +110,39 @@ static NSString *const cellID = @"cellID";
 #pragma mark 获取相册列表
 - (void)_configImageData
 {
-    __weak typeof(self) weakSelf = self;
-    UIView *loadView =  [IJSLodingView showLodingViewAddedTo:self.view title:[NSBundle localizedStringForKey:@"Processing..."]];
-    [[IJSImageManager shareManager] getAllAlbumsContentImage:YES contentVideo:YES completion:^(NSArray<IJSAlbumModel *> *models) {
-        weakSelf.albumListArr = models;
-        [loadView removeFromSuperview];
-        if (!weakSelf.tableView)
+    
+    if (![[IJSImageManager shareManager] authorizationStatusAuthorized])
+    {
+        
+        NSString *tipText;
+        if ([NSBundle localizedStringForKey:@"Please click the photo to read and write after the jump"] != nil)
         {
-            [weakSelf _createTableViewUI];
+            tipText = [NSString stringWithFormat:@"%@", [NSBundle localizedStringForKey:@"Please click the photo to read and write after the jump"]];
         }
-        [_tableView reloadData];
-    }];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:tipText message:nil preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *determineAction = [UIAlertAction actionWithTitle:[NSBundle localizedStringForKey:@"OK"] style:UIAlertActionStyleDefault handler:^(UIAlertAction *_Nonnull action) {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+            }];
+    
+        [alert addAction:determineAction];
+        [self presentViewController:alert animated:YES completion:nil];
+        return;
+    }
+    else
+    {
+        __weak typeof(self) weakSelf = self;
+        UIView *loadView =  [IJSLodingView showLodingViewAddedTo:self.view title:[NSBundle localizedStringForKey:@"Processing..."]];
+        [[IJSImageManager shareManager] getAllAlbumsContentImage:YES contentVideo:YES completion:^(NSArray<IJSAlbumModel *> *models) {
+            weakSelf.albumListArr = models;
+            [loadView removeFromSuperview];
+            if (!weakSelf.tableView)
+            {
+                [weakSelf _createTableViewUI];
+            }
+            [_tableView reloadData];
+        }];
+    }
 }
 
 #pragma mark 点击方法
@@ -142,41 +164,33 @@ static NSString *const cellID = @"cellID";
         [(IJSImagePickerController *) self.navigationController showAlertWithTitle:@"您没有授权访问相册的权限,请您点击设置"];
         return;
     }
-    if (iOS8Later)
-    {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:[NSBundle localizedStringForKey:@"AlbumAlert"] message:nil preferredStyle:UIAlertControllerStyleAlert];
-
-        __weak typeof(alert) weakAlert = alert;
-        UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:[NSBundle localizedStringForKey:@"Cancel"] style:UIAlertActionStyleDefault handler:^(UIAlertAction *_Nonnull action) {
-            [self.navigationController popViewControllerAnimated:YES];
+ 
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:[NSBundle localizedStringForKey:@"AlbumAlert"] message:nil preferredStyle:UIAlertControllerStyleAlert];
+    
+    __weak typeof(alert) weakAlert = alert;
+    UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:[NSBundle localizedStringForKey:@"Cancel"] style:UIAlertActionStyleDefault handler:^(UIAlertAction *_Nonnull action) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }];
+    
+    UIAlertAction *determineAction = [UIAlertAction actionWithTitle:[NSBundle localizedStringForKey:@"OK"] style:UIAlertActionStyleDefault handler:^(UIAlertAction *_Nonnull action) {
+        [self.navigationController popViewControllerAnimated:YES];
+        
+        [[IJSImageManager shareManager] createdAlbumName:weakAlert.textFields.firstObject.text completion:^(id assetCollection, NSError *error, BOOL isExisted) {
+            if (error)
+            {
+                [(IJSImagePickerController *) self.navigationController showAlertWithTitle:@"您创建的相册已经存在,或者系统原因没有创建成功"];
+            }
+            else
+            {
+                [(IJSImagePickerController *) self.navigationController showAlertWithTitle:@"创建成功,保存图片到自定义相册可以进行浏览"];
+            }
         }];
-
-        UIAlertAction *determineAction = [UIAlertAction actionWithTitle:[NSBundle localizedStringForKey:@"OK"] style:UIAlertActionStyleDefault handler:^(UIAlertAction *_Nonnull action) {
-            [self.navigationController popViewControllerAnimated:YES];
-
-            [[IJSImageManager shareManager] createdAlbumName:weakAlert.textFields.firstObject.text completion:^(id assetCollection, NSError *error, BOOL isExisted) {
-                if (error)
-                {
-                    [(IJSImagePickerController *) self.navigationController showAlertWithTitle:@"您创建的相册已经存在,或者系统原因没有创建成功"];
-                }
-                else
-                {
-                    [(IJSImagePickerController *) self.navigationController showAlertWithTitle:@"创建成功,保存图片到自定义相册可以进行浏览"];
-                }
-            }];
-        }];
-        [alert addAction:cancleAction];
-        [alert addAction:determineAction];
-        [alert addTextFieldWithConfigurationHandler:^(UITextField *_Nonnull textField){
-        }];
-        [self presentViewController:alert animated:YES completion:nil];
-    }
-    else
-    {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[NSBundle localizedStringForKey:@"AlbumAlert"] message:nil delegate:self cancelButtonTitle:[NSBundle localizedStringForKey:@"Cancel"] otherButtonTitles:[NSBundle localizedStringForKey:@"OK"], nil];
-        alert.alertViewStyle = UIAlertViewStylePlainTextInput; //给提示窗口加上输入框
-        [alert show];                                          //调用方法
-    }
+    }];
+    [alert addAction:cancleAction];
+    [alert addAction:determineAction];
+    [alert addTextFieldWithConfigurationHandler:^(UITextField *_Nonnull textField){
+    }];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark alert delegate

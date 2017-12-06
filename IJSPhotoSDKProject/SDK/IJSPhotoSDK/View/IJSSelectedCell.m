@@ -35,9 +35,10 @@
 - (void)setSelectedModel:(IJSAssetModel *)selectedModel
 {
     _selectedModel = selectedModel;
-    if (selectedModel.cutImage)
+    if (selectedModel.outputPath)
     {
-        _backImageView.image = selectedModel.cutImage;
+        UIImage *image =[UIImage imageWithData:[NSData dataWithContentsOfURL:selectedModel.outputPath]];
+        _backImageView.image = image;
     }
     else
     {

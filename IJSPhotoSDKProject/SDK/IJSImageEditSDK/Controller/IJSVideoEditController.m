@@ -460,6 +460,7 @@
 
     exportTextView.handleSingleTap = ^(UITextView *textView, BOOL isTap) {
         weakSelf.imputTextView.tapTextView = textView;
+         [weakSelf.navigationController setNavigationBarHidden:YES animated:YES];
     };
     // 改变坐标
     exportTextView.textViewExpoetViewPanCallBack = ^(CGPoint viewPoint) {
