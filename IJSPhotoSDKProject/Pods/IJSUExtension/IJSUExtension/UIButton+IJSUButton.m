@@ -14,7 +14,7 @@
 // 添加弹跳动画
 - (void)addSpringAnimation
 {
-    if (iOS9_1Later)
+    if (@available(iOS 9.0, *))
     {
         CASpringAnimation *spring = [CASpringAnimation animationWithKeyPath:@"transform.scale"];
         spring.toValue = @(2);
