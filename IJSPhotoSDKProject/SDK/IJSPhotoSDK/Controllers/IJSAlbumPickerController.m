@@ -111,26 +111,7 @@ static NSString *const cellID = @"cellID";
 #pragma mark 获取相册列表
 - (void)_configImageData
 {
-    
-    if (![[IJSImageManager shareManager] authorizationStatusAuthorized])
-    {
-        
-        NSString *tipText;
-        if ([NSBundle localizedStringForKey:@"Please click the photo to read and write after the jump"] != nil)
-        {
-            tipText = [NSString stringWithFormat:@"%@", [NSBundle localizedStringForKey:@"Please click the photo to read and write after the jump"]];
-        }
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:tipText message:nil preferredStyle:UIAlertControllerStyleAlert];
-        
-        UIAlertAction *determineAction = [UIAlertAction actionWithTitle:[NSBundle localizedStringForKey:@"OK"] style:UIAlertActionStyleDefault handler:^(UIAlertAction *_Nonnull action) {
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
-            }];
-    
-        [alert addAction:determineAction];
-        [self presentViewController:alert animated:YES completion:nil];
-        return;
-    }
-    else
+    if ([[IJSImageManager shareManager] authorizationStatusAuthorized])
     {
         __weak typeof(self) weakSelf = self;
         UIView *loadView =  [IJSLodingView showLodingViewAddedTo:self.view title:[NSBundle localizedStringForKey:@"Processing..."]];

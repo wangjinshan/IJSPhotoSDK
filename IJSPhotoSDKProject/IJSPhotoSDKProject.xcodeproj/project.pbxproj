@@ -295,15 +295,15 @@
 			isa = PBXGroup;
 			children = (
 				7477482C1FD8DCF000F5E4B6 /* IJSAlbumPickerController.h */,
-				7477482D1FD8DCF000F5E4B6 /* IJSPhotoPickerController.m */,
-				7477482E1FD8DCF000F5E4B6 /* IJS3DTouchController.m */,
-				7477482F1FD8DCF000F5E4B6 /* IJSPhotoPreviewController.m */,
-				747748301FD8DCF000F5E4B6 /* IJSImagePickerController.m */,
-				747748311FD8DCF000F5E4B6 /* IJS3DTouchController.h */,
-				747748321FD8DCF000F5E4B6 /* IJSPhotoPickerController.h */,
 				747748331FD8DCF000F5E4B6 /* IJSAlbumPickerController.m */,
-				747748341FD8DCF000F5E4B6 /* IJSImagePickerController.h */,
 				747748351FD8DCF000F5E4B6 /* IJSPhotoPreviewController.h */,
+				7477482F1FD8DCF000F5E4B6 /* IJSPhotoPreviewController.m */,
+				747748311FD8DCF000F5E4B6 /* IJS3DTouchController.h */,
+				7477482E1FD8DCF000F5E4B6 /* IJS3DTouchController.m */,
+				747748321FD8DCF000F5E4B6 /* IJSPhotoPickerController.h */,
+				7477482D1FD8DCF000F5E4B6 /* IJSPhotoPickerController.m */,
+				747748341FD8DCF000F5E4B6 /* IJSImagePickerController.h */,
+				747748301FD8DCF000F5E4B6 /* IJSImagePickerController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
