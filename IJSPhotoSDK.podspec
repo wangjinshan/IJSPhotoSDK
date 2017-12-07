@@ -21,13 +21,19 @@ Pod::Spec.new do |s|
   
   # 依赖的资源 
   s.resource = "SDK/Resources/JSPhotoSDK.bundle"
+
   s.dependency 'IJSFoundation'
-  s.dependency 'IJSUExtension'
+  s.dependency  'IJSUExtension'
 
-  s.source_files = 'SDK/IJSPhotoSDK'
+  s.source_files = 'SDK/IJSPhotoSDK/ConstantFile/*.{h,m}',
+                    'SDK/IJSPhotoSDK/Controllers/*.{h,m}',
+                    'SDK/IJSPhotoSDK/IJSMapView/*.{h,m}',
+                    'SDK/IJSPhotoSDK/IJSVideoDrawTool/*.{h,m}',
+                    'SDK/IJSPhotoSDK/Model/*.{h,m}',
+                    'SDK/IJSPhotoSDK/TOCropViewController/*.{h,m}',
+                    'SDK/IJSPhotoSDK/View/*.{h,m}'
   
   
-
 end
 
 
