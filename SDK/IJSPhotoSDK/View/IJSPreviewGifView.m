@@ -46,9 +46,9 @@
 {
     _assetModel = assetModel;
     
-    if (assetModel.cutImage) //编辑完成的image
+    if (assetModel.outputPath) //编辑完成的image
     {
-        NSData *imageData = UIImagePNGRepresentation(assetModel.cutImage);
+        NSData *imageData = [NSData dataWithContentsOfURL:assetModel.outputPath];
         [self.backWebView loadData:imageData MIMEType:@"image/gif" textEncodingName:@"" baseURL:[NSURL URLWithString:@""]];
     }
     else

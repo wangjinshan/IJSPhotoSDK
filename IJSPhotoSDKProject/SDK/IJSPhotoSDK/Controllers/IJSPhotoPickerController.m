@@ -13,9 +13,11 @@
 #import "IJSAlbumModel.h"
 #import "IJSImageManager.h"
 #import "IJSImagePickerController.h"
+#import "IJS3DTouchController.h"
+
 #import <IJSFoundation/IJSFoundation.h>
 #import "IJSExtension.h"
-#import "IJS3DTouchController.h"
+
 
 static NSString *const CellID = @"pickerID";
 

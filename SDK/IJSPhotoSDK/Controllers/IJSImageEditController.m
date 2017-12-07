@@ -9,7 +9,6 @@
 #import "IJSImageEditController.h"
 #import "IJSImageNavigationView.h"
 #import "IJSImageToolView.h"
-#import "IJSExtension.h"
 #import "IJSImageConst.h"
 #import "IJSIColorButtonView.h"
 #import "IJSImageToolBase.h"
@@ -24,7 +23,9 @@
 #import <IJSFoundation/IJSFoundation.h>
 #import "IJSImagePickerController.h"
 #import "TOCropViewController-Bridging-Header.h"
+
 #import "IJSExtension.h"
+#import "IJSVideoManager.h"
 
 @interface IJSImageEditController () <UIScrollViewDelegate, TOCropViewControllerDelegate>
 @property (nonatomic, weak) UIView *backPlacehodelView;              // 站位背景图
@@ -41,7 +42,7 @@
 @property (nonatomic, weak) IJSImageMosaicToolView *mosaicToolView;  // 马赛克工具条
 @property (nonatomic, assign) BOOL hiddenToolView;                   //是否隐藏工具条
 @property (nonatomic, strong) UIImage *completeEditImage;            //处理的image
-@property (nonatomic, copy) void (^completeEditImageCallBlock)(UIImage *image);
+@property (nonatomic, copy) void (^completeEditImageCallBlock)(UIImage *image,NSURL *outputPath, NSError *error);
 @property (nonatomic, assign) IJSIEditMode currentModel; // 当前的模式
 @property (nonatomic, weak) UIView *placeholderToolView; // 工具站位视图
 @property (nonatomic, strong) UIImage *gaussanImage;     // 提前获取好高斯图
@@ -96,7 +97,7 @@
     return self;
 }
 
-- (void)loadImageOnCompleteResult:(completeBlock)completeImage
+- (void)loadImageOnCompleteResult:(void(^)(UIImage *image,NSURL *outputPath, NSError *error))completeImage
 {
     self.completeEditImageCallBlock = completeImage;
 }
@@ -106,7 +107,7 @@
     self.mapImageArr = mapImageArr;
 }
 /*-----------------------------------点击事件-------------------------------------------------------*/
-#pragma mark 点击事件处理
+#pragma mark 点击事件处理,取消或者完成绘制
 - (void)_buttonClickAction
 {
     //取消
@@ -121,7 +122,21 @@
             weakSelf.editImage = image;
             if (weakSelf.completeEditImageCallBlock)
             {
-                weakSelf.completeEditImageCallBlock(image);
+                [IJSVideoManager saveImageToSandBoxImage:image completion:^(NSURL *outputPath, NSError *error) {
+                    if (error)
+                    {
+                        UIAlertController *alertView = [UIAlertController alertControllerWithTitle:@"警告" message:[NSString stringWithFormat:@"%@", error] preferredStyle:(UIAlertControllerStyleActionSheet)];
+                        UIAlertAction *cancle = [UIAlertAction actionWithTitle:[NSBundle localizedStringForKey:@"OK"] style:(UIAlertActionStyleDefault) handler:^(UIAlertAction *_Nonnull action) {
+                            [alertView dismissViewControllerAnimated:YES completion:nil];
+                        }];
+                        [alertView addAction:cancle];
+                        [weakSelf presentViewController:alertView animated:YES completion:nil];
+                    }
+                    else
+                    {
+                        weakSelf.completeEditImageCallBlock(image,outputPath,error);
+                    }
+                }];
             }
             [weakSelf dismissViewControllerAnimated:YES completion:nil];
         }];

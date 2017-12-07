@@ -78,7 +78,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     {
         _selectedCollectionHidden = YES;
     }
-
+    
     [self _createdUI];
 }
 - (void)viewWillDisappear:(BOOL)animated
@@ -87,6 +87,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     [self.touchCell stopLivePhotos];
     [self.player pause];
     [self removeListenPlayerTimer];
+    [[IJSImageManager shareManager] stopCachingImagesFormAllAssets];
 }
 
 /*-----------------------------------collection-------------------------------------------------------*/
@@ -123,14 +124,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
         }
         assetModel.networkAccessAllowed = ((IJSImagePickerController *) self.navigationController).networkAccessAllowed;
         cell.assetModel = assetModel;
-        if (iOS9Later)
-        {
-            if (self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable)
-            {
-                [self registerForPreviewingWithDelegate:(id) self sourceView:cell];
-            }
-        }
-         cell.cellDelegate = self;
+        cell.cellDelegate = self;
         return cell;
     }
     else
@@ -148,7 +142,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
             model.isPreviewButton = NO;
         }
         cell.selectedModel = model;
-
+        
         return cell;
     }
     return nil;
@@ -191,17 +185,31 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
         if (hiddenToolsStatus)
         {
             [cell.videoView.player play];
-             self.videoPlayButton.hidden = YES;
+            self.videoPlayButton.hidden = YES;
             [self startListenPlayerTimer];
         }
         else
         {
             [cell.videoView.player pause];
-             self.videoPlayButton.hidden = NO;
+            self.videoPlayButton.hidden = NO;
         }
         [[IJSImageManager shareManager] getAVAssetWithPHAsset:cell.assetModel.asset completion:^(AVAsset *asset, AVAudioMix *audioMix, NSDictionary *info) {
             self.videoDuraing = CMTimeGetSeconds([asset duration]);
         }];
+    }
+    // livePhoto
+    if (cell.assetModel.type == JSAssetModelMediaTypeLivePhoto)
+    {
+        [cell stopLivePhotos];
+        [cell playLivePhotos];
+        // 考虑到内存性能问题,暂时不使用3DTouch
+//        if (iOS9Later)
+//        {
+//            if (self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable)
+//            {
+//                [self registerForPreviewingWithDelegate:(id) self sourceView:cell];
+//            }
+//        }
     }
 }
 #pragma mark - 滚动结束
@@ -246,7 +254,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
         }
         else
         { //正常点击进来
-
+            
             for (IJSAssetModel *selectModel in self.selectedModels)
             {
                 if (selectModel.onlyOneTag == index) //对应
@@ -254,7 +262,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
                     [self _resetRightButtonStatus:selectModel.cellButtonNnumber];
                     NSIndexPath *indexPath = [NSIndexPath indexPathForItem:selectModel.cellButtonNnumber - 1 inSection:0];
                     [self.selectedCollection scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionNone animated:YES];
-
+                    
                     IJSSelectedCell *cell = (IJSSelectedCell *) [self.selectedCollection cellForItemAtIndexPath:indexPath];
                     [self _resetAssetCellStatus:cell];
                     break;
@@ -274,9 +282,9 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
         {
             [self _cleanAssetCellStatus:allCell];
         }
-
+        
         NSInteger index = self.showCollectioView.contentOffset.x / JSScreenWidth;
-
+        
         if (self.isPreviewButton)
         {
             for (int i = 0; i < self.selectedModels.count; i++)
@@ -320,7 +328,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
         }
         // 其他开发者提出的建议修复 多图预览选中滑动上下图标不对应问题
         NSInteger index = self.showCollectioView.contentOffset.x / JSScreenWidth + 0.5;
-
+        
         if (self.isPreviewButton)
         {
             for (int i = 0; i < self.selectedModels.count; i++)
@@ -356,7 +364,6 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     [self.player pause];
     _toHiddToolStatus = YES;
 }
-
 /*-----------------------------------UI-------------------------------------------------------*/
 #pragma mark - UI
 - (void)_createdUI
@@ -365,7 +372,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     self.automaticallyAdjustsScrollViewInsets = NO;
     //中间的collectionview
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-
+    
     layout.itemSize = CGSizeMake(JSScreenWidth, JSScreenHeight - IJSGStatusBarAndNavigationBarHeight - IJSGTabbarSafeBottomMargin - TabbarHeight);
     layout.minimumInteritemSpacing = 0;
     layout.minimumLineSpacing = 0;
@@ -381,13 +388,13 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     showCollectioView.dataSource = self;
     showCollectioView.delegate = self;
     self.showCollectioView = showCollectioView;
-
+    
     self.showCollectioView.contentOffset = CGPointMake(JSScreenWidth * self.pushSelectedIndex - 1, 0);
     NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.pushSelectedIndex inSection:0];
     [self.showCollectioView scrollToItemAtIndexPath:indexpath atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
-
+    
     [self.showCollectioView registerClass:[IJSPreviewImageCell class] forCellWithReuseIdentifier:IJSShowCellID];
-
+    
     // 显示选中的collection
     UICollectionViewFlowLayout *selectedLayout = [[UICollectionViewFlowLayout alloc] init];
     selectedLayout.itemSize = CGSizeMake(80, 80);
@@ -407,9 +414,9 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     [self.view addSubview:selectedCollection];
     selectedCollection.dataSource = self;
     selectedCollection.delegate = self;
-
+    
     [self.selectedCollection registerClass:[IJSSelectedCell class] forCellWithReuseIdentifier:IJSSelectedCellID];
-
+    
     if (_selectedCollectionHidden)
     {
         self.selectedCollection.hidden = YES;
@@ -418,7 +425,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     {
         self.selectedCollection.hidden = NO;
     }
-
+    
     //工具背景
     UIView *toolBarView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.js_height - TabbarHeight, self.view.js_width, TabbarHeight)];
     toolBarView.backgroundColor = [UIColor colorWithRed:(34 / 255.0) green:(34 / 255.0) blue:(34 / 255.0) alpha:1.0];
@@ -436,12 +443,12 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     editButton.layer.masksToBounds = YES;
     editButton.layer.cornerRadius = 2;
     [editButton setTitle:[NSBundle localizedStringForKey:@"Edit"] forState:UIControlStateNormal];
-     editButton.backgroundColor = [IJSFColor colorWithR:40 G:170 B:40 alpha:1];
+    editButton.backgroundColor = [IJSFColor colorWithR:40 G:170 B:40 alpha:1];
     [editButton setTitleColor:[IJSFColor colorWithR:232 G:236 B:239 alpha:1] forState:UIControlStateNormal];
     [editButton addTarget:self action:@selector(_editPhotoAction:) forControlEvents:UIControlEventTouchUpInside];
     [toolBarView addSubview:editButton];
     self.editButton = editButton;
-
+    
     // 完成
     UIButton *finishButton = [UIButton buttonWithType:UIButtonTypeCustom];
     finishButton.frame = CGRectMake(self.view.js_width - 75, 5, 70, 30); //27 81 28
@@ -454,7 +461,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     [toolBarView addSubview:finishButton];
     self.finishButton = finishButton;
     [self _resetToorBarStatus];
-
+    
     // 左按钮
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[NSBundle localizedStringForKey:@"Back"] style:UIBarButtonItemStylePlain target:self action:@selector(callBackButtonAction)];
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
@@ -468,9 +475,9 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     [rightButton setBackgroundImage:[IJSFImageGet loadImageWithBundle:@"JSPhotoSDK" subFile:nil grandson:nil imageName:@"photo_def_previewVc@2x" imageType:@"png"] forState:UIControlStateNormal];
     [rightButton setBackgroundImage:[IJSFImageGet loadImageWithBundle:@"JSPhotoSDK" subFile:nil grandson:nil imageName:@"preview_number_icon@2x" imageType:@"png"] forState:UIControlStateSelected];
     rightButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
-
+    
     [rightButton addTarget:self action:@selector(_selectImageButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-
+    
     if (self.isPreviewButton)
     {
         [rightButton setBackgroundImage:[IJSFImageGet loadImageWithBundle:@"JSPhotoSDK" subFile:nil grandson:nil imageName:@"preview_number_icon@2x" imageType:@"png"] forState:UIControlStateNormal];
@@ -505,7 +512,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     {
         self.rightButton.hidden = NO;
     }
-
+    
     if (_isFirstAppear && self.isPreviewButton)
     {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -564,9 +571,9 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
             return;
         }
         self.isDoing = YES;
-
+        
         IJSLodingView *lodingView = [IJSLodingView showLodingViewAddedTo:self.view title:@"正在加载... ..."];
-
+        
         [[IJSImageManager shareManager] getVideoOutputPathWithAsset:model.asset completion:^(NSURL *outputPath, NSError *error, IJSImageState state) {
             [lodingView removeFromSuperview];
             weakSelf.isDoing = NO;
@@ -612,11 +619,12 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     {
         NSIndexPath *currentIndex = [NSIndexPath indexPathForRow:index inSection:0];
         // 执行点击操作
-        if (model.cutImage) // 上次已经编辑过,直接编辑编辑过的图片
+        if (model.outputPath) // 上次已经编辑过,直接编辑编辑过的图片
         {
-            IJSImageManagerController *managerVc = [[IJSImageManagerController alloc] initWithEditImage:model.cutImage];
-            [managerVc loadImageOnCompleteResult:^(UIImage *image) { //数据回传
-                model.cutImage = image;
+            UIImage *image =[UIImage imageWithData:[NSData dataWithContentsOfURL:model.outputPath]];
+            IJSImageManagerController *managerVc = [[IJSImageManagerController alloc] initWithEditImage:image];
+            [managerVc loadImageOnCompleteResult:^(UIImage *image, NSURL *outputPath, NSError *error) {
+                model.outputPath = outputPath;
                 [weakSelf.showCollectioView reloadData]; // 重载
                 [weakSelf.selectedCollection reloadData];
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -631,7 +639,8 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
             IJSImagePickerController *vc = (IJSImagePickerController *) self.navigationController;
             if (vc.allowPickingOriginalPhoto)  // 允许原图
             {
-                [[IJSImageManager shareManager] getOriginalPhotoWithAsset:model.asset newCompletion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
+                [[IJSImageManager shareManager]getOriginalPhotoDataWithAsset:model.asset completion:^(NSData *data, NSDictionary *info, BOOL isDegraded) {
+                    UIImage *photo =[UIImage imageWithData:data];
                     [weakSelf _pushImageControllerFromModel:model photo:photo isDegraded:isDegraded currentIndex:currentIndex];
                 }];
             }
@@ -656,8 +665,8 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             IJSImageManagerController *managerVc = [[IJSImageManagerController alloc] initWithEditImage:photo];
-            [managerVc loadImageOnCompleteResult:^(UIImage *image) { //数据回传
-                model.cutImage = image;
+            [managerVc loadImageOnCompleteResult:^(UIImage *image, NSURL *outputPath, NSError *error) {
+                model.outputPath = outputPath;
                 [weakSelf.showCollectioView reloadData]; // 重载
                 [weakSelf.selectedCollection reloadData];
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -721,7 +730,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
 {
     IJSImagePickerController *vc = (IJSImagePickerController *) self.navigationController;
     vc.selectedModels = self.selectedModels;
-
+    
     NSMutableArray *photos = [NSMutableArray array];
     NSMutableArray *assets = [NSMutableArray array];
     NSMutableArray *infoArr = [NSMutableArray array];
@@ -735,18 +744,18 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     }
     // 解析数据并返回
     BOOL noShowAlert = YES;
-
+    
     if (vc.selectedModels.count == 0) // 用户没有选中图片或者视频
     {
         [photos addObject:@1];
         [assets addObject:@1];
         [infoArr addObject:@1];
         [avPlayers addObject:@1];
-
+        
         NSIndexPath *firstIndexPath = [[self.showCollectioView indexPathsForVisibleItems] firstObject];
         IJSAssetModel *model = self.allAssetModelArr[firstIndexPath.row];
         JSAssetModelSourceType type = model.type;
-
+        
         if (type == JSAssetModelMediaTypeVideo) //当前显示的是视频资源
         {
             [self _getBackThumbnailDataPhotos:photos assets:assets infoArr:infoArr avPlayers:avPlayers model:model index:0 networkAccessAllowed:NO noAlert:noShowAlert vc:vc];
@@ -767,7 +776,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
             }
             else
             { //缩略图
-
+                
                 [self _getBackThumbnailDataPhotos:photos assets:assets infoArr:infoArr avPlayers:nil model:model index:0 networkAccessAllowed:YES noAlert:noShowAlert vc:vc];
             }
         }
@@ -811,7 +820,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
                                  vc:(IJSImagePickerController *)vc
 {
     __block BOOL noShowAlert = noAlert;
-
+    
     if (model.type == JSAssetModelMediaTypeVideo) //导出视频
     {
         if (_isDoing)
@@ -823,7 +832,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
         [[IJSImageManager shareManager] getAVAssetWithPHAsset:model.asset completion:^(AVAsset *asset, AVAudioMix *audioMix, NSDictionary *info) {
             Float64 duration = CMTimeGetSeconds([asset duration]);
             NSInteger maxTime = 10;
-
+            
             if (imagePick.minVideoCut || imagePick.maxVideoCut)
             {
                 if (duration >= imagePick.minVideoCut && duration <= imagePick.maxVideoCut)
@@ -861,14 +870,15 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
                 }
                 [self _didGetAllPhotos:nil asset:assets infos:infoArr isSelectOriginalPhoto:YES avPlayers:avPlayers sourceType:IJSPVideoType];
             }];
-
+            
         }];
     }
     else
     {                    // 图片
-        if (model.cutImage) // 裁剪过了
+        if (model.outputPath) // 裁剪过了
         {
-            [photos replaceObjectAtIndex:index withObject:model.cutImage];
+            UIImage *image =[UIImage imageWithData:[NSData dataWithContentsOfURL:model.outputPath]];
+            [photos replaceObjectAtIndex:index withObject:image];
             [assets replaceObjectAtIndex:index withObject:model.asset];
             for (id item in photos)
             {
@@ -881,7 +891,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
         }
         else
         { // 没有裁剪过
-
+            
             [[IJSImageManager shareManager] getPhotoWithAsset:model.asset completion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
                 if (isDegraded)
                     return; // 获取不到高清图
@@ -901,12 +911,12 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
                         return;
                     }
                 }
-
+                
                 if (noShowAlert)
                 {
                     [self _didGetAllPhotos:photos asset:assets infos:infoArr isSelectOriginalPhoto:NO avPlayers:nil sourceType:IJSPImageType];
                 }
-
+                
             } progressHandler:^(double progress, NSError *error, BOOL *stop, NSDictionary *info) {
                 // 如果图片正在从iCloud同步中,提醒用户
                 if (progress < 1 && noShowAlert)
@@ -927,9 +937,10 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
                              model:(IJSAssetModel *)model
                              index:(NSInteger)index
 {
-    if (model.cutImage) //裁剪过了
+    if (model.outputPath) //裁剪过了
     {
-        [photos replaceObjectAtIndex:index withObject:model.cutImage];
+        UIImage *image =[UIImage imageWithData:[NSData dataWithContentsOfURL:model.outputPath]];
+        [photos replaceObjectAtIndex:index withObject:image];
         [assets replaceObjectAtIndex:index withObject:model.asset];
         for (id item in photos)
         {
@@ -942,11 +953,14 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     }
     else
     {
-        [[IJSImageManager shareManager] getOriginalPhotoWithAsset:model.asset newCompletion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
+        [[IJSImageManager shareManager] getOriginalPhotoDataWithAsset:model.asset completion:^(NSData *data, NSDictionary *info, BOOL isDegraded) {
             if (isDegraded)
-                return; // 获取不到高清图
-            if (photo)
             {
+                return; // 获取不到高清图
+            }
+            if (data)
+            {
+                UIImage *photo =[UIImage imageWithData:data];
                 [photos replaceObjectAtIndex:index withObject:photo];
             }
             if (info)
@@ -954,7 +968,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
                 [infoArr replaceObjectAtIndex:index withObject:info];
             }
             [assets replaceObjectAtIndex:index withObject:model.asset];
-
+            
             for (id item in photos)
             {
                 if ([item isKindOfClass:[NSNumber class]])
@@ -962,8 +976,10 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
                     return;
                 }
             }
-
+            
             [self _didGetAllPhotos:photos asset:assets infos:infoArr isSelectOriginalPhoto:YES avPlayers:nil sourceType:IJSPImageType];
+            
+            
         }];
     }
 }
@@ -1002,20 +1018,20 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
             IJSAssetModel *model = self.previewAssetModelArr[index];
             [self.selectedModels addObject:model];
             [self.selectedCollection reloadData];
-
+            
             // 增加属性并替换掉
             model.isSelectedModel = YES;
             model.cellButtonNnumber = self.selectedModels.count;
             model.didClickModelArr = self.selectedModels;
             [self.allAssetModelArr replaceObjectAtIndex:model.onlyOneTag withObject:model];
-
+            
             NSIndexPath *indexPath = [NSIndexPath indexPathForItem:self.selectedModels.count - 1 inSection:0];
             if (self.selectedModels.count <= 5)
             {
                 self.selectedCollection.contentOffset = CGPointMake(-0.5, 0);
             }
             [self.selectedCollection scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionNone animated:YES];
-
+            
             [self _resetRightButtonStatus:self.selectedModels.count];
         }
         else
@@ -1027,14 +1043,14 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
                 {
                     [self.selectedModels removeObject:model];
                     [self.selectedCollection reloadData];
-
+                    
                     model.cellButtonNnumber = 0;
                     model.isSelectedModel = NO;
                     model.didClickModelArr = self.selectedModels;
-
+                    
                     [self.allAssetModelArr replaceObjectAtIndex:model.onlyOneTag withObject:model];
                     [self.previewAssetModelArr replaceObjectAtIndex:index withObject:model];
-
+                    
                     [self _cleanRightButtonStatus];
                     break;
                 }
@@ -1061,7 +1077,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
                 model.cellButtonNnumber = self.selectedModels.count;
                 model.didClickModelArr = self.selectedModels;
                 [self.allAssetModelArr replaceObjectAtIndex:index withObject:model];
-
+                
                 NSIndexPath *indexPath = [NSIndexPath indexPathForItem:self.selectedModels.count - 1 inSection:0];
                 if (self.selectedModels.count <= 5)
                     self.selectedCollection.contentOffset = CGPointMake(-0.5, 0);
@@ -1089,7 +1105,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
                     model.cellButtonNnumber = 0;
                     model.isSelectedModel = NO;
                     model.didClickModelArr = self.selectedModels;
-
+                    
                     [self.allAssetModelArr replaceObjectAtIndex:index withObject:model];
                     [self _cleanRightButtonStatus];
                     break;
@@ -1202,7 +1218,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
         IJS3DTouchController *touchVC = [[IJS3DTouchController alloc] init];
         touchVC.model = self.allAssetModelArr[indexPath.row];
         touchVC.preferredContentSize = CGSizeMake(0.0f, 500.0f);
-
+        
         CGRect rect = CGRectMake(0, 0, self.view.frame.size.width, 40);
         previewingContext.sourceRect = rect;
         return touchVC;
@@ -1277,5 +1293,15 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     [[IJSImageManager shareManager] stopCachingImagesFormAllAssets];
     JSLog(@"内存警告了");
 }
+
+
+
+
+
+
+
+
+
+
 
 @end

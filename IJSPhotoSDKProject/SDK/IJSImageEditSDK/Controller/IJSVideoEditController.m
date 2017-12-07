@@ -9,21 +9,19 @@
 #import "IJSVideoEditController.h"
 #import "IJSImageNavigationView.h"
 #import "IJSImageToolView.h"
-#import "IJSExtension.h"
-#import "IJSConst.h"
-#import "IJSExtension.h"
 #import "IJSVideoDrawingView.h"
 #import "IJSImageConst.h"
-#import "IJSImagePickerController.h"
 #import "IJSIMapViewExportView.h"
 #import "IJSIImputTextExportView.h"
 #import "IJSIImputTextView.h"
 #import "IJSLodingView.h"
-#import "IJSImagePickerController.h"
 #import "IJSVideoTrimView.h"
 #import "IJSMapView.h"
+
 #import <IJSFoundation/IJSFoundation.h>
 #import "IJSExtension.h"
+
+#import "IJSImagePickerController.h"
 
 @interface IJSVideoEditController () <IJSVideoTrimViewDelegate>
 @property (nonatomic, weak) IJSImageNavigationView *navigationgView; // 导航栏
@@ -114,7 +112,7 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[NSBundle localizedStringForKey:@"Done"] style:(UIBarButtonItemStylePlain) target:self action:@selector(_didFinishEditVideoAction)];
 
     // 工具条
-    IJSImageToolView *toolView = [[IJSImageToolView alloc] initWithFrame:CGRectMake(0, JSScreenHeight - IJSGTabbarSafeBottomMargin - TabbarHeight, JSScreenWidth, TabbarHeight)];
+    IJSImageToolView *toolView = [[IJSImageToolView alloc] initWithFrame:CGRectMake(0, JSScreenHeight - IJSGTabbarSafeBottomMargin - ToolBarMarginBottom, JSScreenWidth, ToolBarMarginBottom)];
     [toolView setupUIForVideoEditController];
     toolView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:toolView];

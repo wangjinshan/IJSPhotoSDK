@@ -164,8 +164,9 @@
 - (void)_hiddenSquareViewState:(BOOL)state
 {
     self.squareView.hidden = state;
+    __weak typeof (self) weakSelf = self;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        self.squareView.hidden = YES;
+        weakSelf.squareView.hidden = YES;
     });
 }
 

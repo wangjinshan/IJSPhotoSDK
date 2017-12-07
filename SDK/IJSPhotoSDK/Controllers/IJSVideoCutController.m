@@ -8,13 +8,14 @@
 
 #import "IJSVideoCutController.h"
 #import "IJSVideoTrimView.h"
-#import "IJSExtension.h"
+
 #import "IJSImageNavigationView.h"
 #import "IJSImageManager.h"
 #import "IJSImageConst.h"
 #import "IJSVideoManager.h"
 #import "IJSVideoEditController.h"
 #import <IJSFoundation/IJSFoundation.h>
+#import "IJSExtension.h"
 
 @interface IJSVideoCutController () <IJSVideoTrimViewDelegate>
 @property (nonatomic, weak) IJSImageNavigationView *navigationView; // 导航条

@@ -25,7 +25,7 @@
     return [[IJSImageEditController alloc] initWithEditImage:image];
 }
 
-- (void)loadImageOnCompleteResult:(completeBlock)completeImage
+- (void)loadImageOnCompleteResult:(void(^)(UIImage *image,NSURL *outputPath, NSError *error))completeImage
 {
     [[IJSImageEditController new] loadImageOnCompleteResult:completeImage];
 }

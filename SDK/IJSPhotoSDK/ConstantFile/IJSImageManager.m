@@ -26,9 +26,15 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
 // 单利
 + (instancetype)shareManager
 {
+    manager = [[self alloc] init];
+    return manager;
+}
+
++ (instancetype)allocWithZone:(struct _NSZone *)zone
+{
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        manager = [[self alloc] init];
+        manager = [[super allocWithZone:zone] init];
         manager.cachingImageManager = [[PHCachingImageManager alloc] init];
         manager.cachingImageManager.allowsCachingHighQualityImages = YES;
         // 测试发现，如果scale在plus真机上取到3.0，内存会增大特别多。故这里写死成
@@ -38,6 +44,14 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
             JSScreenScale = 1.5;
         }
     });
+    return manager;
+}
+- (id)copyWithZone:(NSZone *)zone
+{
+    return manager;
+}
+- (id)mutableCopyWithZone:(NSZone *)zone
+{
     return manager;
 }
 
@@ -270,7 +284,7 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
     {
         PHAsset *phAsset = (PHAsset *) asset;
         CGFloat aspectRatio = phAsset.pixelWidth / (CGFloat) phAsset.pixelHeight;
-        CGFloat pixelWidth = photoWidth * JSScreenScale * 1.5;
+        CGFloat pixelWidth = photoWidth * JSScreenScale;
         // 超宽图片
         if (aspectRatio > 1)
         {
@@ -284,65 +298,81 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
         CGFloat pixelHeight = pixelWidth / aspectRatio;
         imageSize = CGSizeMake(pixelWidth, pixelHeight);
     }
-    
-    __block UIImage *image;
+  
+    [self startCachingImagesFormAssets:@[asset] targetSize:imageSize];
+    return [self _requestImageForAsset:asset targetSize:imageSize completion:completion progressHandler:progressHandler networkAccessAllowed:networkAccessAllowed];
+}
+// 图片预览界面单独设置
+- (PHImageRequestID)getPhotoWithAsset:(PHAsset *)asset targetSize:(CGSize)targetSize completion:(void (^)(UIImage *photo, NSDictionary *info, BOOL isDegraded))completion progressHandler:(void (^)(double progress, NSError *error, BOOL *stop, NSDictionary *info))progressHandler networkAccessAllowed:(BOOL)networkAccessAllowed
+{
+    return  [self _requestImageForAsset:asset targetSize:targetSize completion:completion progressHandler:progressHandler networkAccessAllowed:networkAccessAllowed];
+}
+///  为了定制大小分开
+-(PHImageRequestID)_requestImageForAsset:(PHAsset *)asset targetSize:(CGSize)targetSize completion:(void (^)(UIImage *photo, NSDictionary *info, BOOL isDegraded))completion progressHandler:(void (^)(double progress, NSError *error, BOOL *stop, NSDictionary *info))progressHandler networkAccessAllowed:(BOOL)networkAccessAllowed
+{
     PHImageRequestOptions *option = [[PHImageRequestOptions alloc] init];
     option.resizeMode = PHImageRequestOptionsResizeModeFast;
-    PHImageRequestID imageRequestID = [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:imageSize contentMode:PHImageContentModeAspectFill options:option resultHandler:^(UIImage *result, NSDictionary *info) {
-        if (result)
-        {
-            image = result;
-        }
-        BOOL downloadFinined = (![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey]);
-        if (downloadFinined && result)
-        {
-            result = [self fixOrientation:result];
-            if (completion)
-            {
-                completion(result, info, [[info objectForKey:PHImageResultIsDegradedKey] boolValue]);
-            }
-        }
-        // Download image from iCloud / 从iCloud下载图片
-        if ([info objectForKey:PHImageResultIsInCloudKey] && !result && networkAccessAllowed)
-        {
-            PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
-            options.progressHandler = ^(double progress, NSError *error, BOOL *stop, NSDictionary *info) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (progressHandler)
-                    {
-                        progressHandler(progress, error, stop, info);
-                    }
-                });
-            };
-            options.networkAccessAllowed = YES;
-            options.resizeMode = PHImageRequestOptionsResizeModeFast;
-            [[PHImageManager defaultManager] requestImageDataForAsset:asset options:options resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
-                UIImage *resultImage = [UIImage imageWithData:imageData scale:0.1];
-                resultImage = [self scaleImage:resultImage toSize:imageSize];
-                if (!resultImage)
-                {
-                    resultImage = image;
-                }
-                resultImage = [self fixOrientation:resultImage];
-                if (completion)
-                {
-                    completion(resultImage, info, NO);
-                }
-            }];
-        }
-    }];
+    PHImageRequestID imageRequestID = [[PHImageManager defaultManager] requestImageForAsset:asset
+                                                                                 targetSize:targetSize
+                                                                                contentMode:PHImageContentModeAspectFill
+                                                                                    options:option resultHandler:^(UIImage *result, NSDictionary *info) {
+                                                                                        UIImage *image;
+                                                                                        if (result)
+                                                                                        {
+                                                                                            image = result;
+                                                                                        }
+                                                                                        BOOL downloadFinined = (![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey]);
+                                                                                        if (downloadFinined && result)
+                                                                                        {
+                                                                                            result = [self fixOrientation:result];
+                                                                                            if (completion)
+                                                                                            {
+                                                                                                completion(result, info, [[info objectForKey:PHImageResultIsDegradedKey] boolValue]);
+                                                                                            }
+                                                                                        }
+                                                                                        // Download image from iCloud / 从iCloud下载图片
+                                                                                        if ([info objectForKey:PHImageResultIsInCloudKey] && !result && networkAccessAllowed)
+                                                                                        {
+                                                                                            PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
+                                                                                            options.progressHandler = ^(double progress, NSError *error, BOOL *stop, NSDictionary *info) {
+                                                                                                dispatch_async(dispatch_get_main_queue(), ^{
+                                                                                                    if (progressHandler)
+                                                                                                    {
+                                                                                                        progressHandler(progress, error, stop, info);
+                                                                                                    }
+                                                                                                });
+                                                                                            };
+                                                                                            options.networkAccessAllowed = YES;
+                                                                                            options.resizeMode = PHImageRequestOptionsResizeModeFast;
+                                                                                            [[PHImageManager defaultManager] requestImageDataForAsset:asset options:options resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
+                                                                                                UIImage *resultImage = [UIImage imageWithData:imageData scale:0.1];
+                                                                                                resultImage = [self scaleImage:resultImage toSize:targetSize];
+                                                                                                if (!resultImage)
+                                                                                                {
+                                                                                                    resultImage = image;
+                                                                                                }
+                                                                                                resultImage = [self fixOrientation:resultImage];
+                                                                                                if (completion)
+                                                                                                {
+                                                                                                    completion(resultImage, info, NO);
+                                                                                                }
+                                                                                            }];
+                                                                                        }
+                                                                                    }];
     return imageRequestID;
 }
+
 /*-----------------------------------获取原图-------------------------------------------------------*/
 #pragma mark 获取原图
 - (PHImageRequestID)getOriginalPhotoWithAsset:(PHAsset *)asset completion:(void (^)(UIImage *photo, NSDictionary *info))completion
 {
-    PHImageRequestID imageRequestID = [self getOriginalPhotoWithAsset:asset newCompletion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
-        if (completion)
-        {
-            completion(photo, info);
-        }
-    }];
+    PHImageRequestID imageRequestID = [self getOriginalPhotoWithAsset:asset
+                                                        newCompletion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
+                                                            if (completion)
+                                                            {
+                                                                completion(photo, info);
+                                                            }
+                                                        }];
     return imageRequestID;
 }
 
@@ -355,6 +385,7 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
                                                                                 contentMode:PHImageContentModeAspectFit
                                                                                     options:option
                                                                               resultHandler:^(UIImage *_Nullable result, NSDictionary *_Nullable info) {
+                                                                                  
                                                                                   BOOL downloadFinined = (![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey]);
                                                                                   if (downloadFinined && result)
                                                                                   {
@@ -373,17 +404,20 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
 {
     PHImageRequestOptions *option = [[PHImageRequestOptions alloc] init];
     option.networkAccessAllowed = YES;
-    PHImageRequestID imageRequestID = [[PHImageManager defaultManager] requestImageDataForAsset:asset options:option resultHandler:^(NSData *_Nullable imageData, NSString *_Nullable dataUTI, UIImageOrientation orientation, NSDictionary *_Nullable info) {
-        BOOL downloadFinined = (![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey]);
-        if (downloadFinined && imageData)
-        {
-            BOOL isDegraded = [[info objectForKey:PHImageResultIsDegradedKey] boolValue];
-            if (completion)
-            {
-               completion(imageData, info, isDegraded);
-            }
-        }
-    }];
+    PHImageRequestID imageRequestID = [[PHImageManager defaultManager] requestImageDataForAsset:asset
+                                                                                        options:option
+                                                                                  resultHandler:^(NSData *_Nullable imageData, NSString *_Nullable dataUTI, UIImageOrientation orientation, NSDictionary *_Nullable info) {
+                                                                                      
+                                                                                      BOOL downloadFinined = (![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey]);
+                                                                                      if (downloadFinined && imageData)
+                                                                                      {
+                                                                                          BOOL isDegraded = [[info objectForKey:PHImageResultIsDegradedKey] boolValue];
+                                                                                          if (completion)
+                                                                                          {
+                                                                                              completion(imageData, info, isDegraded);
+                                                                                          }
+                                                                                      }
+                                                                                  }];
     return imageRequestID;
 }
 // livephoto
@@ -805,14 +839,14 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
 {
     [self.cachingImageManager startCachingImagesForAssets:assets
                                                targetSize:targetSize
-                                              contentMode:PHImageContentModeAspectFit
+                                              contentMode:PHImageContentModeAspectFill
                                                   options:nil];
 }
 -(void)stopCachingImagesFormAssets:(NSArray<PHAsset *> *)assets targetSize:(CGSize)targetSize
 {
     [self.cachingImageManager stopCachingImagesForAssets:assets
                                               targetSize:targetSize
-                                             contentMode:PHImageContentModeAspectFit
+                                             contentMode:PHImageContentModeAspectFill
                                                  options:nil];
 }
 - (void)stopCachingImagesFormAllAssets

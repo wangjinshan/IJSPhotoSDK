@@ -9,6 +9,7 @@
 #import "IJSImagePickerController.h"
 #import <IJSFoundation/IJSFoundation.h>
 #import "IJSExtension.h"
+
 #import "IJSAlbumPickerController.h"
 #import "IJSPhotoPickerController.h"
 #import "IJSImageManager.h"

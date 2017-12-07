@@ -57,7 +57,7 @@ typedef NS_ENUM(NSUInteger, JSAssetModelSourceType) {
 + (instancetype)setAssetModelAsset:(id)asset type:(JSAssetModelSourceType)type;
 
 /*-----------------------------------裁剪图片增加的属性-------------------------------------------------------*/
-@property (nonatomic, strong) UIImage *cutImage; // 图片参数
+@property (nonatomic, strong) NSURL *outputPath; // 图片参数
 /*----------------------------------------------缓存请求的资源条数-------------------------------*/
 @property(nonatomic,assign) PHImageRequestID imageRequestID;  // 缓存图片请求id
 

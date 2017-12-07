@@ -13,9 +13,11 @@
 #import "IJSAlbumModel.h"
 #import "IJSImageManager.h"
 #import "IJSImagePickerController.h"
+#import "IJS3DTouchController.h"
+
 #import <IJSFoundation/IJSFoundation.h>
 #import "IJSExtension.h"
-#import "IJS3DTouchController.h"
+
 
 static NSString *const CellID = @"pickerID";
 
@@ -128,14 +130,6 @@ static NSString *const CellID = @"pickerID";
     }
     cell.model = model;
     cell.cellDelegate = self;
-
-    if (iOS9Later)
-    {
-        if (self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable)
-        {
-            [self registerForPreviewingWithDelegate:(id) self sourceView:cell];
-        }
-    }
     return cell;
 }
 #pragma mark tableview的点击方法
@@ -312,9 +306,10 @@ static NSString *const CellID = @"pickerID";
         {
             IJSAssetModel *model = vc.selectedModels[i];
 
-            if (model.cutImage) //裁剪过了
+            if (model.outputPath) //裁剪过了
             {
-                [photos replaceObjectAtIndex:i withObject:model.cutImage];
+                UIImage *image =[UIImage imageWithData:[NSData dataWithContentsOfURL:model.outputPath]];
+                [photos replaceObjectAtIndex:i withObject:image];
                 [assets replaceObjectAtIndex:i withObject:model.asset];
                 for (id item in photos)
                 {
@@ -361,9 +356,10 @@ static NSString *const CellID = @"pickerID";
         for (int i = 0; i < vc.selectedModels.count; i++)
         {
             IJSAssetModel *model = vc.selectedModels[i];
-            if (model.cutImage)
+            if (model.outputPath)
             {
-                [photos replaceObjectAtIndex:i withObject:model.cutImage];
+                UIImage *image =[UIImage imageWithData:[NSData dataWithContentsOfURL:model.outputPath]];
+                [photos replaceObjectAtIndex:i withObject:image];
                 if (model.asset)
                 {
                     [assets replaceObjectAtIndex:i withObject:model.asset];
@@ -540,18 +536,13 @@ static NSString *const CellID = @"pickerID";
 // 数据解析
 - (void)_createrData
 {
-    NSMutableArray *cancleArr  = [[NSMutableArray alloc] init];
     UIView *loadView =  [IJSLodingView showLodingViewAddedTo:self.view title:[NSBundle localizedStringForKey:@"Processing..."]];
     [[IJSImageManager shareManager] getAssetsFromFetchResult:self.albumModel.result allowPickingVideo:YES allowPickingImage:YES completion:^(NSArray<IJSAssetModel *> *models) {
         [loadView removeFromSuperview];
         self.assetModelArr = [NSMutableArray arrayWithArray:models];
         [self.assetModelArr enumerateObjectsUsingBlock:^(IJSAssetModel *_Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
             obj.onlyOneTag = idx;
-            [cancleArr addObject:obj.asset];
         }];
-        // 开始缓存
-        [[IJSImageManager shareManager] startCachingImagesFormAssets:cancleArr targetSize:CGSizeMake(self.itemHeight, self.itemHeight)];
-        
         [self.showCollectioView reloadData];
         if (self.assetModelArr.count != 0)
         {
@@ -560,7 +551,6 @@ static NSString *const CellID = @"pickerID";
         }
     }];
 }
-
 // 根据cell选中的数量重置toorbar的状态
 - (void)_resetToorBarStatus
 {
@@ -598,24 +588,6 @@ static NSString *const CellID = @"pickerID";
     return newImage;
 }
 
-#pragma mark - UIViewControllerPreviewingDelegate method
-//peek(预览模式)
-- (nullable UIViewController *)previewingContext:(id<UIViewControllerPreviewing>)previewingContext viewControllerForLocation:(CGPoint)location
-{
-    if (iOS9Later)
-    {
-        NSIndexPath *indexPath = [self.showCollectioView indexPathForCell:(IJSPhotoPickerCell *) [previewingContext sourceView]];
-        //设定预览的界面
-        IJS3DTouchController *touchVC = [[IJS3DTouchController alloc] init];
-        touchVC.model = self.assetModelArr[indexPath.row];
-        touchVC.preferredContentSize = CGSizeMake(0.0f, 500.0f);
-        CGRect rect = CGRectMake(0, 0, self.view.frame.size.width, 40);
-        previewingContext.sourceRect = rect;
-        return touchVC;
-    }
-    return nil;
-}
-
 #pragma mark 清空数据--返回上一级界面
 - (void)_cleanModelButtonAction
 {
@@ -632,10 +604,10 @@ static NSString *const CellID = @"pickerID";
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
+    [[IJSImageManager shareManager] stopCachingImagesFormAllAssets];
     JSLog(@"相册--IJSPhotoPickerController--出现了内存增加的问题");
 }
 
-// 刷新数据
-//         [weakSelf.showCollectioView reloadItemsAtIndexPaths:@[index]];
+
 
 @end

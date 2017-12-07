@@ -9,7 +9,6 @@
 #import "IJSImageEditController.h"
 #import "IJSImageNavigationView.h"
 #import "IJSImageToolView.h"
-#import "IJSExtension.h"
 #import "IJSImageConst.h"
 #import "IJSIColorButtonView.h"
 #import "IJSImageToolBase.h"
@@ -24,6 +23,7 @@
 #import <IJSFoundation/IJSFoundation.h>
 #import "IJSImagePickerController.h"
 #import "TOCropViewController-Bridging-Header.h"
+
 #import "IJSExtension.h"
 #import "IJSVideoManager.h"
 

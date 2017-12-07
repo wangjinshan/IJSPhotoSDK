@@ -8,6 +8,7 @@
 
 #import "IJSVideoManager.h"
 #import "IJSExtension.h"
+
 static IJSVideoManager *manager;
 
 @interface IJSVideoManager ()
@@ -19,20 +20,30 @@ static IJSVideoManager *manager;
 //单利
 + (instancetype)shareManager
 {
+    manager = [[self alloc] init];
+    return manager;
+}
++ (instancetype)allocWithZone:(struct _NSZone *)zone
+{
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        if (manager == nil)
-        {
-            manager = [[IJSVideoManager alloc] init];
-        }
+        manager = [[super allocWithZone:zone] init];
     });
+    return manager;
+}
+- (id)copyWithZone:(NSZone *)zone
+{
+    return manager;
+}
+- (id)mutableCopyWithZone:(NSZone *)zone
+{
     return manager;
 }
 #pragma mark 裁剪视频
 /// 裁剪视频
 + (void)cutVideoAndExportVideoWithVideoAsset:(AVAsset *)videoAsset startTime:(CGFloat)startTime endTime:(CGFloat)endTime completion:(void (^)(NSURL *outputPath, NSError *error, IJSVideoState state))completion
 {
-    __block NSError *error;
+     NSError *error;
     //1 创建AVMutableComposition对象来添加视频音频资源的AVMutableCompositionTrack
     AVMutableComposition *mixComposition = [[AVMutableComposition alloc] init];
     // 2 设置采集区域
@@ -255,7 +266,7 @@ static IJSVideoManager *manager;
     videoComposition.animationTool = [AVVideoCompositionCoreAnimationTool videoCompositionCoreAnimationToolWithPostProcessingAsVideoLayer:videoLayer inLayer:parentLayer];
 
     // 7  导出视频
-    NSURL *outputURL = [self _getExportVideoPath]; // 创建输出的路径
+    NSURL *outputURL = [self _getExportVideoPathForType:@"mp4"]; // 创建输出的路径
     AVAssetExportSession *exportSession = [[AVAssetExportSession alloc] initWithAsset:mixComposition presetName:AVAssetExportPresetHighestQuality];
 
     //设置AVAssetExportSession的AVVideoComposition对象，AVAudioMix对象，视频导出路径，视频导出格式
@@ -349,7 +360,7 @@ static IJSVideoManager *manager;
 /// 设置导出对象
 + (void)_getExportVideoWithAvAssset:(AVAsset *)videoAsset videoComposition:(AVVideoComposition *)videoComposition audioMix:(AVAudioMix *)audioMix timeRange:(CMTimeRange)timeRange completion:(void (^)(NSURL *outputPath, NSError *error, IJSVideoState state))completion cut:(BOOL)isCut
 {
-    NSURL *outputURL = [self _getExportVideoPath]; // 创建输出的路径
+    NSURL *outputURL = [self _getExportVideoPathForType:@"mp4"]; // 创建输出的路径
     NSArray *compatiblePresets = [AVAssetExportSession exportPresetsCompatibleWithAsset:videoAsset];
     if ([compatiblePresets containsObject:AVAssetExportPresetHighestQuality])
     {
@@ -447,7 +458,7 @@ static IJSVideoManager *manager;
 }
 
 /// 创建视频路径
-+ (NSURL *)_getExportVideoPath
++ (NSURL *)_getExportVideoPathForType:(NSString *)type
 {
     if (![[NSFileManager defaultManager] fileExistsAtPath:[NSHomeDirectory() stringByAppendingFormat:@"/tmp"]])
     {
@@ -467,24 +478,56 @@ static IJSVideoManager *manager;
     {        // 在 tmp 目录下创建一个 temp 目录
         [fileManager createDirectoryAtPath:filePath withIntermediateDirectories:YES attributes:nil error:nil];
     }
-    NSString *outputPath =[filePath stringByAppendingPathComponent:[NSString stringWithFormat:@"/output-%@.mp4",[formater stringFromDate:[NSDate date]]]];
+  
+    NSString *outputPath =[filePath stringByAppendingPathComponent:[NSString stringWithFormat:@"/output-%@.%@",[formater stringFromDate:[NSDate date]],type]];
     NSURL *outputURL = [NSURL fileURLWithPath:outputPath];
     return outputURL;
 }
 
 /// 获取视频裁剪完成保存的文件路径
-+(void)cleanAllVideo
++(void)cleanAllVideoAndImage
 {
     NSString *path = [NSHomeDirectory() stringByAppendingString:@"/tmp/IJSImageEditSDK"];
    NSFileManager *fileManager = [NSFileManager defaultManager];
     [fileManager removeItemAtPath:path error:nil];
 }
 ///获取视频保存路径
-+(NSString *)getAllVideoPath
++(NSString *)getAllVideoPathAndImagePath
 {
     return  [NSHomeDirectory() stringByAppendingString:@"/tmp/IJSImageEditSDK"];
 }
 
+/// 视频保存沙盒路径
++(void)saveImageToSandBoxImage:(UIImage *)image completion:(void (^)(NSURL *outputPath, NSError *error))completion
+{
+    NSURL *outputPath =[self _getExportVideoPathForType:@"png"];
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        NSData *data = UIImageJPEGRepresentation(image, 1.0);
+        if (data)
+        {
+            BOOL isRight = [data writeToURL:outputPath atomically:YES];
+            if (isRight)
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (completion)
+                    {
+                        completion(outputPath,nil);
+                    }
+                });
+            }
+            else
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (completion)
+                    {
+                        NSError *error = [NSError ijsPhotoSDKImageActionDescription:@"图片写入失败"];
+                        completion(outputPath,error);
+                    }
+                });
+            }
+        }
+    });
+}
 
 
 

@@ -114,9 +114,10 @@
     if (assetModel.type == JSAssetModelMediaTypePhoto)
     {
         self.backImageView.image = nil;    // 先置空解决图片乱跳的问题
-        if (assetModel.cutImage) //编辑完成的image
+        if (assetModel.outputPath) //编辑完成的image
         {
-            self.backImageView.image = assetModel.cutImage;
+            UIImage *image =[UIImage imageWithData:[NSData dataWithContentsOfURL:assetModel.outputPath]];
+            self.backImageView.image = image;
         }
         else
         {
@@ -131,7 +132,6 @@
                     assetModel.imageRequestID = 0;
                 }
             }];
-            
         }
         self.gifView.hidden = YES;
         self.videoView.hidden = YES;
@@ -170,9 +170,10 @@
         }
         else
         {
-            if (assetModel.cutImage)
+            if (assetModel.outputPath)
             {
-                self.backImageView.image = assetModel.cutImage;
+                UIImage *image =[UIImage imageWithData:[NSData dataWithContentsOfURL:assetModel.outputPath]];
+                self.backImageView.image = image;
             }
             else
             {

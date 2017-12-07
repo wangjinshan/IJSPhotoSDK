@@ -17,3 +17,10 @@
 @property (nonatomic, strong) IJSAssetModel *model;
 
 @end
+
+
+// 日志
+/*
+ 0.1.2
+ 考虑到内存性能问题,暂时不使用3DTouch
+ */

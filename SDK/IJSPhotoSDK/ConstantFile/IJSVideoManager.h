@@ -16,6 +16,8 @@ typedef NS_ENUM(NSUInteger, IJSVideoState) {
     IJSExportSessionStatusCompleted,
     IJSExportSessionStatusFailed,
 };
+
+
 /**
  *   outputPath     保存到tem的路径,命名规则是根据时间生成
  *   error  错误信息
@@ -95,18 +97,24 @@ typedef void (^cutVideoCompletionBlock)(NSURL *outputPath, NSError *error, IJSVi
 + (CGSize)getVideSizeFromAvasset:(AVAsset *)videoAsset;
 
 /**
- 清楚所有视频路径
+ 清楚所有视频/图片路径,
  */
-+(void)cleanAllVideo;
++(void)cleanAllVideoAndImage;
 
 /**
- 获取视频保存路径
+ 获取视频/图片文件等等保存路径
 
- @return 视频保存文件夹
+ @return 视频/图片保存文件夹
  */
-+(NSString *)getAllVideoPath;
++(NSString *)getAllVideoPathAndImagePath;
 
+/**
+ 将图片数据写入到沙盒
 
+ @param image 原始图片
+ @param completion 返回的数据 outputPath:图片存储的路径, error具体错误信息
+ */
++(void)saveImageToSandBoxImage:(UIImage *)image completion:(void (^)(NSURL *outputPath, NSError *error))completion;
 
 
 
