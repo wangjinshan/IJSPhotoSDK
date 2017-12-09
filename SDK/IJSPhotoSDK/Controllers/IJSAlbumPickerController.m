@@ -70,7 +70,7 @@ static NSString *const cellID = @"cellID";
     [leftButton setImage:[IJSFImageGet loadImageWithBundle:@"JSPhotoSDK" subFile:nil grandson:nil imageName:@"jiahao@2x" imageType:@"png"] forState:UIControlStateNormal];
     [leftButton addTarget:self action:@selector(addAppAlbum:) forControlEvents:UIControlEventTouchUpInside];
     leftButton.contentMode = UIViewContentModeScaleAspectFit;
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:leftButton];
+//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:leftButton];
 }
 
 - (void)_createTableViewUI

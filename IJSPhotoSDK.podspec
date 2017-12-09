@@ -3,7 +3,7 @@ Pod::Spec.new do |s|
 
  
   s.name         = "IJSPhotoSDK"
-  s.version      = "0.1.4"
+  s.version      = "1.0.0"
 
   s.summary      = "基于PhotoKit实现多图选择"
   s.license= { :type => "MIT", :file => "LICENSE" }
