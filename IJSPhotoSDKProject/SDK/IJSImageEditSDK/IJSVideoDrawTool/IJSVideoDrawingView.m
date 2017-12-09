@@ -9,7 +9,6 @@
 #import "IJSVideoDrawingView.h"
 #import "IJSDExportView.h"
 #import "IJSExtension.h"
-#import "IJSImageConst.h"
 
 @interface IJSVideoDrawingView () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate>
 @property (nonatomic, weak) UIImageView *backImageView; // 背景图
@@ -188,7 +187,7 @@
 
 - (void)layoutSubviews
 {
-    _drawingView.center = CGPointMake(self.superview.center.x, self.superview.center.y - IJSVideoEditNavigationHeight); //
+    _drawingView.center = CGPointMake(self.superview.center.x, self.superview.center.y - 44); //
 }
 #pragma mark - 隐藏
 - (void)_hiddenToolView:(BOOL)state

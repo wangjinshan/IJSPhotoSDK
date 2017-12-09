@@ -22,7 +22,8 @@
 #import "IJSImageMosaicTool.h"
 #import <IJSFoundation/IJSFoundation.h>
 #import "IJSImagePickerController.h"
-#import "TOCropViewController-Bridging-Header.h"
+//#import "TOCropViewController-Bridging-Header.h"
+#import "TOCropViewController.h"
 
 #import "IJSExtension.h"
 #import "IJSVideoManager.h"
