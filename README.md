@@ -1,7 +1,7 @@
 # IJSPhotoSDK
 ios多图选择,高仿微信发朋友圈的功能
 
-# 开发者QQ: 1096452045 
+# 外包合作 QQ: 1096452045   
 
 #简书地址: http://www.jianshu.com/u/874b526fa570
 
@@ -15,7 +15,7 @@ ios多图选择,高仿微信发朋友圈的功能
 1, 照片选取预览,有相册UI 预览UI 详情UI 可以创建相册等
 2, 预览UI 详情UI 可以通过3DTouch的方式进行查看
 3, 可以删除照片 收藏照片
-4, 可以通过3DTouch或者点击播放 Video gif  livephoto等资源
+4, 可以通过点击播放 Video gif  livephoto等资源
 5,  预览详情支持 单击 双击 缩合等手势处理照片查看
 6, 支持国际化配置
 7, 新增视频处理包括,裁剪,涂鸦,水印,贴图等等
@@ -120,7 +120,7 @@ SDK:  1, IJSPhotoSDK: 主要处理Photokit的api封装,用于相册UI展示和�
 Xcode--PROJECT---info --- Localizations---Chinese(Simplified)
 2, 在项目的plist文件中添加两个字段
 Privacy - Photo Library Usage Description ----允许应用访问相机权限
-
+3, View controller-based status bar appearance 改成 NO  设置电池状态
 
 ``` 
 ###  cocoapods 集成方式
@@ -171,9 +171,19 @@ IJSImageEditSDK
 
 2, 拆分SDK
 
-1, 照片预览器 IJSPhotoSDK
-2, 图片视频裁剪器 IJSImageEditSDK
-3, 视频图片滤镜处理 IJSFilterSDK
-4  自定义相机 IJSCameraSDK
-5, 二维码 IJSQRCodeSDK
+      2.1, 照片预览器 IJSPhotoSDK
+      2.2, 图片视频裁剪器 IJSImageEditSDK
+      2.3, 视频图片滤镜处理 IJSFilterSDK
+      2.4  自定义相机 IJSCameraSDK
+      2.5, 二维码 IJSQRCodeSDK
+
+重要更新:
+1.0.0 : 全面适配 iPhone X
+0.1.4 : 全面适配iPhone X
+1,修复缩略图界面刷新闪屏问题 2, 修复gif播放背景尺寸不够时候的白屏问题 3, 修复选多张图预览角标不整齐的问题
+4修复编辑gif后预览界面不显示修改后的图,5, 新增清理保存沙河路径下的所有视频的api 6,修复一些小细节的bug
+
+
+
+
 
