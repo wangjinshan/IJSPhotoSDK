@@ -23,15 +23,15 @@ ios多图选择,高仿微信发朋友圈的功能
 ```
 ### 项目演示
 
-![](http://upload-images.jianshu.io/upload_images/2845360-e1139e616dc9b5ce.gif?imageMogr2/auto-orient/strip)
-![](http://upload-images.jianshu.io/upload_images/2845360-c12b955a610679df.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-![](http://upload-images.jianshu.io/upload_images/2845360-7057f29c498d1e06.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/2845360-c9e82e70ba22cf47.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/200)
+![](http://upload-images.jianshu.io/upload_images/2845360-dfe6586d71e9af56.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/200)
+![](http://upload-images.jianshu.io/upload_images/2845360-b58cd58f7f3d4749.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/200)
 ![](http://upload-images.jianshu.io/upload_images/2845360-ab39607b7469b992.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/2845360-84e41608527d6ff0.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/200)
 ![](http://upload-images.jianshu.io/upload_images/2845360-24a9374b9a49204b.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-![](http://upload-images.jianshu.io/upload_images/2845360-24a9374b9a49204b.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-![](http://upload-images.jianshu.io/upload_images/2845360-d1c54660f95fa431.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/2845360-e8d134cca999dd7b.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/200)
 ![](http://upload-images.jianshu.io/upload_images/2845360-01d4de8f1e86c544.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-![](http://upload-images.jianshu.io/upload_images/2845360-359b1fc91db1fe8b.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/2845360-6f63125cb3207256.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/200)
 ![](http://upload-images.jianshu.io/upload_images/2845360-2415f1e7467133fb.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 ![](http://upload-images.jianshu.io/upload_images/2845360-0b0d573e480ed8e3.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 ![](http://upload-images.jianshu.io/upload_images/2845360-82c00d5157e2442a.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
