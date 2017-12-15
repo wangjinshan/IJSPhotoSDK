@@ -70,7 +70,7 @@ static NSString *const cellID = @"cellID";
     [leftButton setImage:[IJSFImageGet loadImageWithBundle:@"JSPhotoSDK" subFile:nil grandson:nil imageName:@"jiahao@2x" imageType:@"png"] forState:UIControlStateNormal];
     [leftButton addTarget:self action:@selector(addAppAlbum:) forControlEvents:UIControlEventTouchUpInside];
     leftButton.contentMode = UIViewContentModeScaleAspectFit;
-//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:leftButton];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:leftButton];
 }
 
 - (void)_createTableViewUI
@@ -105,6 +105,8 @@ static NSString *const cellID = @"cellID";
     vc.columnNumber = self.columnNumber; // 传递列数计算展示图的大小
     IJSAlbumModel *model = self.albumListArr[indexPath.row];
     vc.albumModel = model;
+    vc.selectedHandler = self.selectedHandler;
+    vc.cancelHandler = self.cancelHandler;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -114,8 +116,10 @@ static NSString *const cellID = @"cellID";
     if ([[IJSImageManager shareManager] authorizationStatusAuthorized])
     {
         __weak typeof(self) weakSelf = self;
+        
         UIView *loadView =  [IJSLodingView showLodingViewAddedTo:self.view title:[NSBundle localizedStringForKey:@"Processing..."]];
-        [[IJSImageManager shareManager] getAllAlbumsContentImage:YES contentVideo:YES completion:^(NSArray<IJSAlbumModel *> *models) {
+        IJSImagePickerController *vc = (IJSImagePickerController *)self.navigationController;
+        [[IJSImageManager shareManager] getAllAlbumsContentImage:vc.allowPickingImage contentVideo:vc.allowPickingVideo completion:^(NSArray<IJSAlbumModel *> *models) {
             weakSelf.albumListArr = models;
             [loadView removeFromSuperview];
             if (!weakSelf.tableView)
@@ -130,7 +134,12 @@ static NSString *const cellID = @"cellID";
 #pragma mark 点击方法
 - (void)cancleAndDisMiss
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:^{
+        if (self.cancelHandler)
+        {
+            self.cancelHandler();
+        }
+    }];
 }
 - (void)addAppAlbum:(UIButton *)button
 {

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "IJSImagePickerController.h"
 @class IJSAssetModel;
 /*
  *  照片预览控制器
@@ -25,5 +26,11 @@
 @property (nonatomic, assign) NSInteger pushSelectedIndex;
 /* 预览控制,yes表示在预览模式下跳转 */
 @property (nonatomic, assign) BOOL isPreviewButton;
+
+@property(nonatomic,copy) void(^selectedHandler)(NSArray<UIImage *> *photos, NSArray *avPlayers, NSArray *assets, NSArray<NSDictionary *> *infos, IJSPExportSourceType sourceType,NSError *error);  // 数据回调
+
+@property(nonatomic,copy) void(^cancelHandler)(void);  // 取消选择的属性
+
+
 
 @end

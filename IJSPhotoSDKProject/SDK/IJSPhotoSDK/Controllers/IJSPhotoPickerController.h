@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "IJSImagePickerController.h"
 /*
  *  图片选择控制器,默认是4列显示
  */
@@ -25,5 +26,11 @@ typedef void (^callBackReload)(NSMutableArray *selectedModel, NSMutableArray *al
 
 /* 数据回调刷新表格 */
 @property (nonatomic, copy) callBackReload callBack;
+
+@property(nonatomic,copy) void(^selectedHandler)(NSArray<UIImage *> *photos, NSArray *avPlayers, NSArray *assets, NSArray<NSDictionary *> *infos, IJSPExportSourceType sourceType,NSError *error);  // 数据回调
+
+@property(nonatomic,copy) void(^cancelHandler)(void);  // 取消选择的属性
+
+
 
 @end

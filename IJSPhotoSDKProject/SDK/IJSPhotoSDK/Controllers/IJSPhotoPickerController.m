@@ -12,7 +12,7 @@
 #import "IJSPhotoPickerCell.h"
 #import "IJSAlbumModel.h"
 #import "IJSImageManager.h"
-#import "IJSImagePickerController.h"
+
 #import "IJS3DTouchController.h"
 
 #import <IJSFoundation/IJSFoundation.h>
@@ -72,12 +72,13 @@ static NSString *const CellID = @"pickerID";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [UIColor blackColor];
     self.title = self.albumModel.name;
     [self _createrCollectionView];
     [self _createrBottomToolBarUI];
     [self _handleCallBackData];
     [self _createrData];
+    
 }
 // 处理回调
 - (void)_handleCallBackData
@@ -107,7 +108,7 @@ static NSString *const CellID = @"pickerID";
 
     if (model.type == JSAssetModelMediaTypeVideo || model.type == JSAssetModelMediaTypeAudio)
     {
-        if (self.selectedModels.count != 0)
+        if (self.selectedModels.count != 0 || !vc.allowPickingVideo)
         {
             model.didMask = YES;
         }
@@ -119,7 +120,7 @@ static NSString *const CellID = @"pickerID";
     else
     {
         // 判断蒙版条件
-        if (self.selectedModels.count > vc.maxImagesCount - 1)
+        if (self.selectedModels.count > vc.maxImagesCount - 1 ||  !vc.allowPickingImage)
         {
             model.didMask = YES;
         }
@@ -137,6 +138,22 @@ static NSString *const CellID = @"pickerID";
 {
     IJSImagePickerController *vc = (IJSImagePickerController *) self.navigationController;
     IJSPhotoPreviewController *preViewVc = [[IJSPhotoPreviewController alloc] init];
+    IJSAssetModel *tempModel = self.assetModelArr[indexPath.row];
+    if ((tempModel.type == JSAssetModelMediaTypeVideo || tempModel.type == JSAssetModelMediaTypeAudio) && !vc.allowPickingVideo)
+    {
+        NSString *title = [NSString stringWithFormat:@"%@", [NSBundle localizedStringForKey:@"Do not support selection of video types"]];
+        [vc showAlertWithTitle:title];
+        return;
+    }
+    if ((tempModel.type != JSAssetModelMediaTypeVideo || tempModel.type != JSAssetModelMediaTypeAudio) && !vc.allowPickingImage)
+    {
+        NSString *title = [NSString stringWithFormat:@"%@", [NSBundle localizedStringForKey:@"Do not support selection of image types"]];
+        [vc showAlertWithTitle:title];
+        return;
+    }
+    
+    preViewVc.selectedHandler = self.selectedHandler;
+    preViewVc.cancelHandler = self.cancelHandler;
     preViewVc.isPreviewButton = NO;                     // 正常点进去
     if (self.selectedModels.count >= vc.maxImagesCount) // 选中的个数超标
     {
@@ -252,7 +269,18 @@ static NSString *const CellID = @"pickerID";
             } completion:nil];
         }];
     });
-    
+    // 刷新视频不可选中
+    [self _maskVideoType];
+}
+/// 视频蒙版
+-(void)_maskVideoType
+{
+    [self.assetModelArr enumerateObjectsUsingBlock:^(IJSAssetModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (obj.type == JSAssetModelMediaTypeVideo || obj.type == JSAssetModelMediaTypeAudio)
+        {
+             [self.showCollectioView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:obj.onlyOneTag inSection:0]]];
+        }
+    }];
 }
 
 /*-----------------------------------点击状态-------------------------------------------------------*/
@@ -267,9 +295,13 @@ static NSString *const CellID = @"pickerID";
     IJSPhotoPreviewController *vc = [[IJSPhotoPreviewController alloc] init];
     vc.allAssetModelArr = self.assetModelArr;
     vc.selectedModels = self.selectedModels;
+    
     vc.previewAssetModelArr = [self.selectedModels mutableCopy];
+    
     vc.pushSelectedIndex = 0;
     vc.isPreviewButton = YES;
+    vc.selectedHandler = self.selectedHandler;
+    vc.cancelHandler = self.cancelHandler;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -283,7 +315,9 @@ static NSString *const CellID = @"pickerID";
     if (vc.minImagesCount && vc.selectedModels.count < vc.minImagesCount)
     {
         NSString *title = [NSString stringWithFormat:[NSBundle localizedStringForKey:@"Select a minimum of %zd photos"], vc.minImagesCount];
-        [vc showAlertWithTitle:title];
+        NSString *noVideo = [NSString stringWithFormat:@"%@", [NSBundle localizedStringForKey:@"Please click on the specific video"]];
+        NSString *alertT = [NSString stringWithFormat:@"%@%@",title,noVideo];
+        [vc showAlertWithTitle:alertT];
         return;
     }
     IJSLodingView *lodingView = [IJSLodingView showLodingViewAddedTo:self.view title:@"正在处理中... ..."];
@@ -427,32 +461,21 @@ static NSString *const CellID = @"pickerID";
     [self.lodingView removeFromSuperview];
 
     [self dismissViewControllerAnimated:YES completion:^{
-        //  block 方式进行数据返回
-        IJSImagePickerController *vc = (IJSImagePickerController *) self.navigationController;
-        if (vc.didFinishUserPickingImageHandle)
+        if (self.selectedHandler)
         {
-            vc.didFinishUserPickingImageHandle(photos, nil, asset, infos, isSelectOriginalPhoto, IJSPImageType);
-        }
-        // 代理方式
-        if ([vc.imagePickerDelegate respondsToSelector:@selector(imagePickerController:isSelectOriginalPhoto:didFinishPickingPhotos:assets:infos:avPlayers:sourceType:)])
-        {
-            [vc.imagePickerDelegate imagePickerController:vc isSelectOriginalPhoto:isSelectOriginalPhoto didFinishPickingPhotos:photos assets:asset infos:infos avPlayers:nil sourceType:IJSPImageType];
+            self.selectedHandler(photos, nil, asset, infos, IJSPImageType, nil);
         }
     }];
 }
 #pragma mark 取消
 - (void)_cancleSelectImage
 {
-    IJSImagePickerController *vc = (IJSImagePickerController *) self.navigationController;
-    if (vc.didCancelHandle)
-    {
-        vc.didCancelHandle();
-    }
-    if ([vc respondsToSelector:@selector(imagePickerControllerDidCancel:)])
-    {
-        [vc.imagePickerDelegate imagePickerControllerWhenDidCancle];
-    }
+    __weak typeof (self) weakSelf = self;
     [self dismissViewControllerAnimated:YES completion:^{
+        if (weakSelf.cancelHandler)
+        {
+            weakSelf.cancelHandler();
+        }
     }];
 }
 

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Photos/Photos.h>
 @class IJSAssetModel;
 @class IJSMapViewModel; //贴图数据模型
 /*
@@ -17,7 +18,6 @@ typedef NS_ENUM(NSUInteger, IJSPExportSourceType) {
     IJSPVideoType,
     IJSPVoiceType,
 };
-@protocol IJSImagePickerControllerDelegate;
 
 @interface IJSImagePickerController : UINavigationController
 
@@ -25,22 +25,35 @@ typedef NS_ENUM(NSUInteger, IJSPExportSourceType) {
  *  初始化方法
  *
  */
-- (instancetype)initWithMaxImagesCount:(NSInteger)maxImagesCount delegate:(id<IJSImagePickerControllerDelegate>)delegate;
-- (instancetype)initWithMaxImagesCount:(NSInteger)maxImagesCount columnNumber:(NSInteger)columnNumber delegate:(id<IJSImagePickerControllerDelegate>)delegate;
+- (instancetype)initWithMaxImagesCount:(NSInteger)maxImagesCount;
+- (instancetype)initWithMaxImagesCount:(NSInteger)maxImagesCount columnNumber:(NSInteger)columnNumber;
 /**
  *  总接口初始化方法
  *
  *  @param maxImagesCount         最大选取的个数
  *  @param columnNumber          显示的列数需要固定 2--6
- *  @param delegate     代理方法获取数据需要
  *  @param pushPhotoPickerVc   是否直接跳转到照片列表界面
  *
  */
-- (instancetype)initWithMaxImagesCount:(NSInteger)maxImagesCount columnNumber:(NSInteger)columnNumber delegate:(id<IJSImagePickerControllerDelegate>)delegate pushPhotoPickerVc:(BOOL)pushPhotoPickerVc;
+- (instancetype)initWithMaxImagesCount:(NSInteger)maxImagesCount columnNumber:(NSInteger)columnNumber pushPhotoPickerVc:(BOOL)pushPhotoPickerVc;
 /**
  *  警告
  */
 - (void)showAlertWithTitle:(NSString *)title;
+
+/**
+ 数据回调方法
+ 
+ @param selectedHandler 回调数据 photos 选中的数据  avPlayers 音视频数据  infos 资源信息 isSelectOriginalPhoto 是否原图 sourceType 资源类型
+ */
+-(void)loadTheSelectedData:(void(^)(NSArray<UIImage *> *photos, NSArray<NSURL *> *avPlayers, NSArray<PHAsset *> *assets, NSArray<NSDictionary *> *infos, IJSPExportSourceType sourceType,NSError *error))selectedHandler;
+
+/**
+ 取消选择
+ 
+ @param cancelHandler 取消的回调
+ */
+-(void)cancelSelectedData:(void(^)(void))cancelHandler;
 
 /*-----------------------------------属性-------------------------------------------------------*/
 
@@ -74,11 +87,10 @@ typedef NS_ENUM(NSUInteger, IJSPExportSourceType) {
 /* 默认为NO，如果设置为YES,用户可以选择gif图片 */
 @property (nonatomic, assign) BOOL allowPickingGif;
 
+@property(nonatomic,assign) BOOL isHiddenEdit;  // 隐藏编辑按钮
+
 /*  默认为YES，如果设置为NO,拍照按钮将隐藏,用户将不能选择照片 */
 @property (nonatomic, assign) BOOL allowTakePicture;
-
-/* 默认为YES，如果设置为NO,预览按钮将隐藏,用户将不能去预览照片 */
-@property (nonatomic, assign) BOOL allowPreview;
 
 /* 最小可选中的图片宽度，默认是0，小于这个宽度的图片不可选中 */
 @property (nonatomic, assign) NSInteger minPhotoWidthSelectable;
@@ -87,8 +99,6 @@ typedef NS_ENUM(NSUInteger, IJSPExportSourceType) {
 /* 是否要选择原图 */
 @property (nonatomic, assign) BOOL isSelectOriginalPhoto;
 
-/* 用户选中过的图片数组 */
-@property (nonatomic, strong) NSMutableArray *selectedAssets;
 /* 用户选取并且需要返回的数据 */
 @property (nonatomic, strong) NSMutableArray<IJSAssetModel *> *selectedModels;
 /**
@@ -100,43 +110,11 @@ typedef NS_ENUM(NSUInteger, IJSPExportSourceType) {
  */
 @property (nonatomic, assign) NSInteger maxVideoCut; // 最大裁剪尺寸
 
-/*-----------------------------------返回用户选取的图片-------------------------------------------------------*/
-/* block属性保存方式返回用户选取的图片 ,此处返回的是一个默认是828像素,经过缩放的图片,如果想获取原图,可以解析assets对象*/
-@property (nonatomic, copy) void (^didFinishUserPickingImageHandle)(NSArray<UIImage *> *photos, NSArray *avPlayers, NSArray *assets, NSArray<NSDictionary *> *infos, BOOL isSelectOriginalPhoto, IJSPExportSourceType sourceType);
-/* 代理属性 */
-@property (nonatomic, copy) void (^didCancelHandle)(void); // 取消选择
-
-@property (nonatomic, weak) id<IJSImagePickerControllerDelegate> imagePickerDelegate;
-
 /*-----------------------------------编辑使用的贴图数组-------------------------------------------------------*/
 @property (nonatomic, strong) NSMutableArray<IJSMapViewModel *> *mapImageArr; // 贴图数据
 
 
-@end
-/*-----------------------------------协议-------------------------------------------------------*/
-/*
- * 协议
- */
-@protocol IJSImagePickerControllerDelegate <NSObject>
 
-@optional
-
-/**
- 选择图片
-
- @param picker 控制器
- @param isSelectOriginalPhoto 是否选择原图
- @param photos 选中的数据
- @param assets 原始数据
- @param infos 资源信息
- @param avPlayers 音视频数据
- @param sourceType 资源类型
- */
-- (void)imagePickerController:(IJSImagePickerController *)picker isSelectOriginalPhoto:(BOOL)isSelectOriginalPhoto didFinishPickingPhotos:(NSArray<UIImage *> *)photos assets:(NSArray *)assets infos:(NSArray<NSDictionary *> *)infos avPlayers:(NSArray<NSURL *> *)avPlayers sourceType:(IJSPExportSourceType)sourceType;
-
-/**
- 取消选择图片
- */
-- (void)imagePickerControllerWhenDidCancle;
 
 @end
+

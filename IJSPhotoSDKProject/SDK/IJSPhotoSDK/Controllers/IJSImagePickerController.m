@@ -26,7 +26,8 @@
 }
 /* 默认的列数 */
 @property (nonatomic, assign) NSInteger columnNumber;
-@property (nonatomic, strong) NSMutableArray *mapDataArr; // 贴图数据
+@property(nonatomic,weak) IJSAlbumPickerController *albumVc;  // 相册控制器
+@property(nonatomic,weak) IJSPhotoPickerController *photoVc;  // 相册预览界面
 @end
 
 @implementation IJSImagePickerController
@@ -37,7 +38,6 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     [self _createrUI];    // 设置UI
-    [self _setupMapData];
     [self configNaviTitleAppearance];
     
 }
@@ -54,38 +54,42 @@
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
 }
 
+-(void)loadTheSelectedData:(void(^)(NSArray<UIImage *> *photos, NSArray<NSURL *> *avPlayers, NSArray<PHAsset *> *assets, NSArray<NSDictionary *> *infos, IJSPExportSourceType sourceType,NSError *error))selectedHandler
+{
+    self.albumVc.selectedHandler = selectedHandler;
+    self.photoVc.selectedHandler = selectedHandler;
+}
+
+-(void)cancelSelectedData:(void(^)(void))cancelHandler
+{
+    self.albumVc.cancelHandler = cancelHandler;
+    self.photoVc.cancelHandler = cancelHandler;
+}
+
 /*-----------------------------------初始化方法-------------------------------------------------------*/
 #pragma mark 初始化方法
 // 默认是4个返回值
-- (instancetype)initWithMaxImagesCount:(NSInteger)maxImagesCount delegate:(id<IJSImagePickerControllerDelegate>)delegate
+- (instancetype)initWithMaxImagesCount:(NSInteger)maxImagesCount
 {
-    return [self initWithMaxImagesCount:maxImagesCount columnNumber:4 delegate:delegate pushPhotoPickerVc:YES];
+    return [self initWithMaxImagesCount:maxImagesCount columnNumber:4  pushPhotoPickerVc:YES];
 }
 // 自定义
-- (instancetype)initWithMaxImagesCount:(NSInteger)maxImagesCount columnNumber:(NSInteger)columnNumber delegate:(id<IJSImagePickerControllerDelegate>)delegate
+- (instancetype)initWithMaxImagesCount:(NSInteger)maxImagesCount columnNumber:(NSInteger)columnNumber
 {
-    return [self initWithMaxImagesCount:maxImagesCount columnNumber:columnNumber delegate:delegate pushPhotoPickerVc:YES];
+    return [self initWithMaxImagesCount:maxImagesCount columnNumber:columnNumber  pushPhotoPickerVc:YES];
 }
 // 统一接口
-- (instancetype)initWithMaxImagesCount:(NSInteger)maxImagesCount columnNumber:(NSInteger)columnNumber delegate:(id<IJSImagePickerControllerDelegate>)delegate pushPhotoPickerVc:(BOOL)pushPhotoPickerVc
+- (instancetype)initWithMaxImagesCount:(NSInteger)maxImagesCount columnNumber:(NSInteger)columnNumber pushPhotoPickerVc:(BOOL)pushPhotoPickerVc
 {
     _pushPhotoPickerVc = pushPhotoPickerVc;
     IJSAlbumPickerController *albumPickerVc = [[IJSAlbumPickerController alloc] init];
+    self.albumVc = albumPickerVc;
     albumPickerVc.columnNumber = columnNumber;
     self = [super initWithRootViewController:albumPickerVc]; // 设置返回的跟控制器
     if (self)
     {
         self.maxImagesCount = maxImagesCount > 0 ? maxImagesCount : 9; // Default is 9 / 默认最大可选9张图片
-        self.imagePickerDelegate = delegate;
         self.selectedModels = [NSMutableArray array];
-
-        // 默认准许用户选择原图和视频, 你也可以在这个方法后置为NO
-        self.allowPickingOriginalPhoto = NO;
-        self.allowPickingVideo = YES;
-        self.allowPickingImage = YES;
-        self.allowTakePicture = YES;
-        self.sortAscendingByModificationDate = YES; //时间排序
-        self.networkAccessAllowed = NO;
         self.columnNumber = columnNumber;
 
         [self setupDefaultData]; // 初始化信息
@@ -168,10 +172,11 @@
     if (!_didPushPhotoPickerVc && _pushPhotoPickerVc) // 直接push
     {
         IJSPhotoPickerController *vc = [[IJSPhotoPickerController alloc] init];
+        self.photoVc = vc;
         vc.columnNumber = self.columnNumber; //列数
         __weak typeof(self) weakSelf = self;
         __weak typeof(vc) weakVc = vc;
-        [[IJSImageManager shareManager] getCameraRollAlbumContentImage:self.allowPickingImage contentVideo:self.allowPickingVideo completion:^(IJSAlbumModel *model) {
+        [[IJSImageManager shareManager] getCameraRollAlbumContentImage:_allowPickingImage contentVideo:_allowPickingVideo completion:^(IJSAlbumModel *model) {
             weakVc.albumModel = model;
             [weakSelf pushViewController:vc animated:YES];
             _didPushPhotoPickerVc = YES;
@@ -186,27 +191,6 @@
 }
 
 #pragma mark 点击方法
-#pragma mark - 设置map数据
-- (void)_setupMapData
-{
-    if (self.mapImageArr == nil)
-    {
-        NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"JSPhotoSDK" ofType:@"bundle"];
-        NSString *filePath = [bundlePath stringByAppendingString:@"/Expression"];
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        BOOL isDir = NO;
-        BOOL existed = [fileManager fileExistsAtPath:filePath isDirectory:&isDir];
-        if ( !(isDir == YES && existed == YES) )
-        {  //不存在
-            return;
-        }
-        [IJSFFilesManager ergodicFilesFromFolderPath:filePath completeHandler:^(NSInteger fileCount, NSInteger fileSzie, NSMutableArray *filePath) {
-            IJSMapViewModel *model = [[IJSMapViewModel alloc] initWithImageDataModel:filePath];
-            [self.mapDataArr addObject:model];
-            self.mapImageArr = self.mapDataArr;
-        }];
-    }
-}
 /*-----------------------------------get set 方法-------------------------------------------------------*/
 #pragma mark set方法
 - (void)setAllowPickingImage:(BOOL)allowPickingImage
@@ -216,6 +200,10 @@
 - (void)setAllowPickingVideo:(BOOL)allowPickingVideo
 {
     _allowPickingVideo = allowPickingVideo;
+}
+-(void)setIsHiddenEdit:(BOOL)isHiddenEdit
+{
+    _isHiddenEdit = isHiddenEdit;
 }
 - (void)setMinPhotoWidthSelectable:(NSInteger)minPhotoWidthSelectable
 {
@@ -300,7 +288,13 @@
 {
     self.photoWidth = 828.0;
     self.photoPreviewMaxWidth = 750; // 图片预览器默认的宽度
-    self.allowPreview = YES;
+    // 默认准许用户选择原图和视频, 你也可以在这个方法后置为NO
+    _allowPickingOriginalPhoto = NO;
+    _allowPickingVideo = YES;
+    _allowPickingImage = YES;
+    _isHiddenEdit = NO;
+    _sortAscendingByModificationDate = YES; //时间排序
+    _networkAccessAllowed = NO;
 }
 // 默认的外观，你可以在这个方法后重置
 - (void)_createrUI
@@ -345,15 +339,6 @@
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
-#pragma mark 懒加载区域
-- (NSMutableArray *)mapDataArr
-{
-    if (_mapImageArr == nil)
-    {
-        _mapImageArr = [NSMutableArray array];
-    }
-    return _mapImageArr;
-}
 
 - (void)didReceiveMemoryWarning
 {

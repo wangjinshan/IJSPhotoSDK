@@ -30,29 +30,42 @@ Pod::Spec.new do |s|
   # IJSPhotoSDK 文件层级结构 Core是SDK的核心库文件
     
   s.subspec 'IJSVideoDrawTool' do |sp|
-    sp.source_files = 'SDK/IJSPhotoSDK/IJSVideoDrawTool/*.{h,m}'
+    sp.source_files = 'SDK/IJSUIBase/IJSVideoDrawTool/*.{h,m}'
   
     end
     
   s.subspec 'IJSMapView' do |sp|
-      sp.source_files = 'SDK/IJSPhotoSDK/IJSMapView/*.{h,m}' 
+      sp.source_files = 'SDK/IJSUIBase/IJSMapView/*.{h,m}' 
 
     end
 
   s.subspec 'TOCropViewController' do |sp|
-      sp.source_files = 'SDK/IJSPhotoSDK/TOCropViewController/*.{h,m}' 
+      sp.source_files = 'SDK/IJSUIBase/TOCropViewController/*.{h,m}' 
     
     end
     
+  # 裁剪框架 
+  s.subspec 'IJSEditSDK' do |sp|
+    sp.source_files = 'SDK/IJSEditSDK/ConstantFile/*.{h,m}','SDK/IJSEditSDK/Controller/*.{h,m}','SDK/IJSEditSDK/Model/*.{h,m}','SDK/IJSEditSDK/View/*.{h,m}' 
+
+    sp.dependency 'IJSPhotoSDK/IJSVideoDrawTool'
+    sp.dependency 'IJSPhotoSDK/TOCropViewController'
+    sp.dependency 'IJSPhotoSDK/IJSMapView'
+
+  end
+
+
   # IJSPhoto 核心代码库    
 
-  s.subspec 'Core' do |sp|
+  s.subspec 'IJSPhotoSDK' do |sp|
 
-      sp.source_files = 'SDK/IJSPhotoSDK/ConstantFile/*.{h,m}','SDK/IJSPhotoSDK/Controllers/*.{h,m}','SDK/IJSPhotoSDK/Model/*.{h,m}','SDK/IJSPhotoSDK/View/*.{h,m}' 
+      sp.source_files = 'SDK/IJSPhotoSDK/ConstantFile/*.{h,m}','SDK/IJSPhotoSDK/Controller/*.{h,m}','SDK/IJSPhotoSDK/Model/*.{h,m}','SDK/IJSPhotoSDK/View/*.{h,m}' 
 
       sp.dependency 'IJSPhotoSDK/IJSVideoDrawTool'
       sp.dependency 'IJSPhotoSDK/TOCropViewController'
       sp.dependency 'IJSPhotoSDK/IJSMapView'
+      sp.dependency 'IJSPhotoSDK/IJSEditSDK'
+      
     end 
 
 end

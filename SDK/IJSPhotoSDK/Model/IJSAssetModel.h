@@ -61,6 +61,7 @@ typedef NS_ENUM(NSUInteger, JSAssetModelSourceType) {
 /*----------------------------------------------缓存请求的资源条数-------------------------------*/
 @property(nonatomic,assign) PHImageRequestID imageRequestID;  // 缓存图片请求id
 
+/*------------------------------------------控制可以选择图片或者视频-------------------------------*/
 
 
 

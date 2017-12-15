@@ -20,7 +20,7 @@
 
 static NSString *const cellID = @"cellID";
 
-@interface ViewController () <IJSImagePickerControllerDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface ViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UIImageView *backImageView;
 @property (nonatomic, strong) NSMutableArray<UIImage *> *imageArr; // 图片数组
@@ -95,11 +95,18 @@ static NSString *const cellID = @"cellID";
 - (IBAction)shareAction:(id)sender
 {
     __weak typeof(self) weakSelf = self;
-    IJSImagePickerController *imageVc = [[IJSImagePickerController alloc] initWithMaxImagesCount:50 columnNumber:4 delegate:self];
-    imageVc.minImagesCount = 1;
-    imageVc.minVideoCut = 3;
-    imageVc.maxVideoCut = 10;
-    imageVc.didFinishUserPickingImageHandle = ^(NSArray<UIImage *> *photos, NSArray *avPlayers, NSArray *assets, NSArray<NSDictionary *> *infos, BOOL isSelectOriginalPhoto, IJSPExportSourceType sourceType) {
+    IJSImagePickerController *imageVc = [[IJSImagePickerController alloc] initWithMaxImagesCount:5 columnNumber:4];
+    // 可选--------------------------------------------------------
+//    imageVc.minImagesCount = 2;
+//    imageVc.minVideoCut = 4;
+//    imageVc.maxVideoCut = 10;
+//    imageVc.sortAscendingByModificationDate = NO;
+//    imageVc.allowPickingVideo = YES;   // 不能选视频
+//    imageVc.allowPickingImage = NO;
+//    imageVc.isHiddenEdit = NO;
+    //-----------------------------------------------------------------
+    [imageVc loadTheSelectedData:^(NSArray<UIImage *> *photos, NSArray *avPlayers, NSArray *assets, NSArray<NSDictionary *> *infos, IJSPExportSourceType sourceType,NSError *error) {
+      
         if (sourceType == IJSPImageType)
         {
             weakSelf.imageArr = [NSMutableArray arrayWithArray:photos];
@@ -111,37 +118,36 @@ static NSString *const cellID = @"cellID";
             AVAsset *avaseet = [AVAsset assetWithURL:avPlayers.firstObject];
             testVc.avasset = avaseet;
             [weakSelf presentViewController:testVc animated:YES completion:nil];
-    
         }
-    };
-
+        NSLog(@"完成选择");
+    }];
+    
+    [imageVc cancelSelectedData:^{
+        NSLog(@"--------取消选择----------");
+    }];
+    
+    // 可选--------------------------------------------------
     NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"JSPhotoSDK" ofType:@"bundle"];
     NSString *filePath = [bundlePath stringByAppendingString:@"/Expression"];
-    [IJSFFilesManager ergodicFilesFromFolderPath:filePath completeHandler:^(NSInteger fileCount, NSInteger fileSzie, NSMutableArray *filePath) {
+    
+    [IJSFFilesManager ergodicFilesFromFolderPath:bundlePath completeHandler:^(NSInteger fileCount, NSInteger fileSzie, NSMutableArray<NSString *> *filePath) {
+        
         IJSMapViewModel *model = [[IJSMapViewModel alloc] initWithImageDataModel:filePath];
         [self.mapDataArr addObject:model];
         imageVc.mapImageArr = self.mapDataArr;
-        [self presentViewController:imageVc animated:YES completion:nil];
     }];
-}
-- (void)imagePickerController:(IJSImagePickerController *)picker isSelectOriginalPhoto:(BOOL)isSelectOriginalPhoto didFinishPickingPhotos:(NSArray<UIImage *> *)photos assets:(NSArray *)assets infos:(NSArray<NSDictionary *> *)infos avPlayers:(NSArray *)avPlayers sourceType:(IJSPExportSourceType)sourceType
-{
-    if (sourceType == IJSPVideoType)
-    {
-      //作为测试
-//     NSString *path = [IJSVideoManager getAllVideoPath];
-//        NSLog(@"%@",path);
-//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(15 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//            [IJSVideoManager cleanAllVideo];  // 清理缓存
-//        });
+    
+    [IJSFFilesManager ergodicFilesFromFolderPath:filePath completeHandler:^(NSInteger fileCount, NSInteger fileSzie, NSMutableArray *filePath) {
         
-//        IJSVideoTestController *testVc = [[IJSVideoTestController alloc] init];
-//        AVAsset *avaseet = [AVAsset assetWithURL:avPlayers.firstObject];
-//        testVc.avasset = avaseet;
-//        [self presentViewController:testVc animated:YES completion:nil];
-        
-    }
+        IJSMapViewModel *model = [[IJSMapViewModel alloc] initWithImageDataModel:filePath];
+        [self.mapDataArr addObject:model];
+        imageVc.mapImageArr = self.mapDataArr;
+    }];
+    ///-----------------------------------------------------
+    
+    [self presentViewController:imageVc animated:YES completion:nil];
 }
+
 #pragma mark 懒加载区域
 - (NSMutableArray *)mapDataArr
 {
@@ -168,9 +174,35 @@ static NSString *const cellID = @"cellID";
             }
         }
     }];
-    
-    
 }
+
+- (IBAction)cutTest:(UIButton *)sender
+{
+    NSString *str = [[NSBundle mainBundle] pathForResource:@"2002" ofType:@"mov"];
+    NSURL *inputPath= [NSURL URLWithString:[NSString stringWithFormat:@"file://%@", str]];
+    AVAsset *avasset =[AVAsset assetWithURL:inputPath];
+    [IJSVideoManager cutVideoAndExportVideoWithVideoAsset:avasset startTime:0 endTime:5 completion:^(NSURL *outputPath, NSError *error, IJSVideoState state) {
+        
+        IJSVideoTestController *testVc = [[IJSVideoTestController alloc] init];
+        AVAsset *avaseet = [AVAsset assetWithURL:outputPath];
+        testVc.avasset = avaseet;
+        [self presentViewController:testVc animated:YES completion:nil];
+
+        
+    }];
+
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 

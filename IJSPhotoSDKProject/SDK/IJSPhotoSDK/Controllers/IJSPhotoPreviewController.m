@@ -20,8 +20,7 @@
 #import "IJSImageManagerController.h"
 #import "IJSSelectedCell.h"
 
-#import "IJSVideoCutController.h"
-#import "IJSVideoEditController.h"
+#import "IJSEditSDK.h"
 
 static NSString *const IJSShowCellID = @"IJSPreviewImageCell";
 static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
@@ -49,6 +48,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
 @property (nonatomic, strong) IJSLodingView *lodingView;          // lodingView
 @property (nonatomic, strong) NSTimer *listenPlayerTimer;         // 监听的时间
 @property (nonatomic, assign) CGFloat videoDuraing;               // 视频长度
+@property (nonatomic, strong) NSMutableArray *mapDataArr; // 贴图数据
 @end
 
 @implementation IJSPhotoPreviewController
@@ -61,7 +61,14 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     }
     return _imageDataArr;
 }
-
+- (NSMutableArray *)mapDataArr
+{
+    if (_mapDataArr == nil)
+    {
+        _mapDataArr = [NSMutableArray array];
+    }
+    return _mapDataArr;
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -78,7 +85,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     {
         _selectedCollectionHidden = YES;
     }
-    
+    [self _setupMapData];
     [self _createdUI];
 }
 - (void)viewWillDisappear:(BOOL)animated
@@ -89,7 +96,29 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     [self removeListenPlayerTimer];
     [[IJSImageManager shareManager] stopCachingImagesFormAllAssets];
 }
+#pragma mark - 设置map数据
+- (void)_setupMapData
+{
+    IJSImagePickerController *vc = (IJSImagePickerController *)self.navigationController;
+    if (vc.mapImageArr == nil)
+    {
+        NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"JSPhotoSDK" ofType:@"bundle"];
+        NSString *filePath = [bundlePath stringByAppendingString:@"/Expression"];
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        BOOL isDir = NO;
+        BOOL existed = [fileManager fileExistsAtPath:filePath isDirectory:&isDir];
+        if ( !(isDir == YES && existed == YES) )
+        {  //不存在
+            return;
+        }
 
+        [IJSFFilesManager ergodicFilesFromFolderPath:filePath completeHandler:^(NSInteger fileCount, NSInteger fileSzie, NSMutableArray *filePath) {
+            IJSMapViewModel *model = [[IJSMapViewModel alloc] initWithImageDataModel:filePath];
+            [self.mapDataArr addObject:model];
+            vc.mapImageArr = self.mapDataArr;
+        }];
+    }
+}
 /*-----------------------------------collection-------------------------------------------------------*/
 #pragma mark collectionview delegate
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -202,6 +231,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     {
         [cell stopLivePhotos];
         [cell playLivePhotos];
+        self.touchCell = cell;
         // 考虑到内存性能问题,暂时不使用3DTouch
 //        if (iOS9Later)
 //        {
@@ -212,6 +242,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
 //        }
     }
 }
+
 #pragma mark - 滚动结束
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
 {
@@ -448,7 +479,11 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     [editButton addTarget:self action:@selector(_editPhotoAction:) forControlEvents:UIControlEventTouchUpInside];
     [toolBarView addSubview:editButton];
     self.editButton = editButton;
-    
+    IJSImagePickerController *vc = (IJSImagePickerController *)self.navigationController;
+    if (vc.isHiddenEdit)
+    {
+        self.editButton.hidden = YES;
+    }
     // 完成
     UIButton *finishButton = [UIButton buttonWithType:UIButtonTypeCustom];
     finishButton.frame = CGRectMake(self.view.js_width - 75, 5, 70, 30); //27 81 28
@@ -548,6 +583,21 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     __block IJSAssetModel *model;
     __block NSUInteger index = 0;
     model = [self _selectedCurrentModel:model]; //判断选中当前的模型数据
+    // 先处理不支持的类型
+    IJSImagePickerController *vc = (IJSImagePickerController *)self.navigationController;
+    if ((model.type == JSAssetModelMediaTypeVideo || model.type == JSAssetModelMediaTypeAudio) && !vc.allowPickingVideo)
+    {
+        NSString *title = [NSString stringWithFormat:@"%@", [NSBundle localizedStringForKey:@"Do not support selection of video types"]];
+        [vc showAlertWithTitle:title];
+        return;
+    }
+    if ((model.type != JSAssetModelMediaTypeVideo || model.type != JSAssetModelMediaTypeAudio) && !vc.allowPickingImage)
+    {
+        NSString *title = [NSString stringWithFormat:@"%@", [NSBundle localizedStringForKey:@"Do not support selection of image types"]];
+        [vc showAlertWithTitle:title];
+        return;
+    }
+
     if (model.type != JSAssetModelMediaTypeVideo)
     {
         // 判断数据
@@ -591,25 +641,86 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
                 dispatch_async(dispatch_get_main_queue(), ^{
                     AVAsset *asset = [AVAsset assetWithURL:outputPath];
                     Float64 duration = CMTimeGetSeconds([asset duration]);
-                    CGFloat minCut = ((IJSImagePickerController *) weakSelf.navigationController).minVideoCut ?: 4;
-                    CGFloat maxCut = ((IJSImagePickerController *) weakSelf.navigationController).maxVideoCut ?: 10;
+                    IJSImagePickerController *vc = (IJSImagePickerController *) weakSelf.navigationController;
+                    CGFloat minCut = vc.minVideoCut ?: 4;
+                    CGFloat maxCut = vc.maxVideoCut ?: 10;
+                    
                     if (duration >= minCut && duration <= maxCut)
                     {
                         IJSVideoEditController *videoEditVc = [[IJSVideoEditController alloc] init];
-                        videoEditVc.outputPath = outputPath;
+                        videoEditVc.inputPath = outputPath;
+                        
+                        [videoEditVc loadVideoOnCompleteResult:^(NSURL *outputPath, NSError *error) { //完成
+                            if (error)
+                            {
+                                UIAlertController *alertView = [UIAlertController alertControllerWithTitle:@"警告" message:[NSString stringWithFormat:@"%@", error] preferredStyle:(UIAlertControllerStyleActionSheet)];
+                                UIAlertAction *cancle = [UIAlertAction actionWithTitle:[NSBundle localizedStringForKey:@"OK"] style:(UIAlertActionStyleDefault) handler:^(UIAlertAction *_Nonnull action) {
+                                    [alertView dismissViewControllerAnimated:YES completion:nil];
+                                }];
+                                [alertView addAction:cancle];
+                                [weakSelf presentViewController:alertView animated:YES completion:nil];
+                                
+                                if (weakSelf.selectedHandler)
+                                {
+                                    weakSelf.selectedHandler(nil, nil, nil, nil, IJSPVideoType, error);
+                                }
+                            }
+                            else
+                            {
+                                if (weakSelf.selectedHandler)
+                                {
+                                    weakSelf.selectedHandler(nil, @[outputPath], nil, nil, IJSPVideoType, error);
+                                }
+                            }
+                        }];
+                        
+                        [videoEditVc cancelSelectedData:^{
+                            if (weakSelf.cancelHandler)
+                            {
+                                weakSelf.cancelHandler();
+                            }
+                        }];
                         videoEditVc.mapImageArr = [(IJSImagePickerController *) weakSelf.navigationController mapImageArr]; //贴图数据
-                        [weakSelf.navigationController pushViewController:videoEditVc animated:YES];
+                        [vc pushViewController:videoEditVc animated:YES];
                     }
                     else
                     {
                         IJSVideoCutController *videoCutVc = [[IJSVideoCutController alloc] init];
-                        videoCutVc.minCutTime = ((IJSImagePickerController *) weakSelf.navigationController).minVideoCut;
-                        videoCutVc.maxCutTime = ((IJSImagePickerController *) weakSelf.navigationController).maxVideoCut;
-                        videoCutVc.avasset = asset;
-                        videoCutVc.assetModel = model;
+                        videoCutVc.minCutTime = vc.minVideoCut;
+                        videoCutVc.maxCutTime = vc.maxVideoCut;
+                        videoCutVc.inputPath = outputPath;
+                        
+                        [videoCutVc loadVideoOnCompleteResult:^(NSURL *outputPath, NSError *error) {
+                            if (error)
+                            {
+                                UIAlertController *alertView = [UIAlertController alertControllerWithTitle:@"警告" message:[NSString stringWithFormat:@"%@", error] preferredStyle:(UIAlertControllerStyleActionSheet)];
+                                UIAlertAction *cancle = [UIAlertAction actionWithTitle:[NSBundle localizedStringForKey:@"OK"] style:(UIAlertActionStyleDefault) handler:^(UIAlertAction *_Nonnull action) {
+                                    [alertView dismissViewControllerAnimated:YES completion:nil];
+                                }];
+                                [alertView addAction:cancle];
+                                [weakSelf presentViewController:alertView animated:YES completion:nil];
+                                if (weakSelf.selectedHandler)
+                                {
+                                   weakSelf.selectedHandler(nil, nil, nil, nil, IJSPVideoType, error);
+                                }
+                            }
+                            else
+                            {
+                                if (weakSelf.selectedHandler)
+                                {
+                                    weakSelf.selectedHandler(nil, @[outputPath], nil, nil, IJSPVideoType, error);
+                                }
+                            }
+                        }];
+                        [videoCutVc cancelSelectedData:^{
+                            if (weakSelf.cancelHandler)
+                            {
+                                weakSelf.cancelHandler();
+                            }
+                        }];
                         videoCutVc.canEdit = YES;  // 可以进入编辑界面
                         videoCutVc.mapImageArr = [(IJSImagePickerController *) weakSelf.navigationController mapImageArr]; //贴图数据
-                        [weakSelf.navigationController pushViewController:videoCutVc animated:YES];
+                        [vc pushViewController:videoCutVc animated:YES];
                     }
                 });
             }
@@ -623,14 +734,28 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
         {
             UIImage *image =[UIImage imageWithData:[NSData dataWithContentsOfURL:model.outputPath]];
             IJSImageManagerController *managerVc = [[IJSImageManagerController alloc] initWithEditImage:image];
+            
             [managerVc loadImageOnCompleteResult:^(UIImage *image, NSURL *outputPath, NSError *error) {
-                model.outputPath = outputPath;
-                [weakSelf.showCollectioView reloadData]; // 重载
-                [weakSelf.selectedCollection reloadData];
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [weakSelf _resetUpSelectedDidClick:currentIndex];
-                });
+                if (error)
+                {
+                    UIAlertController *alertView = [UIAlertController alertControllerWithTitle:@"警告" message:[NSString stringWithFormat:@"%@", error] preferredStyle:(UIAlertControllerStyleActionSheet)];
+                    UIAlertAction *cancle = [UIAlertAction actionWithTitle:[NSBundle localizedStringForKey:@"OK"] style:(UIAlertActionStyleDefault) handler:^(UIAlertAction *_Nonnull action) {
+                        [alertView dismissViewControllerAnimated:YES completion:nil];
+                    }];
+                    [alertView addAction:cancle];
+                    [weakSelf presentViewController:alertView animated:YES completion:nil];
+                }
+                else
+                {
+                    model.outputPath = outputPath;
+                    [weakSelf.showCollectioView reloadData]; // 重载
+                    [weakSelf.selectedCollection reloadData];
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [weakSelf _resetUpSelectedDidClick:currentIndex];
+                    });
+                }
             }];
+            
             managerVc.mapImageArr = [(IJSImagePickerController *) weakSelf.navigationController mapImageArr];
             [weakSelf presentViewController:managerVc animated:YES completion:nil];
         }
@@ -755,7 +880,20 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
         NSIndexPath *firstIndexPath = [[self.showCollectioView indexPathsForVisibleItems] firstObject];
         IJSAssetModel *model = self.allAssetModelArr[firstIndexPath.row];
         JSAssetModelSourceType type = model.type;
-        
+        // 先处理不支持的类型
+        IJSImagePickerController *vc = (IJSImagePickerController *)self.navigationController;
+        if ((model.type == JSAssetModelMediaTypeVideo || model.type == JSAssetModelMediaTypeAudio) && !vc.allowPickingVideo)
+        {
+            NSString *title = [NSString stringWithFormat:@"%@", [NSBundle localizedStringForKey:@"Do not support selection of video types"]];
+            [vc showAlertWithTitle:title];
+            return;
+        }
+        if ((model.type != JSAssetModelMediaTypeVideo || model.type != JSAssetModelMediaTypeAudio) && !vc.allowPickingImage)
+        {
+            NSString *title = [NSString stringWithFormat:@"%@", [NSBundle localizedStringForKey:@"Do not support selection of image types"]];
+            [vc showAlertWithTitle:title];
+            return;
+        }
         if (type == JSAssetModelMediaTypeVideo) //当前显示的是视频资源
         {
             [self _getBackThumbnailDataPhotos:photos assets:assets infoArr:infoArr avPlayers:avPlayers model:model index:0 networkAccessAllowed:NO noAlert:noShowAlert vc:vc];
@@ -828,8 +966,9 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
             return;
         }
         _isDoing = YES;
-        IJSImagePickerController *imagePick = (IJSImagePickerController *) self.navigationController;
+        __weak typeof (self) weakSelf = self;
         [[IJSImageManager shareManager] getAVAssetWithPHAsset:model.asset completion:^(AVAsset *asset, AVAudioMix *audioMix, NSDictionary *info) {
+            IJSImagePickerController *imagePick = (IJSImagePickerController *) weakSelf.navigationController;
             Float64 duration = CMTimeGetSeconds([asset duration]);
             NSInteger maxTime = 10;
             
@@ -849,8 +988,9 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
                 maxTime = duration;
             }
             dispatch_async(dispatch_get_main_queue(), ^{
-                self.lodingView = [IJSLodingView showLodingViewAddedTo:self.view title:@"正在处理... ..."];
+                weakSelf.lodingView = [IJSLodingView showLodingViewAddedTo:self.view title:@"正在处理... ..."];
             });
+            
             [IJSVideoManager cutVideoAndExportVideoWithVideoAsset:asset startTime:0 endTime:maxTime completion:^(NSURL *outputPath, NSError *error, IJSVideoState state) {
                 if (outputPath)
                 {
@@ -978,8 +1118,6 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
             }
             
             [self _didGetAllPhotos:photos asset:assets infos:infoArr isSelectOriginalPhoto:YES avPlayers:nil sourceType:IJSPImageType];
-            
-            
         }];
     }
 }
@@ -988,19 +1126,13 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
 - (void)_didGetAllPhotos:(NSArray *)photos asset:(NSArray *)asset infos:(NSArray *)infos isSelectOriginalPhoto:(BOOL)isSelectOriginalPhoto avPlayers:(NSArray *)avPlayers sourceType:(IJSPExportSourceType)sourceType
 {
     _isDoing = NO;
+    __weak typeof (self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.lodingView removeFromSuperview];
-        [self dismissViewControllerAnimated:YES completion:^{
-            //  block 方式进行数据返回
-            IJSImagePickerController *vc = (IJSImagePickerController *) self.navigationController;
-            if (vc.didFinishUserPickingImageHandle)
+        [weakSelf.lodingView removeFromSuperview];
+        [weakSelf dismissViewControllerAnimated:YES completion:^{
+            if (weakSelf.selectedHandler)
             {
-                vc.didFinishUserPickingImageHandle(photos, avPlayers, asset, infos, isSelectOriginalPhoto, sourceType);
-            }
-            // 代理方式
-            if ([vc.imagePickerDelegate respondsToSelector:@selector(imagePickerController:isSelectOriginalPhoto:didFinishPickingPhotos:assets:infos:avPlayers:sourceType:)])
-            {
-                [vc.imagePickerDelegate imagePickerController:vc isSelectOriginalPhoto:isSelectOriginalPhoto didFinishPickingPhotos:photos assets:asset infos:infos avPlayers:avPlayers sourceType:sourceType];
+                weakSelf.selectedHandler(photos, avPlayers, asset, infos, sourceType, nil);
             }
         }];
     });
