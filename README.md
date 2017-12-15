@@ -1,7 +1,7 @@
 # IJSPhotoSDK
 ios多图选择,高仿微信发朋友圈的功能
 
-# 外包合作 QQ: 1096452045   
+# 合作 QQ: 1096452045   
 
 #简书地址: http://www.jianshu.com/u/874b526fa570
 
@@ -62,21 +62,27 @@ SDK:  1, IJSPhotoSDK: 主要处理Photokit的api封装,用于相册UI展示和�
 #import "IJSMapViewModel.h"
 #import <IJSFoundation/IJSFoundation.h>
 #import <Photos/Photos.h>
-2, 设置回调的数据,以下二者选一个
-  2.1,签订协议
-    <IJSImagePickerControllerDelegate>
-  2.2,获取用户选择的图片等资源可以通过 block 也可以通过代理方法
-如下:
-// 1 block 方法
-- (IBAction)_selectImageActin:(id)sender
+
+
+
+2, 设置回调的数据
+ - (IBAction)shareAction:(id)sender
 {
     __weak typeof(self) weakSelf = self;
-    IJSImagePickerController *imageVc = [[IJSImagePickerController alloc] initWithMaxImagesCount:3 delegate:self];
-    // 可选写不写
-    imageVc.minImagesCount = 1; // 图片最小选择要求,可以不设置
-    imageVc.minVideoCut = 4;   //视频最小裁剪尺寸 可选(默认是4秒)
-    //可选  可以通过代理的回调去获取数据
-    imageVc.didFinishUserPickingImageHandle = ^(NSArray<UIImage *> *photos, NSArray *avPlayers, NSArray *assets, NSArray<NSDictionary *> *infos, BOOL isSelectOriginalPhoto, IJSPExportSourceType sourceType) {
+    IJSImagePickerController *imageVc = [[IJSImagePickerController alloc] initWithMaxImagesCount:5 columnNumber:4];
+    // 可选--------------------------------------------------------
+    //  更加项目需求进行配置
+//    imageVc.minImagesCount = 2;
+//    imageVc.minVideoCut = 4;
+//    imageVc.maxVideoCut = 10;
+//    imageVc.sortAscendingByModificationDate = NO;
+//    imageVc.allowPickingVideo = YES;   // 不能选视频
+//    imageVc.allowPickingImage = NO;
+//    imageVc.isHiddenEdit = NO;
+    //-----------------------------------------------------------------
+    // 获取数据的方法
+    [imageVc loadTheSelectedData:^(NSArray<UIImage *> *photos, NSArray *avPlayers, NSArray *assets, NSArray<NSDictionary *> *infos, IJSPExportSourceType sourceType,NSError *error) {
+      
         if (sourceType == IJSPImageType)
         {
             weakSelf.imageArr = [NSMutableArray arrayWithArray:photos];
@@ -84,33 +90,39 @@ SDK:  1, IJSPhotoSDK: 主要处理Photokit的api封装,用于相册UI展示和�
         }
         else
         {
-            NSLog(@"%@",avPlayers);
+            IJSVideoTestController *testVc = [[IJSVideoTestController alloc] init];
+            AVAsset *avaseet = [AVAsset assetWithURL:avPlayers.firstObject];
+            testVc.avasset = avaseet;
+            [weakSelf presentViewController:testVc animated:YES completion:nil];
         }
-    };
-    /*
-     1,贴图资源可以不传,不穿则读取SDK内存的资源,可以找到 JSPhotoSDK.bundle Expression文件 把自己的资源放到里面不需要管文件名字sdk自己会便利
-     2, 如果是外部动态添加资源选择下面添加的方式 需要传 IJSMapViewModel 的数组
-     */
-//    NSString *bundlePath = [[NSBundle mainBundle]pathForResource:@"JSPhotoSDK" ofType:@"bundle"];
-//    NSString *filePath =[bundlePath stringByAppendingString:@"/Expression"];
-//    [IJSFFilesManager ergodicFilesFromFolderPath:filePath completeHandler:^(NSInteger fileCount, NSInteger fileSzie, NSMutableArray *filePath) {
-//        IJSMapViewModel *model =[[IJSMapViewModel alloc]initWithImageDataModel:filePath];
-//        [self.mapDataArr addObject:model];
-//        imageVc.mapImageArr  = self.mapDataArr;
-//    }];
-      [self presentViewController:imageVc animated:YES completion:nil];
-}
- //  不想在block中做,可以选择代理方法 
-#pragma mark - 代理方法
--(void)imagePickerController:(IJSImagePickerController *)picker isSelectOriginalPhoto:(BOOL)isSelectOriginalPhoto didFinishPickingPhotos:(NSArray<UIImage *> *)photos assets:(NSArray *)assets infos:(NSArray<NSDictionary *> *)infos avPlayers:(NSArray *)avPlayers sourceType:(IJSPExportSourceType)sourceType
-{
-    if (sourceType == IJSPVideoType)
-    {
-        IJSVideoTestController *testVc =[[IJSVideoTestController alloc] init];
-        AVAsset *avaseet = [AVAsset assetWithURL:avPlayers.firstObject];
-        testVc.avasset = avaseet;
-        [self presentViewController:testVc animated:YES completion:nil];
-    }
+        NSLog(@"完成选择");
+    }];
+    
+    [imageVc cancelSelectedData:^{
+        NSLog(@"--------取消选择----------");
+    }];
+    
+    // 可选--------------------------------------------------
+    // 添加 贴图的方法 如果不加则默认读取 里面的配置
+    NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"JSPhotoSDK" ofType:@"bundle"];
+    NSString *filePath = [bundlePath stringByAppendingString:@"/Expression"];
+    
+    [IJSFFilesManager ergodicFilesFromFolderPath:bundlePath completeHandler:^(NSInteger fileCount, NSInteger fileSzie, NSMutableArray<NSString *> *filePath) {
+        
+        IJSMapViewModel *model = [[IJSMapViewModel alloc] initWithImageDataModel:filePath];
+        [self.mapDataArr addObject:model];
+        imageVc.mapImageArr = self.mapDataArr;
+    }];
+    
+    [IJSFFilesManager ergodicFilesFromFolderPath:filePath completeHandler:^(NSInteger fileCount, NSInteger fileSzie, NSMutableArray *filePath) {
+        
+        IJSMapViewModel *model = [[IJSMapViewModel alloc] initWithImageDataModel:filePath];
+        [self.mapDataArr addObject:model];
+        imageVc.mapImageArr = self.mapDataArr;
+    }];
+    ///-----------------------------------------------------
+    
+    [self presentViewController:imageVc animated:YES completion:nil];
 }
 大功告成就是这么简单
 额外注意点:
@@ -176,10 +188,19 @@ IJSImageEditSDK
       2.5, 二维码 IJSQRCodeSDK
 
 重要更新:
+1.0.1 : 完善一些细节
 1.0.0 : 全面适配 iPhone X
 0.1.4 : 全面适配iPhone X
 1,修复缩略图界面刷新闪屏问题 2, 修复gif播放背景尺寸不够时候的白屏问题 3, 修复选多张图预览角标不整齐的问题
 4修复编辑gif后预览界面不显示修改后的图,5, 新增清理保存沙河路径下的所有视频的api 6,修复一些小细节的bug
+
+SDK 拆分说明
+
+1,代码拆分 SDK 分 IJSPhotoSDK IJSEditSDK 如果不需要编辑图片或者视频的功能可以直接删除 IJSEditSDK然后剩下的项目哪儿报错就注释掉哪儿的代码就就可以不影响项目的使用,
+
+2,IJSPhoto.bundle 资源 Expression 文件夹属于表情包资源如果需要换成自己的可以随意替换,不需要注意名字,
+   Expression文件夹之外的资源属于项目依赖图,如果替换需要同名
+   
 
 
 
