@@ -22,24 +22,34 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sca-v2-hje">
-                                <rect key="frame" x="258" y="66" width="117" height="54"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sca-v2-hje">
+                                <rect key="frame" x="16" y="66" width="46" height="42"/>
                                 <color key="backgroundColor" red="0.24028345942497253" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="117" id="YkH-11-rcZ"/>
                                     <constraint firstAttribute="height" constant="54" id="oZg-4j-nvW"/>
                                 </constraints>
-                                <state key="normal" title="share"/>
+                                <state key="normal" title="选图"/>
                                 <connections>
                                     <action selector="shareAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="nS3-h1-KR2"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nlQ-J7-wu8">
-                                <rect key="frame" x="258" y="128" width="108" height="39"/>
+                                <rect key="frame" x="70" y="68" width="99" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="1" green="0.67216897004081255" blue="0.97335080662889761" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <state key="normal" title="裁剪方法测试"/>
                                 <connections>
                                     <action selector="cutTest:" destination="BYZ-38-t0r" eventType="touchUpInside" id="zhc-M7-jrV"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="904-RF-Srf">
+                                <rect key="frame" x="190" y="72" width="57" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="1" green="0.43922594718289731" blue="0.31622400978290899" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <state key="normal" title="二维码"/>
+                                <connections>
+                                    <action selector="qrcodeAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="uXQ-jf-sGQ"/>
                                 </connections>
                             </button>
                         </subviews>

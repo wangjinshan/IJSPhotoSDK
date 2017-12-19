@@ -10,7 +10,7 @@ target 'IJSPhotoSDKProject' do
  pod 'MLeaksFinder', '~> 0.2.1'
 
 
-pod 'IJSUExtension'
-pod 'IJSFoundation'
+#pod 'IJSUExtension'
+#pod 'IJSFoundation'
 
 end

@@ -18,6 +18,9 @@
 #import "IJSVideoManager.h"
 #import "IJSAlbumModel.h"
 
+// 二维码模块
+#import "IJSQRCodeController.h"
+
 static NSString *const cellID = @"cellID";
 
 @interface ViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -60,7 +63,7 @@ static NSString *const cellID = @"cellID";
 
 - (void)createTableViewUI
 {
-    UITableView *tableview = [[UITableView alloc] initWithFrame:CGRectMake(0, 100, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStylePlain];
+    UITableView *tableview = [[UITableView alloc] initWithFrame:CGRectMake(0, 300, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStylePlain];
     [self.view addSubview:tableview];
 
     tableview.delegate = self;
@@ -97,6 +100,7 @@ static NSString *const cellID = @"cellID";
     __weak typeof(self) weakSelf = self;
     IJSImagePickerController *imageVc = [[IJSImagePickerController alloc] initWithMaxImagesCount:5 columnNumber:4];
     // 可选--------------------------------------------------------
+    //  更加项目需求进行配置
 //    imageVc.minImagesCount = 2;
 //    imageVc.minVideoCut = 4;
 //    imageVc.maxVideoCut = 10;
@@ -105,6 +109,7 @@ static NSString *const cellID = @"cellID";
 //    imageVc.allowPickingImage = NO;
 //    imageVc.isHiddenEdit = NO;
     //-----------------------------------------------------------------
+    // 获取数据的方法
     [imageVc loadTheSelectedData:^(NSArray<UIImage *> *photos, NSArray *avPlayers, NSArray *assets, NSArray<NSDictionary *> *infos, IJSPExportSourceType sourceType,NSError *error) {
       
         if (sourceType == IJSPImageType)
@@ -127,6 +132,7 @@ static NSString *const cellID = @"cellID";
     }];
     
     // 可选--------------------------------------------------
+    // 添加 贴图的方法 如果不加则默认读取 里面的配置
     NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"JSPhotoSDK" ofType:@"bundle"];
     NSString *filePath = [bundlePath stringByAppendingString:@"/Expression"];
     
@@ -187,12 +193,15 @@ static NSString *const cellID = @"cellID";
         AVAsset *avaseet = [AVAsset assetWithURL:outputPath];
         testVc.avasset = avaseet;
         [self presentViewController:testVc animated:YES completion:nil];
-
-        
     }];
-
 }
 
+/// 二维码控制器
+- (IBAction)qrcodeAction:(UIButton *)sender
+{
+    IJSQRCodeController *vc =[IJSQRCodeController new];
+    [self presentViewController:vc animated:YES completion:nil];
+}
 
 
 

@@ -53,7 +53,23 @@ SDK:  1, IJSPhotoSDK: 主要处理Photokit的api封装,用于相册UI展示和�
 ```
 #### 1, 下载sdk并把里面的SDK文件夹直接拖入到项目中去
 #### 2, 在项目的点击事件中实现如下代码
+#### 简洁版本
 
+
+```
+1, 引入头文件
+#import "IJSImagePickerController.h"
+2, 按钮中实现下面代码
+IJSImagePickerController *imageVc = [[IJSImagePickerController alloc] initWithMaxImagesCount:3 columnNumber:4];
+    //可选  可以通过代理的回调去获取数据
+    [imageVc loadTheSelectedData:^(NSArray<UIImage *> *photos, NSArray<NSURL *> *avPlayers, NSArray<PHAsset *> *assets, NSArray<NSDictionary *> *infos, IJSPExportSourceType sourceType, NSError *error) {
+        NSLog(@"%@",photos);
+        NSLog(@"%@",avPlayers);
+    }];
+    [self presentViewController:imageVc animated:YES completion:nil];
+
+```
+#### 稍微定制版
 ```
 1,导入头文件
 //必须
@@ -187,19 +203,28 @@ IJSImageEditSDK
       2.4  自定义相机 IJSCameraSDK
       2.5, 二维码 IJSQRCodeSDK
 
+
+```
 重要更新:
+
 1.0.1 : 完善一些细节
 1.0.0 : 全面适配 iPhone X
 0.1.4 : 全面适配iPhone X
 1,修复缩略图界面刷新闪屏问题 2, 修复gif播放背景尺寸不够时候的白屏问题 3, 修复选多张图预览角标不整齐的问题
 4修复编辑gif后预览界面不显示修改后的图,5, 新增清理保存沙河路径下的所有视频的api 6,修复一些小细节的bug
 
+```
+
+
+```
 SDK 拆分说明
 
 1,代码拆分 SDK 分 IJSPhotoSDK IJSEditSDK 如果不需要编辑图片或者视频的功能可以直接删除 IJSEditSDK然后剩下的项目哪儿报错就注释掉哪儿的代码就就可以不影响项目的使用,
 
 2,IJSPhoto.bundle 资源 Expression 文件夹属于表情包资源如果需要换成自己的可以随意替换,不需要注意名字,
    Expression文件夹之外的资源属于项目依赖图,如果替换需要同名
+   
+```
    
 
 
