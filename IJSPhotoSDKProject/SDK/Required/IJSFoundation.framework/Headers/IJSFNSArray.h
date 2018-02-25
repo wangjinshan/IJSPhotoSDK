@@ -13,6 +13,7 @@
  */
 @interface IJSFNSArray : NSObject
 
+
 /**
  拆分数组
 
@@ -20,6 +21,7 @@
  @param subSize 拆分间距
  @return 拆分完成的数组
  */
-+ (NSMutableArray *)splitArray:(NSMutableArray *)array withSubSize:(int)subSize;
++ (NSMutableArray *)splitArray: (NSMutableArray *)array withSubSize:(int)subSize;
+
 
 @end

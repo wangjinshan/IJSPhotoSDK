@@ -21,7 +21,7 @@
  *
  *  @return RGB转换的颜色
  */
-+ (UIColor *)colorWithR:(double)R G:(double)G B:(double)B alpha:(CGFloat)alpha;
++(UIColor *)colorWithR:(double)R G:(double)G B:(double)B alpha:(CGFloat)alpha;
 
 /**
  *  16进制颜色转换,默认alpha是1
@@ -41,5 +41,9 @@
  *  @return 10进制颜色
  */
 + (UIColor *)colorWithHexString:(NSString *)color alpha:(CGFloat)alpha;
+
+
+
+
 
 @end

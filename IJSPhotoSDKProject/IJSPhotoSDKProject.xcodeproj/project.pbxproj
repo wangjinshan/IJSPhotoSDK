@@ -389,15 +389,15 @@
 			children = (
 				74E5440B1FE76AF700D4E92A /* IJSImageEditController.h */,
 				74E5440C1FE76AF700D4E92A /* IJSVideoManagerController.m */,
-				74E5440D1FE76AF700D4E92A /* IJSVideoCutController.m */,
 				74E5440E1FE76AF700D4E92A /* IJSImageManagerController.m */,
 				74E5440F1FE76AF700D4E92A /* IJSVideoEditController.m */,
 				74E544101FE76AF700D4E92A /* IJSEditSDK.h */,
-				74E544111FE76AF700D4E92A /* IJSImageEditController.m */,
 				74E544121FE76AF700D4E92A /* IJSVideoEditController.h */,
 				74E544131FE76AF700D4E92A /* IJSImageManagerController.h */,
 				74E544141FE76AF700D4E92A /* IJSVideoManagerController.h */,
 				74E544151FE76AF700D4E92A /* IJSVideoCutController.h */,
+				74E544111FE76AF700D4E92A /* IJSImageEditController.m */,
+				74E5440D1FE76AF700D4E92A /* IJSVideoCutController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -464,9 +464,9 @@
 		74E5443B1FE76AF700D4E92A /* ConstantFile */ = {
 			isa = PBXGroup;
 			children = (
-				74E5443C1FE76AF700D4E92A /* IJSImageManager.m */,
 				74E5443D1FE76AF700D4E92A /* IJSConst.h */,
 				74E5443E1FE76AF700D4E92A /* IJSImageManager.h */,
+				74E5443C1FE76AF700D4E92A /* IJSImageManager.m */,
 			);
 			path = ConstantFile;
 			sourceTree = "<group>";
@@ -506,16 +506,16 @@
 		74E544531FE76AF700D4E92A /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				74E544541FE76AF700D4E92A /* IJSAlbumPickerController.h */,
-				74E544551FE76AF700D4E92A /* IJSPhotoPickerController.m */,
-				74E544561FE76AF700D4E92A /* IJS3DTouchController.m */,
-				74E544571FE76AF700D4E92A /* IJSPhotoPreviewController.m */,
-				74E544581FE76AF700D4E92A /* IJSImagePickerController.m */,
-				74E544591FE76AF700D4E92A /* IJS3DTouchController.h */,
-				74E5445A1FE76AF700D4E92A /* IJSPhotoPickerController.h */,
-				74E5445B1FE76AF700D4E92A /* IJSAlbumPickerController.m */,
 				74E5445C1FE76AF700D4E92A /* IJSImagePickerController.h */,
+				74E544581FE76AF700D4E92A /* IJSImagePickerController.m */,
+				74E5445B1FE76AF700D4E92A /* IJSAlbumPickerController.m */,
+				74E544541FE76AF700D4E92A /* IJSAlbumPickerController.h */,
+				74E5445A1FE76AF700D4E92A /* IJSPhotoPickerController.h */,
+				74E544551FE76AF700D4E92A /* IJSPhotoPickerController.m */,
 				74E5445D1FE76AF700D4E92A /* IJSPhotoPreviewController.h */,
+				74E544571FE76AF700D4E92A /* IJSPhotoPreviewController.m */,
+				74E544591FE76AF700D4E92A /* IJS3DTouchController.h */,
+				74E544561FE76AF700D4E92A /* IJS3DTouchController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";

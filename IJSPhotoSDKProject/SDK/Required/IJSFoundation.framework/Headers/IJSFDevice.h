@@ -11,32 +11,34 @@
 /**
  *  网络类型
  */
-typedef NS_ENUM(NSUInteger, IJSNetworkType) {
+typedef NS_ENUM(NSUInteger, IJSNetworkType)
+{
     /**
      *  无网咯
      */
-    IJSNetworkTypeNone = 0,
+    IJSNetworkTypeNone         = 0,
     /**
      *  蜂窝网络
      */
-    IJSNetworkTypeCellular = 2,
+    IJSNetworkTypeCellular     = 2,
     /**
      *  WIFI
      */
-    IJSNetworkTypeWifi = 1,
+    IJSNetworkTypeWifi         = 1,
     /**
      *  2G网络
      */
-    IJSNetworkTypeCellular2G = 3,
+    IJSNetworkTypeCellular2G   = 3,
     /**
      *  3G网络
      */
-    IJSNetworkTypeCellular3G = 4,
+    IJSNetworkTypeCellular3G   = 4,
     /**
      *  4G网络
      */
-    IJSNetworkTypeCellular4G = 5,
+    IJSNetworkTypeCellular4G   = 5,
 };
+
 
 /**
  IP版本
@@ -44,7 +46,8 @@ typedef NS_ENUM(NSUInteger, IJSNetworkType) {
  - IJSIPVersion4: IPv4
  - IJSIPVersion6: IPv6
  */
-typedef NS_ENUM(NSUInteger, IJSIPVersion) {
+typedef NS_ENUM(NSUInteger, IJSIPVersion)
+{
     IJSIPVersion4 = 0,
     IJSIPVersion6 = 1,
 };
@@ -58,13 +61,13 @@ typedef NS_ENUM(NSUInteger, IJSIPVersion) {
  *
  *  @return 手机mac地址
  */
-- (NSString *)getMacAddressFuncOne;
+- (NSString *) getMacAddressFuncOne;
 /**
  *  判断手机mac地址方法2
  *
  *  @return 手机mac地址
  */
-- (NSString *)getMacAddressFuncTwo;
+- (NSString *) getMacAddressFuncTwo;
 
 /**
  *  判断设备型号
@@ -81,5 +84,9 @@ typedef NS_ENUM(NSUInteger, IJSIPVersion) {
  *  @return < 0 低于指定版本； = 0 跟指定版本相同；> 0 高于指定版本
  */
 + (NSInteger)versionCompare:(NSString *)other;
+
+
+
+
 
 @end
