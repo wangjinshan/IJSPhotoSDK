@@ -19,7 +19,7 @@
 {
     IJSLodingView *lodingView = [[IJSLodingView alloc] initWithFrame:CGRectMake(0, 0, 150, 150)];
     lodingView.layer.borderWidth = 1;
-    lodingView.layer.cornerRadius = 5;
+    lodingView.layer.cornerRadius = 10;
     lodingView.layer.masksToBounds = YES;
 
     lodingView.backgroundColor = [UIColor colorWithRed:41 / 256.0 green:25 / 256.0 blue:10 / 256.0 alpha:1];
@@ -29,7 +29,7 @@
     indicatorView.color = [UIColor whiteColor];
     [indicatorView startAnimating];
     [lodingView addSubview:indicatorView];
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 130, 150, 20)];
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 100, 150, 20)];
     titleLabel.text = title;
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.textColor = [UIColor whiteColor];

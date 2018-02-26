@@ -267,7 +267,7 @@
     return newImage;
 }
 
-static inline CGFloat DegreesToRadians(CGFloat degrees)
+static inline CGFloat IJSDegreesToRadians(CGFloat degrees)
 {
     return M_PI * (degrees / 180.0);
 }
@@ -277,7 +277,7 @@ static inline CGFloat DegreesToRadians(CGFloat degrees)
 {
     // calculate the size of the rotated view's containing box for our drawing space
     UIView *rotatedViewBox = [[UIView alloc] initWithFrame:CGRectMake(0, 0, image.size.width, image.size.height)];
-    CGAffineTransform t = CGAffineTransformMakeRotation(DegreesToRadians(degrees));
+    CGAffineTransform t = CGAffineTransformMakeRotation(IJSDegreesToRadians(degrees));
     rotatedViewBox.transform = t;
     CGSize rotatedSize = rotatedViewBox.frame.size;
 
@@ -289,7 +289,7 @@ static inline CGFloat DegreesToRadians(CGFloat degrees)
     CGContextTranslateCTM(bitmap, rotatedSize.width / 2, rotatedSize.height / 2);
 
     //   // Rotate the image context
-    CGContextRotateCTM(bitmap, DegreesToRadians(degrees));
+    CGContextRotateCTM(bitmap, IJSDegreesToRadians(degrees));
 
     // Now, draw the rotated/scaled image into the context
     CGContextScaleCTM(bitmap, 1.0, -1.0);
@@ -304,7 +304,7 @@ static inline CGFloat DegreesToRadians(CGFloat degrees)
 {
     // calculate the size of the rotated view's containing box for our drawing space
     UIView *rotatedViewBox = [[UIView alloc] initWithFrame:CGRectMake(0, 0, image.size.width, image.size.height)];
-    CGAffineTransform t = CGAffineTransformMakeRotation(DegreesToRadians(90));
+    CGAffineTransform t = CGAffineTransformMakeRotation(IJSDegreesToRadians(90));
     rotatedViewBox.transform = t;
     CGSize rotatedSize = rotatedViewBox.frame.size;
 
@@ -316,7 +316,7 @@ static inline CGFloat DegreesToRadians(CGFloat degrees)
     CGContextTranslateCTM(bitmap, rotatedSize.width / 2, rotatedSize.height / 2);
 
     //   // Rotate the image context
-    CGContextRotateCTM(bitmap, DegreesToRadians(90));
+    CGContextRotateCTM(bitmap, IJSDegreesToRadians(90));
 
     // Now, draw the rotated/scaled image into the context
     CGContextScaleCTM(bitmap, 1.0, -1.0);

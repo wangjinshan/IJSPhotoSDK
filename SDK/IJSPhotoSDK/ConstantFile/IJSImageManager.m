@@ -312,6 +312,7 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
 {
     PHImageRequestOptions *option = [[PHImageRequestOptions alloc] init];
     option.resizeMode = PHImageRequestOptionsResizeModeFast;
+    option.deliveryMode = PHImageRequestOptionsDeliveryModeOpportunistic;
     PHImageRequestID imageRequestID = [[PHImageManager defaultManager] requestImageForAsset:asset
                                                                                  targetSize:targetSize
                                                                                 contentMode:PHImageContentModeAspectFill
@@ -321,7 +322,7 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
                                                                                         {
                                                                                             image = result;
                                                                                         }
-                                                                                        BOOL downloadFinined = (![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey]);
+                                                                                         BOOL downloadFinined = ![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey] && ![[info objectForKey:PHImageResultIsDegradedKey] boolValue];  //表示已经获取了高清图
                                                                                         if (downloadFinined && result)
                                                                                         {
                                                                                             result = [self fixOrientation:result];
@@ -386,7 +387,7 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
                                                                                     options:option
                                                                               resultHandler:^(UIImage *_Nullable result, NSDictionary *_Nullable info) {
                                                                                   
-                                                                                  BOOL downloadFinined = (![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey]);
+                                                                                   BOOL downloadFinined = ![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey] && ![[info objectForKey:PHImageResultIsDegradedKey] boolValue];  //表示已经获取了高清图
                                                                                   if (downloadFinined && result)
                                                                                   {
                                                                                       result = [self fixOrientation:result]; // 修复方向
@@ -408,7 +409,7 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
                                                                                         options:option
                                                                                   resultHandler:^(NSData *_Nullable imageData, NSString *_Nullable dataUTI, UIImageOrientation orientation, NSDictionary *_Nullable info) {
                                                                                       
-                                                                                      BOOL downloadFinined = (![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey]);
+                                                                                       BOOL downloadFinined = ![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey] && ![[info objectForKey:PHImageResultIsDegradedKey] boolValue];  //表示已经获取了高清图
                                                                                       if (downloadFinined && imageData)
                                                                                       {
                                                                                           BOOL isDegraded = [[info objectForKey:PHImageResultIsDegradedKey] boolValue];
@@ -475,7 +476,7 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
             };
             PHImageRequestID imageRequestID = [[PHImageManager defaultManager] requestLivePhotoForAsset:asset targetSize:[UIScreen mainScreen].bounds.size contentMode:PHImageContentModeAspectFit options:livePhotoOptions resultHandler:^(PHLivePhoto *_Nullable livePhoto, NSDictionary *_Nullable info) {
                 // 排除取消，错误，低清图三种情况，即已经获取到了高清图
-                BOOL downloadFinined = (![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey]);
+                 BOOL downloadFinined = ![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey] && ![[info objectForKey:PHImageResultIsDegradedKey] boolValue];  //表示已经获取了高清图
                 if (downloadFinined && livePhoto)
                 {
                     if (completion)

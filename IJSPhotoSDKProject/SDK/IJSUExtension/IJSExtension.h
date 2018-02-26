@@ -23,4 +23,8 @@
 
 #import "IJSLodingView.h"
 
+#import "IJSAlertViewController.h"
+#import "IJSNotificationCenterString.h"
+
+
 #endif /* IJSExtension_h */
