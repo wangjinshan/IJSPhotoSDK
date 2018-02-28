@@ -225,9 +225,223 @@ SDK 拆分说明
    Expression文件夹之外的资源属于项目依赖图,如果替换需要同名
    
 ```
+<hr>
+
+# IJSEditSDK 使用文档
+
+地址: https://github.com/wangjinshan/IJSEditSDK
+
+IJSEditSDK主要是处理图片和视频的框架,主要包括 视频处理包括,裁剪,涂鸦,水印,贴图等等
+
+使用:
+
+如果需要贴图请先设置贴图数据,如果不设置就使用内部自带的
+
+```
+#import <IJSFoundation/IJSFoundation.h>
+#import "IJSEditSDK.h"
+
+// 设置贴图数据
+    NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"JSPhotoSDK" ofType:@"bundle"];
+    NSString *filePath = [bundlePath stringByAppendingString:@"/Expression"];
+    [IJSFFilesManager ergodicFilesFromFolderPath:filePath completeHandler:^(NSInteger fileCount, NSInteger fileSzie, NSMutableArray *filePath) {
+        IJSMapViewModel *model = [[IJSMapViewModel alloc] initWithImageDataModel:filePath];
+        [self.mapDataArr addObject:model];
+    }];
+    
+```
+
+### 处理图片
+
+```
+  __weak typeof (self) weakSelf = self;
+    UIImage *image =[UIImage imageNamed:@"8"]; //资源
+    IJSImageManagerController *vc =[[IJSImageManagerController alloc]initWithEditImage:image];
+    // 回调数据
+    [vc loadImageOnCompleteResult:^(UIImage *image, NSURL *outputPath, NSError *error) {
+        weakSelf.backImageView.image = image;
+    }];
+    vc.mapImageArr = self.mapDataArr;
+    [self presentViewController:vc animated:YES completion:nil];
+    
+```
+
+### 裁剪视频
+
+
+```
+ IJSVideoCutController *vc =[[IJSVideoCutController alloc] init];
+   NSString *str =  [[NSBundle mainBundle] pathForResource:@"test" ofType:@"mp4"];
+//    http://dvideo.spriteapp.cn/video/2017/1210/5a2d27ea6e697_wpd.mp4
+    NSURL *inputPath= [NSURL URLWithString:[NSString stringWithFormat:@"file://%@", str]];  //注意本地视频需要加头
+//     NSURL *inputPath= [NSURL URLWithString:@"http://dvideo.spriteapp.cn/video/2017/1210/5a2d27ea6e697_wpd.mp4"];  //注意本地视频需要加头
+    vc.canEdit = NO;   //裁剪完了不会进入编辑界面
+    vc.inputPath = inputPath;
+    vc.didFinishCutVideoCallBack = ^(IJSVideoManagerController *controller, NSURL *outputPath, NSError *error, IJSVideoState state) {
+        NSLog(@"%@",controller);
+        NSLog(@"%@",outputPath);
+        NSLog(@"%@",error);
+        NSLog(@"%lu",(unsigned long)state);
+    };
+    vc.delegate = self;
+    [self presentViewController:vc animated:YES completion:nil];
+
+```
+
+### 视频编辑
+
+```
+ IJSVideoEditController *vc =[[IJSVideoEditController alloc]init];
+    NSString *str =  [[NSBundle mainBundle] pathForResource:@"test" ofType:@"mp4"];
+    NSURL *inputPath= [NSURL URLWithString:[NSString stringWithFormat:@"file://%@", str]];  //注意本地视频需要加头
+//         NSURL *inputPath= [NSURL URLWithString:@"http://dvideo.spriteapp.cn/video/2017/1210/5a2d27ea6e697_wpd.mp4"];  //注意本地视频需要加头
+    vc.inputPath = inputPath;
+    vc.didFinishCutVideoCallBack = ^(IJSVideoManagerController *controller, NSURL *outputPath, NSError *error, IJSVideoState state) {
+        NSLog(@"--block------%@",controller);
+        NSLog(@"--block------%@",outputPath);
+        NSLog(@"--block------%@",error);
+        NSLog(@"--block------%lu",(unsigned long)state);
+    };
+    vc.delegate = self;  // 可以通过代理方法返回数据
+    [self.navigationController pushViewController:vc animated:YES];
+    
+//    [self presentViewController:vc animated:YES completion:nil];
+
+```
+
+#####代理方法可以不写
+
+```
+-(void)didFinishCutVideoWithController:(IJSVideoManagerController *)controller outputPath:(NSURL *)outputPath error:(NSError *)error state:(IJSVideoState)state
+{
+            IJSVideoTestController *testVc = [[IJSVideoTestController alloc] init];
+            AVAsset *avaseet = [AVAsset assetWithURL:outputPath];
+            testVc.avasset = avaseet;
+            [self presentViewController:testVc animated:YES completion:nil];
+}
+-(void)didFinishCutVideoWithController:(IJSVideoManagerController *)controller outputPath:(NSURL *)outputPath error:(NSError *)error state:(IJSVideoState)state
+{
+            IJSVideoTestController *testVc = [[IJSVideoTestController alloc] init];
+            AVAsset *avaseet = [AVAsset assetWithURL:outputPath];
+            testVc.avasset = avaseet;
+            [self presentViewController:testVc animated:YES completion:nil];
+}
+```
+### cocopods 集成方法
+
+
+```
+pod 'IJSEditSDK'
+```
+代码部分和上面一样
+
+<hr>
+
+###IJSNavigation 使用说明
+
+
+```
+直接将 UINavigationController+IJSNavigationController 文件 拖到自己的项目什么都不需要做
+
+ self.noPopAction = YES;  // 这个界面不想要全屏手势了
+ 或者直接设置
+ self.navigationController.recognizerLength = 0;
+ 
+ 
+```
+
+<hr>
+
+### IJSTagListView 使用说明
    
+项目演示:
+![](https://upload-images.jianshu.io/upload_images/2845360-f3f12cb59805664d.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/300)
 
+![](https://upload-images.jianshu.io/upload_images/2845360-6434602a198ff8bd.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/300)
 
+#####简单实用:
 
+```
+-(void)_setupUI
+{
+    // 创建标签列表
+    IJSTagListView *tagListView = [[IJSTagListView alloc] init];
+    tagListView.delegate = self;
+    
+    /*----------------属性列表设置 可以不设置-----------------*/
+    // 设置标签颜色
+//    tagListView.tagColor = [UIColor whiteColor];
+//    tagListView.isSort = YES;  // 设置成YES 就是可以拖拽
+//    tagListView.tagMargin = 10;  // 左边距
+//    tagListView.backgroundColor = [UIColor redColor];
+    // 设置标签删除图片
+//        tagListView.tagDeleteimage =[UIImage imageNamed:@"sns_icon_22"];
+//        tagListView.tagDelegateImageHeight = 30;
+    
+    //    tagListView.isFitTagListViewHeight = NO;
+    //    tagListView.tagListViewHeight = 600;
+    
+//    tagListView.frame = CGRectMake(10, 200, self.view.frame.size.width - 20, 0);   // 高度可以不设置自动会更新
+//    tagListView.borderColor = [UIColor yellowColor];
+//    tagListView.borderWidth = 5;
+//    tagListView.tagButtonMargin = 5;
+    
+    //    tagListView.tagClass = [UIButton class];
+//    tagListView.tagCornerRadius = 5;
+    //    tagListView.tagSize =CGSizeMake(80, 80);   // 如果设置此属性则规律排版
+//    tagListView.tagFont =[UIFont systemFontOfSize:17];
+    /*---------------------属性列表设置----------------------------*/
+    [self.tagListArr enumerateObjectsUsingBlock:^(IJSYiTagsListModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        // 设置标签背景色
+        if (idx == 0)
+        {
+            tagListView.tagBackgroundColor = [UIColor redColor];
+        }
+        [tagListView addTag:obj.themeName];
+        
+    }];
+    [self.scrollView addSubview:tagListView];
+
+    // 点击标签，就会调用,点击标签，删除标签
+    __weak typeof (self) weakSelf = self;
+    __block typeof (tagListView) weaktagListView = tagListView;
+    /// 点击方法
+    tagListView.clickTagBlock = ^(NSString *tag){
+        [weaktagListView deleteTag:tag];  // 删除
+        
+        IJSTagListView *selectList =[[IJSTagListView alloc]initWithFrame:CGRectMake(10, 20,  self.view.bounds.size.width -20, 0)];
+        if (self.lastTagStrng)
+        {
+            [selectList deleteTag:self.lastTagStrng];
+        }
+        selectList.tagColor = [UIColor whiteColor];
+        selectList.tagBackgroundColor =[UIColor greenColor];
+        selectList.tagFont = [UIFont systemFontOfSize:15];
+        [selectList addTag:tag];
+        [weakSelf.scrollView addSubview:selectList];
+        self.lastTagStrng = tag;
+    };
+    
+}
+#pragma mark -----------------------taglist delegate-  可以不写-----------------------------
+-(void)didTapCurrentTagWith:(IJSTagListView *)view currentButton:(UIButton *)currentButton currentTagText:(NSString *)text
+{
+    //    NSLog(@"---tap-------%@",text);
+}
+-(void)movingCurrentTagWith:(IJSTagListView *)view currentButton:(UIButton *)currentButton currentTagText:(NSString *)text
+{
+    //    NSLog(@"---moving-----------%@",text);
+}
+
+-(void)endMoveCurrentTagWith:(IJSTagListView *)view currentButton:(UIButton *)currentButton currentTagText:(NSString *)text
+{
+    //    NSLog(@"------end-------%@",text);
+}
+
+```
+
+<hr>
+
+后续实用的小demo 也会在此处更新欢迎关注
 
 
