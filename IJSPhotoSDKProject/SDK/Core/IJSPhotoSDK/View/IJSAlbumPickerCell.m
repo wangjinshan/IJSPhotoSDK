@@ -41,7 +41,7 @@
 {
     // 缩略图
     UIImageView *thumbImageView = [UIImageView new];
-    thumbImageView.backgroundColor = [UIColor redColor];
+    thumbImageView.backgroundColor = [UIColor whiteColor];
     thumbImageView.contentMode = UIViewContentModeScaleAspectFill;
     thumbImageView.clipsToBounds = YES;
     [self.contentView addSubview:thumbImageView];

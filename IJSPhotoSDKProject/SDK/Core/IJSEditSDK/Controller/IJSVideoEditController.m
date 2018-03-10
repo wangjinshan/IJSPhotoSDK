@@ -152,14 +152,23 @@
     self.placeholderToolView = placeholderToolView;
 
     // 导航条
-    IJSImageNavigationView *navigationgView;
-    if (IJSGiPhoneX)
+    CGFloat top;
+    if ([UIApplication sharedApplication].statusBarHidden)
     {
-        navigationgView =[[IJSImageNavigationView alloc]initWithFrame:CGRectMake(0, IJSGStatusBarHeight, JSScreenWidth, ToolBarMarginBottom)];
+        top = 0;
     }
     else
     {
-        navigationgView =[[IJSImageNavigationView alloc]initWithFrame:CGRectMake(0, 0, JSScreenWidth, ToolBarMarginBottom)];
+        top = IJSGStatusBarHeight;
+    }
+    IJSImageNavigationView *navigationgView;
+    if (IJSGiPhoneX)
+    {
+        navigationgView =[[IJSImageNavigationView alloc]initWithFrame:CGRectMake(0, top, JSScreenWidth, IJSGNavigationBarHeight)];
+    }
+    else
+    {
+        navigationgView =[[IJSImageNavigationView alloc]initWithFrame:CGRectMake(0, top, JSScreenWidth, IJSGNavigationBarHeight)];
     }
 //    __weak typeof (self) weakSelf = self;
 //    navigationgView.cancleBlock = ^{
@@ -407,13 +416,22 @@
 {
     if (_videoDrawView == nil)
     {
-        if (IJSGiPhoneX)
+        CGFloat top;
+        if ([UIApplication sharedApplication].statusBarHidden)
         {
-            _videoDrawView = [[IJSVideoDrawingView alloc] initWithFrame:CGRectMake(0, IJSGStatusBarAndNavigationBarHeight, JSScreenWidth, JSScreenHeight - IJSGStatusBarAndNavigationBarHeight -IJSGTabbarSafeBottomMargin - ToolBarMarginBottom) drawingViewSize:CGSizeMake(self.playView.js_width, self.playView.js_height)];
+            top = IJSGNavigationBarHeight;
         }
         else
         {
-            _videoDrawView = [[IJSVideoDrawingView alloc] initWithFrame:CGRectMake(0, IJSGNavigationBarHeight, JSScreenWidth, JSScreenHeight - IJSGNavigationBarHeight  - ToolBarMarginBottom) drawingViewSize:CGSizeMake(self.playView.js_width, self.playView.js_height)];
+            top = IJSGStatusBarAndNavigationBarHeight;
+        }
+        if (IJSGiPhoneX)
+        {
+            _videoDrawView = [[IJSVideoDrawingView alloc] initWithFrame:CGRectMake(0, top, JSScreenWidth, JSScreenHeight - IJSGStatusBarAndNavigationBarHeight -IJSGTabbarSafeBottomMargin - ToolBarMarginBottom) drawingViewSize:CGSizeMake(self.playView.js_width, self.playView.js_height)];
+        }
+        else
+        {
+            _videoDrawView = [[IJSVideoDrawingView alloc] initWithFrame:CGRectMake(0, top, JSScreenWidth, JSScreenHeight - IJSGNavigationBarHeight  - ToolBarMarginBottom) drawingViewSize:CGSizeMake(self.playView.js_width, self.playView.js_height)];
         }
 
         _videoDrawView.controller = self;

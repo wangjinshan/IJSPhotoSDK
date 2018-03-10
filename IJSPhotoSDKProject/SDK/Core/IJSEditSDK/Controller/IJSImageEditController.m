@@ -228,7 +228,7 @@
         {
             weakSelf.placeholderToolView.frame = CGRectMake(0, JSScreenHeight - ToolBarMarginBottom - IJSImageMosaicButtonHeight, JSScreenWidth, IJSImageMosaicButtonHeight);
         }
-        weakSelf.mosaicToolView.hidden = NO;
+        weakSelf.mosaicToolView.hidden = button.selected;
         [weakSelf _drawingViewSubViewUserInteractionEnabled:nil state:NO];
     };
     // 裁剪
@@ -286,14 +286,23 @@
     self.drawingView.userInteractionEnabled = YES;
 
     // 导航条
-    IJSImageNavigationView *navigationView;
-    if (IJSGiPhoneX)
+    CGFloat top;
+    if ([UIApplication sharedApplication].statusBarHidden)
     {
-        navigationView = [[IJSImageNavigationView alloc] initWithFrame:CGRectMake(0, IJSGStatusBarHeight, JSScreenWidth, IJSINavigationHeight)];
+        top = 0;
     }
     else
     {
-        navigationView = [[IJSImageNavigationView alloc] initWithFrame:CGRectMake(0, 0, JSScreenWidth, IJSINavigationHeight)];
+        top = IJSGStatusBarHeight;
+    }
+    IJSImageNavigationView *navigationView;
+    if (IJSGiPhoneX)
+    {
+        navigationView =[[IJSImageNavigationView alloc]initWithFrame:CGRectMake(0, top, JSScreenWidth, IJSGNavigationBarHeight)];
+    }
+    else
+    {
+        navigationView =[[IJSImageNavigationView alloc]initWithFrame:CGRectMake(0, top, JSScreenWidth, IJSGNavigationBarHeight)];
     }
     navigationView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:navigationView];
@@ -472,6 +481,10 @@
 
         _imputTextView.textCallBackBlock = ^(UITextView *textView) {
             weakSelf.exportTextView.textView = textView;
+        };
+        // 取消时候
+        _imputTextView.textCancelCallBack = ^{
+             [weakSelf _hiddenPlaceholderToolView:YES];
         };
     }
     return _imputTextView;

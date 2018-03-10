@@ -110,6 +110,13 @@ typedef NS_ENUM(NSUInteger, IJSPExportSourceType) {
  */
 @property (nonatomic, assign) NSInteger maxVideoCut; // 最大裁剪尺寸
 
+/**
+ 隐藏选择原始图选择按钮,默认是yes隐藏
+ */
+@property(nonatomic,assign) BOOL hiddenOriginalButton;
+
+
+
 /*-----------------------------------编辑使用的贴图数组-------------------------------------------------------*/
 @property (nonatomic, strong) NSMutableArray<IJSMapViewModel *> *mapImageArr; // 贴图数据
 

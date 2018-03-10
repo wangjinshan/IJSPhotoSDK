@@ -34,6 +34,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
 @property (nonatomic, assign) BOOL isPlaying;                     //正在播放
 @property (nonatomic, weak) UIButton *editButton;                 /* 编辑 */
 @property (nonatomic, weak) UIButton *finishButton;               /* 完成 */
+@property(nonatomic,weak) UIButton *originalButton;  // 选择原图
 @property (nonatomic, weak) UICollectionView *showCollectioView;  /* collection */
 @property (nonatomic, strong) NSMutableArray *imageDataArr;       /* 解析的数据 */
 @property (nonatomic, weak) UIView *toolBarView;                  /* 工具条 */
@@ -49,6 +50,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
 @property (nonatomic, strong) NSTimer *listenPlayerTimer;         // 监听的时间
 @property (nonatomic, assign) CGFloat videoDuraing;               // 视频长度
 @property (nonatomic, strong) NSMutableArray *mapDataArr; // 贴图数据
+
 @end
 
 @implementation IJSPhotoPreviewController
@@ -251,12 +253,14 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
         // 计算当前的下标值
         NSInteger index = targetContentOffset->x / JSScreenWidth;
         IJSAssetModel *model = self.allAssetModelArr[index];
-        if (model.type == JSAssetModelMediaTypeVideo)
+        if (model.type == JSAssetModelMediaTypeVideo || model.type == JSAssetModelMediaTypeAudio)
         {
             self.rightButton.hidden = YES;
+            self.originalButton.hidden = YES;
         }
         else
         {
+            self.originalButton.hidden = NO;
             self.rightButton.hidden = NO;
         }
         NSArray *cellArr = [self.selectedCollection visibleCells];
@@ -497,6 +501,41 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     self.finishButton = finishButton;
     [self _resetToorBarStatus];
     
+    // 原始图
+    UIButton *originalButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    originalButton.frame = CGRectMake(0, 0, 70, 30);
+    originalButton.js_centerX = JSScreenWidth * 0.5;
+    originalButton.js_centerY = toolBarView.js_height * 0.5;
+    [originalButton setTitle:[NSBundle localizedStringForKey:@"Full image"] forState:UIControlStateNormal];
+    originalButton.titleLabel.font = [UIFont systemFontOfSize:14];
+    [originalButton setImage:[IJSFImageGet loadImageWithBundle:@"JSPhotoSDK" subFile:@"" grandson:@"" imageName:@"circular_icon" imageType:@"png"] forState:UIControlStateNormal];
+    [originalButton setImage:[IJSFImageGet loadImageWithBundle:@"JSPhotoSDK" subFile:@"" grandson:@"" imageName:@"circular_selected_icon" imageType:@"png"] forState:UIControlStateSelected];
+    [originalButton addTarget:self action:@selector(_selectedOriginImage:) forControlEvents:UIControlEventTouchUpInside];
+    [toolBarView addSubview:originalButton];
+    self.originalButton =originalButton;
+    originalButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    originalButton.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 30);
+    originalButton.titleEdgeInsets = UIEdgeInsetsMake(0, -30, 0, 0);
+    if (!self.isPreviewButton)
+    {
+        IJSAssetModel *model = self.allAssetModelArr[self.pushSelectedIndex];
+        if (model.type == JSAssetModelMediaTypeVideo || model.type== JSAssetModelMediaTypeAudio)
+        {
+            originalButton.hidden = YES;
+        }
+    }
+    if (vc.hiddenOriginalButton)
+    {
+        originalButton.hidden = YES;
+    }
+    if (vc.allowPickingOriginalPhoto)
+    {
+        originalButton.selected = YES;
+    }
+    else
+    {
+         originalButton.selected = NO;
+    }
     // 左按钮
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[NSBundle localizedStringForKey:@"Back"] style:UIBarButtonItemStylePlain target:self action:@selector(callBackButtonAction)];
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
@@ -784,6 +823,9 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     __weak typeof (self) weakSelf = self;
     if (isDegraded)
     {
+        IJSImagePickerController *vc = (IJSImagePickerController *)self.navigationController;
+        NSString *title = [NSString stringWithFormat:@"%@", [NSBundle localizedStringForKey:@"Do not get a high definition diagram"]];
+        [vc showAlertWithTitle:title];
         return; // 获取不到高清图
     }
     if (photo)
@@ -849,7 +891,13 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
     }
     return model;
 }
-
+#pragma mark -----------------------允许选择原图------------------------------
+-(void)_selectedOriginImage:(UIButton *)button
+{
+   IJSImagePickerController *vc = (IJSImagePickerController *)self.navigationController;
+    vc.allowPickingOriginalPhoto = !button.selected;
+    button.selected = !button.selected;
+}
 #pragma mark 完成选择
 - (void)_finishSelectImageDisMiss
 {
@@ -1150,7 +1198,7 @@ static NSString *const IJSSelectedCellID = @"IJSSelectedCell";
             IJSAssetModel *model = self.previewAssetModelArr[index];
             [self.selectedModels addObject:model];
             [self.selectedCollection reloadData];
-            
+
             // 增加属性并替换掉
             model.isSelectedModel = YES;
             model.cellButtonNnumber = self.selectedModels.count;

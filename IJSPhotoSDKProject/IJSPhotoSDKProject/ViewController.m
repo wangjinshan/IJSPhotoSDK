@@ -42,14 +42,18 @@ static NSString *const cellID = @"cellID";
     [super viewDidLoad];
     self.view.backgroundColor =[UIColor whiteColor];
     [self createTableViewUI];
-    [self.view bringSubviewToFront:self.pushActionBt];
-    //    NSString *str = [[NSBundle mainBundle] pathForResource:@"01" ofType:@"mp4"];
-    //    NSURL *url = [NSURL fileURLWithPath:str];
-    //    [[IJSImageManager shareManager] saveVideoIntoSystemAlbumFromVideoUrl:url completion:^(id assetCollection, NSError *error, BOOL isExistedOrIsSuccess) {
-    //        NSLog(@"----%@",error);
-    //    }];
-    
+//    [self.view bringSubviewToFront:self.pushActionBt];
+//
+//        NSString *str = [[NSBundle mainBundle] pathForResource:@"01" ofType:@"mp4"];
+//        NSURL *url = [NSURL fileURLWithPath:str];
+//        [[IJSImageManager shareManager] saveVideoIntoSystemAlbumFromVideoUrl:url completion:^(id assetCollection, NSError *error, BOOL isExistedOrIsSuccess) {
+//            NSLog(@"----%@",error);
+//        }];
+//    [self testMemory];
+
+//    [UIColor redColor];
 }
+
 
 #pragma mark 懒加载区域
 - (NSMutableArray *)imageArr
@@ -108,6 +112,8 @@ static NSString *const cellID = @"cellID";
 //    imageVc.allowPickingVideo = YES;   // 不能选视频
 //    imageVc.allowPickingImage = NO;
 //    imageVc.isHiddenEdit = NO;
+    imageVc.allowPickingOriginalPhoto = YES;
+    imageVc.hiddenOriginalButton = NO;
     //-----------------------------------------------------------------
     // 获取数据的方法
     [imageVc loadTheSelectedData:^(NSArray<UIImage *> *photos, NSArray *avPlayers, NSArray *assets, NSArray<NSDictionary *> *infos, IJSPExportSourceType sourceType,NSError *error) {
@@ -168,18 +174,37 @@ static NSString *const cellID = @"cellID";
 
 -(void)testMemory
 {
+
     [[IJSImageManager shareManager] getAllAlbumsContentImage:YES contentVideo:YES completion:^(NSArray<IJSAlbumModel *> *models) {
         
-        for (IJSAlbumModel *model in models)
-        {
+        IJSAlbumModel *model = models.firstObject;
+        
+//        for (IJSAlbumModel *model in models)
+//        {
+        int i = 0;
             for (PHAsset *asset in model.result)
             {
-                [[IJSImageManager shareManager] getOriginalPhotoWithAsset:asset completion:^(UIImage *photo, NSDictionary *info) {
-                    self.backImageView.image = photo;
+                NSLog(@"-------------%d",i);
+                if (i > 9)
+                {
+                    break;
+                }
+//                [[IJSImageManager shareManager] getOriginalPhotoWithAsset:asset completion:^(UIImage *photo, NSDictionary *info) {
+//                    NSLog(@"------ww----------%@",photo);
+//                    self.backImageView.image = photo;
+//
+//                }];
+                
+                [[IJSImageManager shareManager]getPhotoWithAsset:asset completion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
+                    
+                    NSLog(@"------ww----------%@",photo);
                 }];
+                
+                     i ++;
             }
-        }
+//        }
     }];
+    
 }
 
 - (IBAction)cutTest:(UIButton *)sender

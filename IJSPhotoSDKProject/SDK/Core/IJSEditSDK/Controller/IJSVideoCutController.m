@@ -117,14 +117,23 @@
     self.playButton = playButton;
 
     // 导航条
-    IJSImageNavigationView *navigationView;
-    if (IJSGiPhoneX)
+    CGFloat top;
+    if ([UIApplication sharedApplication].statusBarHidden)
     {
-        navigationView = [[IJSImageNavigationView alloc] initWithFrame:CGRectMake(0, IJSGStatusBarHeight, JSScreenWidth, IJSVideoEditNavigationHeight)];
+        top = 0;
     }
     else
     {
-      navigationView = [[IJSImageNavigationView alloc] initWithFrame:CGRectMake(0, 3, JSScreenWidth, IJSVideoEditNavigationHeight)];
+        top = IJSGStatusBarHeight;
+    }
+    IJSImageNavigationView *navigationView;
+    if (IJSGiPhoneX)
+    {
+        navigationView =[[IJSImageNavigationView alloc]initWithFrame:CGRectMake(0, top, JSScreenWidth, IJSGNavigationBarHeight)];
+    }
+    else
+    {
+        navigationView =[[IJSImageNavigationView alloc]initWithFrame:CGRectMake(0, top, JSScreenWidth, IJSGNavigationBarHeight)];
     }
     navigationView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:navigationView];

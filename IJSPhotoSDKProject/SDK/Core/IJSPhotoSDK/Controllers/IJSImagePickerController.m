@@ -250,6 +250,11 @@
     _allowPickingOriginalPhoto = allowPickingOriginalPhoto;
     [IJSImageManager shareManager].allowPickingOriginalPhoto = allowPickingOriginalPhoto;
 }
+/// 是否隐藏原图按钮
+-(void)setHiddenOriginalButton:(BOOL)hiddenOriginalButton
+{
+    _hiddenOriginalButton = hiddenOriginalButton;
+}
 /// 贴图数组
 - (void)setMapImageArr:(NSMutableArray<IJSMapViewModel *> *)mapImageArr
 {
@@ -295,6 +300,7 @@
     _isHiddenEdit = NO;
     _sortAscendingByModificationDate = YES; //时间排序
     _networkAccessAllowed = NO;
+    _hiddenOriginalButton = YES;
 }
 // 默认的外观，你可以在这个方法后重置
 - (void)_createrUI

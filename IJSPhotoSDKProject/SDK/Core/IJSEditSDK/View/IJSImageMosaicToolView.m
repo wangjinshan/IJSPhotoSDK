@@ -67,7 +67,7 @@
     {
         self.typeOneCallBack(button);
     }
-    button.selected = !button.selected;
+    button.selected = YES;   // 暂时固定死
 }
 
 - (void)typeTwoAction:(UIButton *)button
@@ -77,7 +77,7 @@
     {
         self.typeTwoCallBack(button);
     }
-    button.selected = !button.selected;
+    button.selected = YES;   // 暂时固定死
 }
 - (void)cancleLastAction:(UIButton *)button
 {

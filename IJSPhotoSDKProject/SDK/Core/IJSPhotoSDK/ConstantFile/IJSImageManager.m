@@ -43,6 +43,7 @@ static CGSize assetGridThumbnailSize; //预览照片的大小
         {
             JSScreenScale = 1.5;
         }
+        manager.photoPreviewMaxWidth = 6000;
     });
     return manager;
 }
