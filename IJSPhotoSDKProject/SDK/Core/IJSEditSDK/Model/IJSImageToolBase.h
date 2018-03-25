@@ -46,6 +46,9 @@
 @property (nonatomic, assign) CGSize originalImageSize;   // 原始图片的大小
 @property (nonatomic, weak) UIImageView *drawingView;     // 绘制的背景
 @property (nonatomic, strong) NSMutableArray *allLineArr; // 所有的线
+@property(nonatomic,assign) CGFloat panWidth;  // 绘制的宽度
+@property(nonatomic,strong) UIColor *panColor;  // 绘制的颜色
+@property(nonatomic,strong) UIImage *backImage;  // 需要设置的背景图片
 
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture; // 画笔
 @property (nonatomic, strong) UITapGestureRecognizer *tapGesture; //轻点

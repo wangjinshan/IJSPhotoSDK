@@ -203,6 +203,7 @@ static NSString *const CellID = @"pickerID";
 #pragma mark - cell的代理方法
 - (void)didClickCellButtonWithButton:(UIButton *)button  ButtonState:(BOOL)state buttonIndex:(NSInteger)currentIndex
 {
+     __weak typeof (self) weakSelf = self;
     IJSAssetModel *currentModel = self.assetModelArr[currentIndex];
     IJSImagePickerController *vc = (IJSImagePickerController *) self.navigationController;
     if (state) // 被选中
@@ -217,7 +218,7 @@ static NSString *const CellID = @"pickerID";
             currentModel.cellButtonNnumber = currentModel.didClickModelArr.count; // 给button的赋值
             if (vc.selectedModels.count == vc.maxImagesCount)
             {
-              [self.showCollectioView reloadData];
+                [self _reloadAllCellWithNoAnimation];
             }
         }
         else // 选中超标
@@ -230,9 +231,9 @@ static NSString *const CellID = @"pickerID";
     {
         currentModel.isSelectedModel = NO;
         currentModel.didMask = NO;
-        
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-           [self.showCollectioView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:currentModel.onlyOneTag inSection:0]]];
+
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf _reloadCellNoAniomation:currentModel];
         });
         
         NSArray *selectedModels = [NSArray arrayWithArray:vc.selectedModels]; // 处理用户回调数据
@@ -254,20 +255,16 @@ static NSString *const CellID = @"pickerID";
         // 刷新返回之前的没有蒙版的状态
         if (vc.selectedModels.count == vc.maxImagesCount - 1)
         {
-            [self.showCollectioView reloadData];
+            [self _reloadAllCellWithNoAnimation];
         }
     }
     [self _resetToorBarStatus]; // 重置 toor
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [UIView animateWithDuration:0 animations:^{
-            [self.showCollectioView performBatchUpdates:^{
-                for (IJSAssetModel *tempModel in self.selectedModels)
-                {
-                    [self.showCollectioView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:tempModel.onlyOneTag inSection:0]]];
-                }
-            } completion:nil];
-        }];
+        for (IJSAssetModel *tempModel in weakSelf.selectedModels)
+        {
+            [weakSelf _reloadCellNoAniomation:tempModel];
+        }
     });
     // 刷新视频不可选中
     [self _maskVideoType];
@@ -278,8 +275,29 @@ static NSString *const CellID = @"pickerID";
     [self.assetModelArr enumerateObjectsUsingBlock:^(IJSAssetModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if (obj.type == JSAssetModelMediaTypeVideo || obj.type == JSAssetModelMediaTypeAudio)
         {
-             [self.showCollectioView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:obj.onlyOneTag inSection:0]]];
+            [self _reloadCellNoAniomation:obj];
         }
+    }];
+}
+/// 无动画的刷新
+-(void)_reloadCellNoAniomation:(IJSAssetModel *)model
+{
+    [UIView animateWithDuration:0 animations:^{
+        [self.showCollectioView performBatchUpdates:^{
+                [self.showCollectioView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:model.onlyOneTag inSection:0]]];
+        } completion:nil];
+    }];
+}
+///  刷新整个的cell
+-(void)_reloadAllCellWithNoAnimation
+{
+    [UIView setAnimationsEnabled:NO];
+    [UIView animateWithDuration:0 animations:^{
+        [self.showCollectioView performBatchUpdates:^{
+            [self.showCollectioView reloadData];
+        } completion:^(BOOL finished) {
+            [UIView setAnimationsEnabled:YES];
+        }];
     }];
 }
 

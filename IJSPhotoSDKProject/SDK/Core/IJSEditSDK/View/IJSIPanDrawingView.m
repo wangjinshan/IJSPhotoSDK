@@ -41,10 +41,6 @@
     self.drawingView.backgroundColor = [UIColor clearColor];
 }
 
-- (void)setEditorController:(IJSImageEditController *)editorController
-{
-    _editorController = editorController;
-}
 #pragma mark 添加手势
 - (void)_addGestureRecognizer
 {
@@ -89,9 +85,9 @@
     if (sender.state == UIGestureRecognizerStateBegan)                          //一个手势已经开始但尚未改变或者完成时
     {
         // 初始化一个UIBezierPath对象, 把起始点存储到UIBezierPath对象中, 用来存储所有的轨迹点
-        IJSIPath *path = [IJSIPath pathToPoint:currentDraggingPosition pathWidth:self.editorController.panWidth != 0 ? self.editorController.panWidth : MAX(1, 4)];
+        IJSIPath *path = [IJSIPath pathToPoint:currentDraggingPosition pathWidth:self.panWidth != 0 ? self.panWidth : MAX(1, 4)];
 
-        path.pathColor = self.editorController.panColor != nil ? self.editorController.panColor : [UIColor redColor];
+        path.pathColor = self.panColor != nil ? self.panColor : [UIColor redColor];
         path.shape.strokeColor = [UIColor greenColor].CGColor; //代表设置它的边框色
         [self.allLineArr addObject:path];                      //添加路线
     }
@@ -171,8 +167,8 @@
     {
         self.originalImageSize = CGSizeMake(JSScreenWidth, JSScreenHeight);
     }
-    UIGraphicsBeginImageContextWithOptions(self.originalImageSize, NO, self.editorController.backImageView.image.scale);
-    [self.editorController.backImageView.image drawAtPoint:CGPointZero];
+    UIGraphicsBeginImageContextWithOptions(self.originalImageSize, NO, self.backImage.scale);
+    [self.backImage drawAtPoint:CGPointZero];
     [self.drawingView.image drawInRect:CGRectMake(0, 0, self.originalImageSize.width, self.originalImageSize.height)];
     UIImage *tmp = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();

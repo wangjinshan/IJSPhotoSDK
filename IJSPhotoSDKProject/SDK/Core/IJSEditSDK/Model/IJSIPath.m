@@ -15,6 +15,7 @@
 @end
 
 @implementation IJSIPath
+
 + (instancetype)pathToPoint:(CGPoint)beginPoint pathWidth:(CGFloat)pathWidth
 {
     UIBezierPath *bezierPath = [UIBezierPath bezierPath]; // 线的路径

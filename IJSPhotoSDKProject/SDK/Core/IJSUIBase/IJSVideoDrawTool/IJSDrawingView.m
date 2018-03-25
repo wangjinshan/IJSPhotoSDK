@@ -41,6 +41,7 @@
         path.lineCapStyle = kCGLineCapRound;
         path.lineJoinStyle = kCGLineJoinRound;
         [path moveToPoint:currentPoint];
+        
         IJSDrawingModel *model = [IJSDrawingModel new];
         model.path = path;
         if (self.pathWidth == 0)
@@ -61,7 +62,7 @@
         {
             self.isDrawing();
         }
-        [[((IJSDrawingModel *) self.allPathArr.lastObject) path] addLineToPoint:currentPoint];
+        [((IJSDrawingModel *) self.allPathArr.lastObject).path addLineToPoint:currentPoint];
         [self setNeedsDisplay];
     }
     else if (pan.state == UIGestureRecognizerStateEnded)
@@ -102,7 +103,9 @@
         UIGraphicsEndImageContext();
         dispatch_async(dispatch_get_main_queue(), ^{
             if (finishCallBack)
+            {
                 finishCallBack(image);
+            }
         });
     });
 }

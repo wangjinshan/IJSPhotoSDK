@@ -39,7 +39,7 @@
 {
     [super drawRect:rect];
     CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetLineCap(context, kCGLineCapRound);
+    CGContextSetLineCap(context, kCGLineCapRound); //设置线条两端的样式为圆角
     [self.nowImage drawInRect:rect];
 }
 
@@ -95,7 +95,7 @@
 
     // 结束绘制
     UIGraphicsEndImageContext();
-    [self setNeedsDisplay];
+    [self setNeedsDisplay];  // 将内容绘制到 self.view上
 }
 #pragma mark 清楚最后一条线
 - (void)cleanLastDrawPath

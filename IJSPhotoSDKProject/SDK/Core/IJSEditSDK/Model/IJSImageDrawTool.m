@@ -15,6 +15,11 @@
 @end
 
 @implementation IJSImageDrawTool
+{
+    CGFloat _panWidth;
+    UIColor *_panColor;
+    UIImage *_backImage;
+}
 #pragma mark 重写父类的方法
 - (instancetype)initToolWithViewController:(IJSImageEditController *)controller
 {
@@ -63,7 +68,10 @@
     {
         IJSIPanDrawingView *panDrawingView = [[IJSIPanDrawingView alloc] initWithFrame:self.editorController.backImageView.bounds];
         panDrawingView.center = self.drawingView.superview.center;
-        panDrawingView.editorController = self.editorController;
+        panDrawingView.backImage = _backImage; //self.editorController.backImageView.image;
+        panDrawingView.panWidth = _panWidth; //self.editorController.panWidth;
+        panDrawingView.panColor = _panColor; //self.editorController.panColor;
+     
         [self.drawingView addSubview:panDrawingView];
         _panDrawingView = panDrawingView;
         __weak typeof(self) weakSelf = self;
@@ -99,4 +107,34 @@
 }
 /// 绘制
 - (void)drawLine {}
+#pragma mark -----------------------重写set方法------------------------------
+//@property(nonatomic,assign) CGFloat panWidth;  // 绘制的宽度
+//@property(nonatomic,strong) UIColor *panColor;  // 绘制的颜色
+//@property(nonatomic,strong) UIImage *backImage;  // 需要设置的背景图片
+
+-(void)setPanWidth:(CGFloat)panWidth
+{
+    _panWidth = panWidth;
+    _panDrawingView.panWidth = panWidth;
+}
+
+-(void)setPanColor:(UIColor *)panColor
+{
+    _panColor = panColor;
+    _panDrawingView.panColor = panColor;
+}
+-(void)setBackImage:(UIImage *)backImage
+{
+    _backImage= backImage;
+    _panDrawingView.backImage = backImage;
+}
+
+
+
+
+
+
+
+
+
 @end

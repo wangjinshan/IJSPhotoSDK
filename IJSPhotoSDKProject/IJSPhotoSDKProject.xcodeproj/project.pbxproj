@@ -63,25 +63,6 @@
 		74CC0B412043AF600046E9E8 /* IJSImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 74CC0AAB2043AF600046E9E8 /* IJSImageManager.m */; };
 		74CC0B422043AF600046E9E8 /* IJSAlbumModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 74CC0AAF2043AF600046E9E8 /* IJSAlbumModel.m */; };
 		74CC0B432043AF600046E9E8 /* IJSAssetModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 74CC0AB22043AF600046E9E8 /* IJSAssetModel.m */; };
-		74CC0B442043AF600046E9E8 /* IJSPreviewVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 74CC0AB52043AF600046E9E8 /* IJSPreviewVideoView.m */; };
-		74CC0B452043AF600046E9E8 /* IJSPhotoPickerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 74CC0AB62043AF600046E9E8 /* IJSPhotoPickerCell.m */; };
-		74CC0B462043AF600046E9E8 /* IJSSelectedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 74CC0AB72043AF600046E9E8 /* IJSSelectedCell.m */; };
-		74CC0B472043AF600046E9E8 /* IJSPreviewLivePhotoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 74CC0AB82043AF600046E9E8 /* IJSPreviewLivePhotoView.m */; };
-		74CC0B482043AF600046E9E8 /* IJSAlbumPickerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 74CC0AB92043AF600046E9E8 /* IJSAlbumPickerCell.m */; };
-		74CC0B492043AF600046E9E8 /* IJSPreviewImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 74CC0ABC2043AF600046E9E8 /* IJSPreviewImageCell.m */; };
-		74CC0B4A2043AF600046E9E8 /* IJSPreviewGifView.m in Sources */ = {isa = PBXBuildFile; fileRef = 74CC0AC12043AF600046E9E8 /* IJSPreviewGifView.m */; };
-		74CC0B502043AF610046E9E8 /* IJSDrawingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 74CC0AD12043AF600046E9E8 /* IJSDrawingView.m */; };
-		74CC0B512043AF610046E9E8 /* IJSDColorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 74CC0AD62043AF600046E9E8 /* IJSDColorView.m */; };
-		74CC0B522043AF610046E9E8 /* IJSDExportView.m in Sources */ = {isa = PBXBuildFile; fileRef = 74CC0AD72043AF600046E9E8 /* IJSDExportView.m */; };
-		74CC0B532043AF610046E9E8 /* IJSDrawingModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 74CC0AD82043AF600046E9E8 /* IJSDrawingModel.m */; };
-		74CC0B542043AF610046E9E8 /* IJSDToolBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 74CC0ADA2043AF600046E9E8 /* IJSDToolBarView.m */; };
-		74CC0B552043AF610046E9E8 /* IJSVideoDrawingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 74CC0ADB2043AF600046E9E8 /* IJSVideoDrawingView.m */; };
-		74CC0B562043AF610046E9E8 /* IJSDrawingController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74CC0ADC2043AF600046E9E8 /* IJSDrawingController.m */; };
-		74CC0B602043AF610046E9E8 /* IJSMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 74CC0AF22043AF600046E9E8 /* IJSMapView.m */; };
-		74CC0B612043AF610046E9E8 /* IJSMapViewMapCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 74CC0AF32043AF600046E9E8 /* IJSMapViewMapCell.m */; };
-		74CC0B622043AF610046E9E8 /* IJSMapViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 74CC0AF52043AF600046E9E8 /* IJSMapViewModel.m */; };
-		74CC0B632043AF610046E9E8 /* IJSMapViewCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 74CC0AF72043AF600046E9E8 /* IJSMapViewCollectionViewLayout.m */; };
-		74CC0B642043AF610046E9E8 /* IJSMapViewThumbCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 74CC0AFA2043AF600046E9E8 /* IJSMapViewThumbCell.m */; };
 		74CC0B652043AF610046E9E8 /* IJSCNavigationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 74CC0AFE2043AF600046E9E8 /* IJSCNavigationView.m */; };
 		74CC0B662043AF610046E9E8 /* IJSQRCodeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 74CC0B032043AF600046E9E8 /* IJSQRCodeManager.m */; };
 		74CC0B672043AF610046E9E8 /* IJSQRCodeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74CC0B062043AF600046E9E8 /* IJSQRCodeController.m */; };
@@ -92,6 +73,25 @@
 		74CC34771F06210E00118CA9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74CC34751F06210E00118CA9 /* Main.storyboard */; };
 		74CC34791F06210E00118CA9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 74CC34781F06210E00118CA9 /* Assets.xcassets */; };
 		74CC347C1F06210E00118CA9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74CC347A1F06210E00118CA9 /* LaunchScreen.storyboard */; };
+		74D423B320568097009A6D28 /* IJSPreviewImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D423AA20568096009A6D28 /* IJSPreviewImageCell.m */; };
+		74D423B420568097009A6D28 /* IJSPreviewGifView.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D423AC20568096009A6D28 /* IJSPreviewGifView.m */; };
+		74D423B520568097009A6D28 /* IJSAlbumPickerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D423AD20568096009A6D28 /* IJSAlbumPickerCell.m */; };
+		74D423B620568097009A6D28 /* IJSSelectedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D423AE20568097009A6D28 /* IJSSelectedCell.m */; };
+		74D423B720568097009A6D28 /* IJSPreviewLivePhotoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D423AF20568097009A6D28 /* IJSPreviewLivePhotoView.m */; };
+		74D423B820568097009A6D28 /* IJSPhotoPickerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D423B020568097009A6D28 /* IJSPhotoPickerCell.m */; };
+		74D423B920568097009A6D28 /* IJSPreviewVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D423B220568097009A6D28 /* IJSPreviewVideoView.m */; };
+		74D423C5205680DB009A6D28 /* IJSMapViewMapCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D423BB205680DA009A6D28 /* IJSMapViewMapCell.m */; };
+		74D423C6205680DB009A6D28 /* IJSMapViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D423BC205680DA009A6D28 /* IJSMapViewModel.m */; };
+		74D423C7205680DB009A6D28 /* IJSMapViewCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D423BF205680DA009A6D28 /* IJSMapViewCollectionViewLayout.m */; };
+		74D423C8205680DB009A6D28 /* IJSMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D423C0205680DA009A6D28 /* IJSMapView.m */; };
+		74D423C9205680DB009A6D28 /* IJSMapViewThumbCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D423C1205680DA009A6D28 /* IJSMapViewThumbCell.m */; };
+		74D423D8205680F3009A6D28 /* IJSDToolBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D423CC205680F2009A6D28 /* IJSDToolBarView.m */; };
+		74D423D9205680F3009A6D28 /* IJSDExportView.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D423CD205680F3009A6D28 /* IJSDExportView.m */; };
+		74D423DA205680F3009A6D28 /* IJSDrawingModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D423CF205680F3009A6D28 /* IJSDrawingModel.m */; };
+		74D423DB205680F3009A6D28 /* IJSDrawingController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D423D1205680F3009A6D28 /* IJSDrawingController.m */; };
+		74D423DC205680F3009A6D28 /* IJSDrawingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D423D3205680F3009A6D28 /* IJSDrawingView.m */; };
+		74D423DD205680F3009A6D28 /* IJSVideoDrawingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D423D5205680F3009A6D28 /* IJSVideoDrawingView.m */; };
+		74D423DE205680F3009A6D28 /* IJSDColorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D423D7205680F3009A6D28 /* IJSDColorView.m */; };
 		74FDCC7D1FE389AF00AE93D8 /* 2002.mov in Resources */ = {isa = PBXBuildFile; fileRef = 74FDCC7C1FE389AF00AE93D8 /* 2002.mov */; };
 /* End PBXBuildFile section */
 
@@ -213,45 +213,6 @@
 		74CC0AB02043AF600046E9E8 /* IJSAssetModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSAssetModel.h; sourceTree = "<group>"; };
 		74CC0AB12043AF600046E9E8 /* IJSAlbumModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSAlbumModel.h; sourceTree = "<group>"; };
 		74CC0AB22043AF600046E9E8 /* IJSAssetModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSAssetModel.m; sourceTree = "<group>"; };
-		74CC0AB42043AF600046E9E8 /* IJSPreviewImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSPreviewImageCell.h; sourceTree = "<group>"; };
-		74CC0AB52043AF600046E9E8 /* IJSPreviewVideoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSPreviewVideoView.m; sourceTree = "<group>"; };
-		74CC0AB62043AF600046E9E8 /* IJSPhotoPickerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSPhotoPickerCell.m; sourceTree = "<group>"; };
-		74CC0AB72043AF600046E9E8 /* IJSSelectedCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSSelectedCell.m; sourceTree = "<group>"; };
-		74CC0AB82043AF600046E9E8 /* IJSPreviewLivePhotoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSPreviewLivePhotoView.m; sourceTree = "<group>"; };
-		74CC0AB92043AF600046E9E8 /* IJSAlbumPickerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSAlbumPickerCell.m; sourceTree = "<group>"; };
-		74CC0ABA2043AF600046E9E8 /* IJSPreviewGifView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSPreviewGifView.h; sourceTree = "<group>"; };
-		74CC0ABB2043AF600046E9E8 /* IJSPreviewVideoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSPreviewVideoView.h; sourceTree = "<group>"; };
-		74CC0ABC2043AF600046E9E8 /* IJSPreviewImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSPreviewImageCell.m; sourceTree = "<group>"; };
-		74CC0ABD2043AF600046E9E8 /* IJSPhotoPickerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSPhotoPickerCell.h; sourceTree = "<group>"; };
-		74CC0ABE2043AF600046E9E8 /* IJSAlbumPickerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSAlbumPickerCell.h; sourceTree = "<group>"; };
-		74CC0ABF2043AF600046E9E8 /* IJSPreviewLivePhotoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSPreviewLivePhotoView.h; sourceTree = "<group>"; };
-		74CC0AC02043AF600046E9E8 /* IJSSelectedCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSSelectedCell.h; sourceTree = "<group>"; };
-		74CC0AC12043AF600046E9E8 /* IJSPreviewGifView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSPreviewGifView.m; sourceTree = "<group>"; };
-		74CC0ACF2043AF600046E9E8 /* IJSDExportView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSDExportView.h; sourceTree = "<group>"; };
-		74CC0AD02043AF600046E9E8 /* IJSDColorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSDColorView.h; sourceTree = "<group>"; };
-		74CC0AD12043AF600046E9E8 /* IJSDrawingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSDrawingView.m; sourceTree = "<group>"; };
-		74CC0AD22043AF600046E9E8 /* IJSDrawingModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSDrawingModel.h; sourceTree = "<group>"; };
-		74CC0AD32043AF600046E9E8 /* IJSDToolBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSDToolBarView.h; sourceTree = "<group>"; };
-		74CC0AD42043AF600046E9E8 /* IJSDrawingController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSDrawingController.h; sourceTree = "<group>"; };
-		74CC0AD52043AF600046E9E8 /* IJSVideoDrawingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSVideoDrawingView.h; sourceTree = "<group>"; };
-		74CC0AD62043AF600046E9E8 /* IJSDColorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSDColorView.m; sourceTree = "<group>"; };
-		74CC0AD72043AF600046E9E8 /* IJSDExportView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSDExportView.m; sourceTree = "<group>"; };
-		74CC0AD82043AF600046E9E8 /* IJSDrawingModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSDrawingModel.m; sourceTree = "<group>"; };
-		74CC0AD92043AF600046E9E8 /* IJSDrawingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSDrawingView.h; sourceTree = "<group>"; };
-		74CC0ADA2043AF600046E9E8 /* IJSDToolBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSDToolBarView.m; sourceTree = "<group>"; };
-		74CC0ADB2043AF600046E9E8 /* IJSVideoDrawingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSVideoDrawingView.m; sourceTree = "<group>"; };
-		74CC0ADC2043AF600046E9E8 /* IJSDrawingController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSDrawingController.m; sourceTree = "<group>"; };
-		74CC0AF22043AF600046E9E8 /* IJSMapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSMapView.m; sourceTree = "<group>"; };
-		74CC0AF32043AF600046E9E8 /* IJSMapViewMapCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSMapViewMapCell.m; sourceTree = "<group>"; };
-		74CC0AF42043AF600046E9E8 /* IJSMapViewThumbCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSMapViewThumbCell.h; sourceTree = "<group>"; };
-		74CC0AF52043AF600046E9E8 /* IJSMapViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSMapViewModel.m; sourceTree = "<group>"; };
-		74CC0AF62043AF600046E9E8 /* IJSMapViewUIMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSMapViewUIMacro.h; sourceTree = "<group>"; };
-		74CC0AF72043AF600046E9E8 /* IJSMapViewCollectionViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSMapViewCollectionViewLayout.m; sourceTree = "<group>"; };
-		74CC0AF82043AF600046E9E8 /* IJSMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSMapView.h; sourceTree = "<group>"; };
-		74CC0AF92043AF600046E9E8 /* IJSMapViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSMapViewModel.h; sourceTree = "<group>"; };
-		74CC0AFA2043AF600046E9E8 /* IJSMapViewThumbCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSMapViewThumbCell.m; sourceTree = "<group>"; };
-		74CC0AFB2043AF600046E9E8 /* IJSMapViewMapCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSMapViewMapCell.h; sourceTree = "<group>"; };
-		74CC0AFC2043AF600046E9E8 /* IJSMapViewCollectionViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSMapViewCollectionViewLayout.h; sourceTree = "<group>"; };
 		74CC0AFE2043AF600046E9E8 /* IJSCNavigationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSCNavigationView.m; sourceTree = "<group>"; };
 		74CC0AFF2043AF600046E9E8 /* IJSCNavigationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSCNavigationView.h; sourceTree = "<group>"; };
 		74CC0B022043AF600046E9E8 /* IJSQRCodeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSQRCodeManager.h; sourceTree = "<group>"; };
@@ -271,6 +232,45 @@
 		74CC347D1F06210E00118CA9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		74CC34D31F0625CD00118CA9 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		74CC34D41F0625CD00118CA9 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		74D423A520568096009A6D28 /* IJSPreviewLivePhotoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSPreviewLivePhotoView.h; sourceTree = "<group>"; };
+		74D423A620568096009A6D28 /* IJSSelectedCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSSelectedCell.h; sourceTree = "<group>"; };
+		74D423A720568096009A6D28 /* IJSPreviewImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSPreviewImageCell.h; sourceTree = "<group>"; };
+		74D423A820568096009A6D28 /* IJSPreviewGifView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSPreviewGifView.h; sourceTree = "<group>"; };
+		74D423A920568096009A6D28 /* IJSPreviewVideoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSPreviewVideoView.h; sourceTree = "<group>"; };
+		74D423AA20568096009A6D28 /* IJSPreviewImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSPreviewImageCell.m; sourceTree = "<group>"; };
+		74D423AB20568096009A6D28 /* IJSPhotoPickerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSPhotoPickerCell.h; sourceTree = "<group>"; };
+		74D423AC20568096009A6D28 /* IJSPreviewGifView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSPreviewGifView.m; sourceTree = "<group>"; };
+		74D423AD20568096009A6D28 /* IJSAlbumPickerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSAlbumPickerCell.m; sourceTree = "<group>"; };
+		74D423AE20568097009A6D28 /* IJSSelectedCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSSelectedCell.m; sourceTree = "<group>"; };
+		74D423AF20568097009A6D28 /* IJSPreviewLivePhotoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSPreviewLivePhotoView.m; sourceTree = "<group>"; };
+		74D423B020568097009A6D28 /* IJSPhotoPickerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSPhotoPickerCell.m; sourceTree = "<group>"; };
+		74D423B120568097009A6D28 /* IJSAlbumPickerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSAlbumPickerCell.h; sourceTree = "<group>"; };
+		74D423B220568097009A6D28 /* IJSPreviewVideoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSPreviewVideoView.m; sourceTree = "<group>"; };
+		74D423BA205680DA009A6D28 /* IJSMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSMapView.h; sourceTree = "<group>"; };
+		74D423BB205680DA009A6D28 /* IJSMapViewMapCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSMapViewMapCell.m; sourceTree = "<group>"; };
+		74D423BC205680DA009A6D28 /* IJSMapViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSMapViewModel.m; sourceTree = "<group>"; };
+		74D423BD205680DA009A6D28 /* IJSMapViewUIMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSMapViewUIMacro.h; sourceTree = "<group>"; };
+		74D423BE205680DA009A6D28 /* IJSMapViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSMapViewModel.h; sourceTree = "<group>"; };
+		74D423BF205680DA009A6D28 /* IJSMapViewCollectionViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSMapViewCollectionViewLayout.m; sourceTree = "<group>"; };
+		74D423C0205680DA009A6D28 /* IJSMapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSMapView.m; sourceTree = "<group>"; };
+		74D423C1205680DA009A6D28 /* IJSMapViewThumbCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSMapViewThumbCell.m; sourceTree = "<group>"; };
+		74D423C2205680DA009A6D28 /* IJSMapViewThumbCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSMapViewThumbCell.h; sourceTree = "<group>"; };
+		74D423C3205680DA009A6D28 /* IJSMapViewCollectionViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSMapViewCollectionViewLayout.h; sourceTree = "<group>"; };
+		74D423C4205680DA009A6D28 /* IJSMapViewMapCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSMapViewMapCell.h; sourceTree = "<group>"; };
+		74D423CA205680F2009A6D28 /* IJSDToolBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSDToolBarView.h; sourceTree = "<group>"; };
+		74D423CB205680F2009A6D28 /* IJSDColorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSDColorView.h; sourceTree = "<group>"; };
+		74D423CC205680F2009A6D28 /* IJSDToolBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSDToolBarView.m; sourceTree = "<group>"; };
+		74D423CD205680F3009A6D28 /* IJSDExportView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSDExportView.m; sourceTree = "<group>"; };
+		74D423CE205680F3009A6D28 /* IJSDExportView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSDExportView.h; sourceTree = "<group>"; };
+		74D423CF205680F3009A6D28 /* IJSDrawingModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSDrawingModel.m; sourceTree = "<group>"; };
+		74D423D0205680F3009A6D28 /* IJSDrawingController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSDrawingController.h; sourceTree = "<group>"; };
+		74D423D1205680F3009A6D28 /* IJSDrawingController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSDrawingController.m; sourceTree = "<group>"; };
+		74D423D2205680F3009A6D28 /* IJSDrawingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSDrawingView.h; sourceTree = "<group>"; };
+		74D423D3205680F3009A6D28 /* IJSDrawingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSDrawingView.m; sourceTree = "<group>"; };
+		74D423D4205680F3009A6D28 /* IJSVideoDrawingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSVideoDrawingView.h; sourceTree = "<group>"; };
+		74D423D5205680F3009A6D28 /* IJSVideoDrawingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSVideoDrawingView.m; sourceTree = "<group>"; };
+		74D423D6205680F3009A6D28 /* IJSDrawingModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSDrawingModel.h; sourceTree = "<group>"; };
+		74D423D7205680F3009A6D28 /* IJSDColorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSDColorView.m; sourceTree = "<group>"; };
 		74FDCC7C1FE389AF00AE93D8 /* 2002.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = 2002.mov; sourceTree = "<group>"; };
 		FABD4407EDC3B080753EEB3B /* Pods-IJSPhotoSDKProject.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IJSPhotoSDKProject.release.xcconfig"; path = "Pods/Target Support Files/Pods-IJSPhotoSDKProject/Pods-IJSPhotoSDKProject.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -333,9 +333,9 @@
 		74CC0A752043AF600046E9E8 /* ConstantFile */ = {
 			isa = PBXGroup;
 			children = (
+				74CC0A782043AF600046E9E8 /* IJSVideoManager.h */,
 				74CC0A762043AF600046E9E8 /* IJSVideoManager.m */,
 				74CC0A772043AF600046E9E8 /* IJSImageConst.h */,
-				74CC0A782043AF600046E9E8 /* IJSVideoManager.h */,
 			);
 			path = ConstantFile;
 			sourceTree = "<group>";
@@ -362,12 +362,12 @@
 			isa = PBXGroup;
 			children = (
 				74CC0A862043AF600046E9E8 /* IJSImageToolBase.h */,
-				74CC0A872043AF600046E9E8 /* IJSIPath.h */,
-				74CC0A882043AF600046E9E8 /* IJSImageMosaicTool.h */,
-				74CC0A892043AF600046E9E8 /* IJSImageDrawTool.m */,
 				74CC0A8A2043AF600046E9E8 /* IJSImageToolBase.m */,
-				74CC0A8B2043AF600046E9E8 /* IJSImageDrawTool.h */,
+				74CC0A882043AF600046E9E8 /* IJSImageMosaicTool.h */,
 				74CC0A8C2043AF600046E9E8 /* IJSImageMosaicTool.m */,
+				74CC0A8B2043AF600046E9E8 /* IJSImageDrawTool.h */,
+				74CC0A892043AF600046E9E8 /* IJSImageDrawTool.m */,
+				74CC0A872043AF600046E9E8 /* IJSIPath.h */,
 				74CC0A8D2043AF600046E9E8 /* IJSIPath.m */,
 			);
 			path = Model;
@@ -441,20 +441,20 @@
 		74CC0AB32043AF600046E9E8 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				74CC0AB42043AF600046E9E8 /* IJSPreviewImageCell.h */,
-				74CC0AB52043AF600046E9E8 /* IJSPreviewVideoView.m */,
-				74CC0AB62043AF600046E9E8 /* IJSPhotoPickerCell.m */,
-				74CC0AB72043AF600046E9E8 /* IJSSelectedCell.m */,
-				74CC0AB82043AF600046E9E8 /* IJSPreviewLivePhotoView.m */,
-				74CC0AB92043AF600046E9E8 /* IJSAlbumPickerCell.m */,
-				74CC0ABA2043AF600046E9E8 /* IJSPreviewGifView.h */,
-				74CC0ABB2043AF600046E9E8 /* IJSPreviewVideoView.h */,
-				74CC0ABC2043AF600046E9E8 /* IJSPreviewImageCell.m */,
-				74CC0ABD2043AF600046E9E8 /* IJSPhotoPickerCell.h */,
-				74CC0ABE2043AF600046E9E8 /* IJSAlbumPickerCell.h */,
-				74CC0ABF2043AF600046E9E8 /* IJSPreviewLivePhotoView.h */,
-				74CC0AC02043AF600046E9E8 /* IJSSelectedCell.h */,
-				74CC0AC12043AF600046E9E8 /* IJSPreviewGifView.m */,
+				74D423B120568097009A6D28 /* IJSAlbumPickerCell.h */,
+				74D423AD20568096009A6D28 /* IJSAlbumPickerCell.m */,
+				74D423AB20568096009A6D28 /* IJSPhotoPickerCell.h */,
+				74D423B020568097009A6D28 /* IJSPhotoPickerCell.m */,
+				74D423A820568096009A6D28 /* IJSPreviewGifView.h */,
+				74D423AC20568096009A6D28 /* IJSPreviewGifView.m */,
+				74D423A720568096009A6D28 /* IJSPreviewImageCell.h */,
+				74D423AA20568096009A6D28 /* IJSPreviewImageCell.m */,
+				74D423A520568096009A6D28 /* IJSPreviewLivePhotoView.h */,
+				74D423AF20568097009A6D28 /* IJSPreviewLivePhotoView.m */,
+				74D423A920568096009A6D28 /* IJSPreviewVideoView.h */,
+				74D423B220568097009A6D28 /* IJSPreviewVideoView.m */,
+				74D423A620568096009A6D28 /* IJSSelectedCell.h */,
+				74D423AE20568097009A6D28 /* IJSSelectedCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -490,20 +490,20 @@
 		74CC0ACE2043AF600046E9E8 /* IJSVideoDrawTool */ = {
 			isa = PBXGroup;
 			children = (
-				74CC0ACF2043AF600046E9E8 /* IJSDExportView.h */,
-				74CC0AD02043AF600046E9E8 /* IJSDColorView.h */,
-				74CC0AD12043AF600046E9E8 /* IJSDrawingView.m */,
-				74CC0AD22043AF600046E9E8 /* IJSDrawingModel.h */,
-				74CC0AD32043AF600046E9E8 /* IJSDToolBarView.h */,
-				74CC0AD42043AF600046E9E8 /* IJSDrawingController.h */,
-				74CC0AD52043AF600046E9E8 /* IJSVideoDrawingView.h */,
-				74CC0AD62043AF600046E9E8 /* IJSDColorView.m */,
-				74CC0AD72043AF600046E9E8 /* IJSDExportView.m */,
-				74CC0AD82043AF600046E9E8 /* IJSDrawingModel.m */,
-				74CC0AD92043AF600046E9E8 /* IJSDrawingView.h */,
-				74CC0ADA2043AF600046E9E8 /* IJSDToolBarView.m */,
-				74CC0ADB2043AF600046E9E8 /* IJSVideoDrawingView.m */,
-				74CC0ADC2043AF600046E9E8 /* IJSDrawingController.m */,
+				74D423CB205680F2009A6D28 /* IJSDColorView.h */,
+				74D423D7205680F3009A6D28 /* IJSDColorView.m */,
+				74D423CE205680F3009A6D28 /* IJSDExportView.h */,
+				74D423CD205680F3009A6D28 /* IJSDExportView.m */,
+				74D423D0205680F3009A6D28 /* IJSDrawingController.h */,
+				74D423D1205680F3009A6D28 /* IJSDrawingController.m */,
+				74D423D6205680F3009A6D28 /* IJSDrawingModel.h */,
+				74D423CF205680F3009A6D28 /* IJSDrawingModel.m */,
+				74D423D2205680F3009A6D28 /* IJSDrawingView.h */,
+				74D423D3205680F3009A6D28 /* IJSDrawingView.m */,
+				74D423CA205680F2009A6D28 /* IJSDToolBarView.h */,
+				74D423CC205680F2009A6D28 /* IJSDToolBarView.m */,
+				74D423D4205680F3009A6D28 /* IJSVideoDrawingView.h */,
+				74D423D5205680F3009A6D28 /* IJSVideoDrawingView.m */,
 			);
 			path = IJSVideoDrawTool;
 			sourceTree = "<group>";
@@ -537,17 +537,17 @@
 		74CC0AF12043AF600046E9E8 /* IJSMapView */ = {
 			isa = PBXGroup;
 			children = (
-				74CC0AF22043AF600046E9E8 /* IJSMapView.m */,
-				74CC0AF32043AF600046E9E8 /* IJSMapViewMapCell.m */,
-				74CC0AF42043AF600046E9E8 /* IJSMapViewThumbCell.h */,
-				74CC0AF52043AF600046E9E8 /* IJSMapViewModel.m */,
-				74CC0AF62043AF600046E9E8 /* IJSMapViewUIMacro.h */,
-				74CC0AF72043AF600046E9E8 /* IJSMapViewCollectionViewLayout.m */,
-				74CC0AF82043AF600046E9E8 /* IJSMapView.h */,
-				74CC0AF92043AF600046E9E8 /* IJSMapViewModel.h */,
-				74CC0AFA2043AF600046E9E8 /* IJSMapViewThumbCell.m */,
-				74CC0AFB2043AF600046E9E8 /* IJSMapViewMapCell.h */,
-				74CC0AFC2043AF600046E9E8 /* IJSMapViewCollectionViewLayout.h */,
+				74D423BA205680DA009A6D28 /* IJSMapView.h */,
+				74D423C0205680DA009A6D28 /* IJSMapView.m */,
+				74D423C3205680DA009A6D28 /* IJSMapViewCollectionViewLayout.h */,
+				74D423BF205680DA009A6D28 /* IJSMapViewCollectionViewLayout.m */,
+				74D423C4205680DA009A6D28 /* IJSMapViewMapCell.h */,
+				74D423BB205680DA009A6D28 /* IJSMapViewMapCell.m */,
+				74D423BE205680DA009A6D28 /* IJSMapViewModel.h */,
+				74D423BC205680DA009A6D28 /* IJSMapViewModel.m */,
+				74D423C2205680DA009A6D28 /* IJSMapViewThumbCell.h */,
+				74D423C1205680DA009A6D28 /* IJSMapViewThumbCell.m */,
+				74D423BD205680DA009A6D28 /* IJSMapViewUIMacro.h */,
 			);
 			path = IJSMapView;
 			sourceTree = "<group>";
@@ -863,39 +863,42 @@
 				74CC0B672043AF610046E9E8 /* IJSQRCodeController.m in Sources */,
 				746F651420542BED0075E182 /* TOCropViewControllerTransitioning.m in Sources */,
 				74CC0B652043AF610046E9E8 /* IJSCNavigationView.m in Sources */,
-				74CC0B642043AF610046E9E8 /* IJSMapViewThumbCell.m in Sources */,
+				74D423B920568097009A6D28 /* IJSPreviewVideoView.m in Sources */,
 				746F64F82054261C0075E182 /* IJSImagePickerController.m in Sources */,
+				74D423D9205680F3009A6D28 /* IJSDExportView.m in Sources */,
 				74CC0B2A2043AF600046E9E8 /* IJSVideoManager.m in Sources */,
 				74CC0B312043AF600046E9E8 /* IJSImageToolBase.m in Sources */,
-				74CC0B532043AF610046E9E8 /* IJSDrawingModel.m in Sources */,
+				74D423C8205680DB009A6D28 /* IJSMapView.m in Sources */,
 				746F6537205445960075E182 /* CALayer+IJSULayer.m in Sources */,
+				74D423C9205680DB009A6D28 /* IJSMapViewThumbCell.m in Sources */,
+				74D423C6205680DB009A6D28 /* IJSMapViewModel.m in Sources */,
 				74CC34711F06210E00118CA9 /* AppDelegate.m in Sources */,
 				74CC0B422043AF600046E9E8 /* IJSAlbumModel.m in Sources */,
-				74CC0B522043AF610046E9E8 /* IJSDExportView.m in Sources */,
+				74D423DE205680F3009A6D28 /* IJSDColorView.m in Sources */,
 				746F64C220541F380075E182 /* IJSVideoCutController.m in Sources */,
 				746F64C620541F380075E182 /* IJSImageEditController.m in Sources */,
 				746F64FC2054261C0075E182 /* IJSPhotoPickerController.m in Sources */,
 				746F64E920541FFC0075E182 /* IJSVideoSlideView.m in Sources */,
-				74CC0B482043AF600046E9E8 /* IJSAlbumPickerCell.m in Sources */,
 				746F651120542BED0075E182 /* TOCropToolbar.m in Sources */,
-				74CC0B442043AF600046E9E8 /* IJSPreviewVideoView.m in Sources */,
-				74CC0B462043AF600046E9E8 /* IJSSelectedCell.m in Sources */,
-				74CC0B472043AF600046E9E8 /* IJSPreviewLivePhotoView.m in Sources */,
+				74D423D8205680F3009A6D28 /* IJSDToolBarView.m in Sources */,
 				74CC0B412043AF600046E9E8 /* IJSImageManager.m in Sources */,
+				74D423DC205680F3009A6D28 /* IJSDrawingView.m in Sources */,
+				74D423C5205680DB009A6D28 /* IJSMapViewMapCell.m in Sources */,
 				746F653F205445960075E182 /* IJSNotificationCenterString.m in Sources */,
 				746F653A205445960075E182 /* UIImage+IJSUImage.m in Sources */,
 				7477D5C81F3C4BE9005F348D /* ViewController.m in Sources */,
 				746F64EB20541FFC0075E182 /* IJSIImputTextView.m in Sources */,
 				74CC0B332043AF600046E9E8 /* IJSIPath.m in Sources */,
 				74CC0B432043AF600046E9E8 /* IJSAssetModel.m in Sources */,
+				74D423DB205680F3009A6D28 /* IJSDrawingController.m in Sources */,
 				74CC0B322043AF600046E9E8 /* IJSImageMosaicTool.m in Sources */,
 				746F64C520541F380075E182 /* IJSImageManagerController.m in Sources */,
 				746F64E120541FFC0075E182 /* IJSImageToolView.m in Sources */,
-				74CC0B502043AF610046E9E8 /* IJSDrawingView.m in Sources */,
-				74CC0B562043AF610046E9E8 /* IJSDrawingController.m in Sources */,
+				74D423DD205680F3009A6D28 /* IJSVideoDrawingView.m in Sources */,
+				74D423B720568097009A6D28 /* IJSPreviewLivePhotoView.m in Sources */,
 				746F64FA2054261C0075E182 /* IJSPhotoPreviewController.m in Sources */,
 				746F64C420541F380075E182 /* IJSVideoManagerController.m in Sources */,
-				74CC0B542043AF610046E9E8 /* IJSDToolBarView.m in Sources */,
+				74D423B620568097009A6D28 /* IJSSelectedCell.m in Sources */,
 				746F64E520541FFC0075E182 /* IJSIImputTextExportView.m in Sources */,
 				746F651620542BED0075E182 /* UIImage+CropRotate.m in Sources */,
 				746F64C320541F380075E182 /* IJSVideoEditController.m in Sources */,
@@ -906,18 +909,13 @@
 				74CC346E1F06210E00118CA9 /* main.m in Sources */,
 				746F6535205445960075E182 /* UIBarButtonItem+IJSUUIBarBtItem.m in Sources */,
 				74CC0B302043AF600046E9E8 /* IJSImageDrawTool.m in Sources */,
-				74CC0B552043AF610046E9E8 /* IJSVideoDrawingView.m in Sources */,
 				746F64E720541FFC0075E182 /* IJSVideoRulerView.m in Sources */,
 				746F653B205445960075E182 /* UINavigationController+IJSNavigationController.m in Sources */,
-				74CC0B4A2043AF600046E9E8 /* IJSPreviewGifView.m in Sources */,
+				74D423DA205680F3009A6D28 /* IJSDrawingModel.m in Sources */,
 				746F64E420541FFC0075E182 /* IJSIColorButtonView.m in Sources */,
-				74CC0B452043AF600046E9E8 /* IJSPhotoPickerCell.m in Sources */,
 				746F64F92054261C0075E182 /* IJSAlbumPickerController.m in Sources */,
-				74CC0B632043AF610046E9E8 /* IJSMapViewCollectionViewLayout.m in Sources */,
+				74D423B320568097009A6D28 /* IJSPreviewImageCell.m in Sources */,
 				746F64EA20541FFC0075E182 /* IJSIMapViewExportView.m in Sources */,
-				74CC0B622043AF610046E9E8 /* IJSMapViewModel.m in Sources */,
-				74CC0B612043AF610046E9E8 /* IJSMapViewMapCell.m in Sources */,
-				74CC0B512043AF610046E9E8 /* IJSDColorView.m in Sources */,
 				746F653D205445960075E182 /* IJSLodingView.m in Sources */,
 				746F653C205445960075E182 /* NSBundle+IJSUBundle.m in Sources */,
 				746F64E220541FFC0075E182 /* IJSImageMosaicView.m in Sources */,
@@ -925,16 +923,18 @@
 				746F653E205445960075E182 /* UIView+IJSUUIView.m in Sources */,
 				746F64EC20541FFC0075E182 /* IJSIPanDrawingView.m in Sources */,
 				746F651720542BED0075E182 /* TOActivityCroppedImageProvider.m in Sources */,
-				74CC0B602043AF610046E9E8 /* IJSMapView.m in Sources */,
 				746F651320542BED0075E182 /* TOCropViewController.m in Sources */,
+				74D423B820568097009A6D28 /* IJSPhotoPickerCell.m in Sources */,
 				746F64E820541FFC0075E182 /* IJSImageGaussanView.m in Sources */,
 				746F64E320541FFC0075E182 /* IJSVideoTrimView.m in Sources */,
+				74D423B520568097009A6D28 /* IJSAlbumPickerCell.m in Sources */,
 				746F64ED20541FFC0075E182 /* IJSImageMosaicToolView.m in Sources */,
 				746F64FB2054261C0075E182 /* IJS3DTouchController.m in Sources */,
+				74D423B420568097009A6D28 /* IJSPreviewGifView.m in Sources */,
 				746F6539205445960075E182 /* IJSAlertViewController.m in Sources */,
 				746F6536205445960075E182 /* UITextField+IJSUTextField.m in Sources */,
+				74D423C7205680DB009A6D28 /* IJSMapViewCollectionViewLayout.m in Sources */,
 				746F651220542BED0075E182 /* TOCropView.m in Sources */,
-				74CC0B492043AF600046E9E8 /* IJSPreviewImageCell.m in Sources */,
 				746F64E620541FFC0075E182 /* IJSImageNavigationView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

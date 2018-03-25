@@ -16,7 +16,7 @@
 @property (nonatomic, strong) CAShapeLayer *shapeLayer;
 @property (nonatomic, assign) CGMutablePathRef path;
 @property (nonatomic, strong) NSMutableArray *allLineArr;    // 路径
-@property (nonatomic, strong) NSMutableArray *nowPointArray; // 点坐标
+@property (nonatomic, strong) NSMutableArray *savePathArray; // 点坐标
 @property (nonatomic, assign) CGSize originalImageSize;      // 原始图片的大小
 @end
 
@@ -56,6 +56,7 @@
     //添加layer（imageLayer）到self上
     self.imageLayer = [CALayer layer];
     self.imageLayer.frame = self.bounds;
+
     [self.layer addSublayer:self.imageLayer];
 
     self.shapeLayer = [CAShapeLayer layer];
@@ -64,8 +65,8 @@
     self.shapeLayer.lineJoin = kCALineJoinRound;
     //手指移动时 画笔的宽度
     self.shapeLayer.lineWidth = 30.f;
-    self.shapeLayer.strokeColor = [UIColor blueColor].CGColor; //不可设置clean
-    self.shapeLayer.fillColor = nil;
+    self.shapeLayer.strokeColor = [UIColor blueColor].CGColor; //不可设置clean, 主要是设置opacity和这个属性相关
+    self.shapeLayer.fillColor = nil; // 此处必需置空,不能设置
 
     [self.layer addSublayer:self.shapeLayer];
 
@@ -94,9 +95,9 @@
     }
     CGPathMoveToPoint(self.path, NULL, point.x, point.y);
     CGMutablePathRef path = CGPathCreateMutableCopy(self.path);
-    self.nowPointArray = [[NSMutableArray alloc] init];
-    [self.nowPointArray addObject:(__bridge id _Nonnull)(path)];
-    [self.allLineArr addObject:self.nowPointArray];
+    self.savePathArray = [NSMutableArray array];
+    [self.savePathArray addObject:(__bridge id _Nonnull)(path)];
+    [self.allLineArr addObject:self.savePathArray];
     CGPathRelease(path);
 }
 
@@ -155,7 +156,9 @@
 - (void)cleanLastDrawPath
 {
     if (self.allLineArr.count != 0)
+    {
         [self.allLineArr removeLastObject];
+    }
     [self drawSmearView];
     self.path = nil;
     if (self.allLineArr.count == 0)

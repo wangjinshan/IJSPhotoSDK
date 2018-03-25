@@ -427,10 +427,10 @@
         __weak typeof(self) weakSelf = self;
 
         _colorButtonView.colorCallBack = ^(UIColor *color) {
-            weakSelf.panColor = color;
+            weakSelf.drawTool.panColor = color;
         };
         _colorButtonView.sliderCallBack = ^(CGFloat width) {
-            weakSelf.panWidth = width;
+            weakSelf.drawTool.panWidth = width;
         };
         // 撤销
         _colorButtonView.cancleCallBack = ^{

@@ -44,11 +44,17 @@ static NSString *const cellID = @"cellID";
     [self createTableViewUI];
 //    [self.view bringSubviewToFront:self.pushActionBt];
 //
-//        NSString *str = [[NSBundle mainBundle] pathForResource:@"01" ofType:@"mp4"];
-//        NSURL *url = [NSURL fileURLWithPath:str];
-//        [[IJSImageManager shareManager] saveVideoIntoSystemAlbumFromVideoUrl:url completion:^(id assetCollection, NSError *error, BOOL isExistedOrIsSuccess) {
-//            NSLog(@"----%@",error);
-//        }];
+        NSString *str = [[NSBundle mainBundle] pathForResource:@"2002" ofType:@"mov"];
+    
+    NSURL *url;
+    if (str)
+    {
+     url  =  [NSURL fileURLWithPath:str];
+    }
+    
+        [[IJSImageManager shareManager] saveVideoIntoSystemAlbumFromVideoUrl:url completion:^(id assetCollection, NSError *error, BOOL isExistedOrIsSuccess) {
+            NSLog(@"----%@",error);
+        }];
 //    [self testMemory];
 
 //    [UIColor redColor];
