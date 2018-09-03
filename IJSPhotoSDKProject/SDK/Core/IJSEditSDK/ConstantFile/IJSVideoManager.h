@@ -116,20 +116,4 @@ typedef void (^cutVideoCompletionBlock)(NSURL *outputPath, NSError *error, IJSVi
  */
 +(void)saveImageToSandBoxImage:(UIImage *)image completion:(void (^)(NSURL *outputPath, NSError *error))completion;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 @end

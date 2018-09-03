@@ -85,10 +85,9 @@
 @property (nonatomic, strong, readonly) NSMutableArray<NSString *> *tagStringArray;
 
 /**
- 添加的标签数组
+ 添加的标签数组, uitbutton
  */
 @property (nonatomic, strong,readonly) NSMutableArray *tagButtonsArray;
-
 
 /**
  通过拖拽的方式进行排序,默认是NO,不能拖拽
@@ -185,9 +184,6 @@
 
 
 @end
-
-
-
 
 
 /*-------------------------------------------------------------------------自定义的标签类----------------------------------------------------------------------------------------------*/

@@ -269,7 +269,9 @@
     UIView *backPlacehodelView = [[UIView alloc] initWithFrame:self.view.bounds];
     [backScrollView addSubview:backPlacehodelView];
     self.backPlacehodelView = backPlacehodelView;
-
+    UIPanGestureRecognizer *pan =[[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(viewDidPan:)];
+    [backPlacehodelView addGestureRecognizer:pan];
+    
     // 背景图片
     self.backImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, JSScreenWidth, self.imageHeight)];
     _backImageView.center = self.view.center;
@@ -283,7 +285,7 @@
     self.drawingView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin;
     self.drawingView.backgroundColor = [UIColor clearColor];
     [self.backImageView.superview addSubview:self.drawingView];
-    self.drawingView.userInteractionEnabled = YES;
+    self.drawingView.userInteractionEnabled = NO;
 
     // 导航条
     CGFloat top;
@@ -675,6 +677,30 @@
 - (void)_hiddenViewDidTap
 {
 }
+- (void)viewDidPan:(UIPanGestureRecognizer *)recognizer
+{
+    if (recognizer.state == UIGestureRecognizerStateChanged)
+    {
+        CGPoint location = [recognizer locationInView:self.view];
+        if (location.y < 0 || location.y > self.view.bounds.size.height)
+        {
+            return;
+        }
+        CGPoint translation = [recognizer translationInView:self.view];
+        recognizer.view.center = CGPointMake(recognizer.view.center.x + translation.x,recognizer.view.center.y + translation.y);
+        [recognizer setTranslation:CGPointZero inView:self.view];
+    }
+    if (recognizer.state == UIGestureRecognizerStateEnded)
+    {
+        if (self.backPlacehodelView.js_origin.x < -JSScreenWidth / 2/3.f
+            || self.backPlacehodelView.js_origin.x > JSScreenWidth + JSScreenWidth / 2/3.f
+            || self.backPlacehodelView.js_origin.y > JSScreenHeight - IJSGTabbarHeight
+            || self.backPlacehodelView.js_origin.y < -JSScreenHeight / 2/3.f)
+        {
+            self.backPlacehodelView.center = self.view.center;
+        }
+    }
+}
 - (void)_hiddenplaceholderToolViewSubView
 {
     for (UIView *subView in self.placeholderToolView.subviews)
@@ -822,7 +848,24 @@
 {
     return self.backPlacehodelView;
 }
-- (void)scrollViewDidZoom:(UIScrollView *)scrollView {}
+// 让图片保持在屏幕中央，防止图片放大时，位置出现跑偏
+- (void)scrollViewDidZoom:(UIScrollView *)scrollView
+{
+    UIView *anyView = self.backPlacehodelView;
+    CGFloat offsetX = 0.0;
+    if (self.backScrollView.bounds.size.width > self.backScrollView.contentSize.width)
+    {
+        offsetX = (self.backScrollView.bounds.size.width - self.backScrollView.contentSize.width) * 0.5;
+    }
+    CGFloat offsetY = 0.0;
+    if ((self.backScrollView.bounds.size.height > self.backScrollView.contentSize.height))
+    {
+        offsetY = (self.backScrollView.bounds.size.height - self.backScrollView.contentSize.height) * 0.5;
+    }
+    
+    anyView.center = CGPointMake(self.backScrollView.contentSize.width * 0.5 + offsetX, self.backScrollView.contentSize.height * 0.5 + offsetY);
+}
+
 #pragma mark 裁剪的代理方法
 - (void)cropViewController:(TOCropViewController *)cropViewController didCropToImage:(UIImage *)image withRect:(CGRect)cropRect angle:(NSInteger)angle
 {

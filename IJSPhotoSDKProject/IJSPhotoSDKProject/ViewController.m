@@ -52,9 +52,9 @@ static NSString *const cellID = @"cellID";
      url  =  [NSURL fileURLWithPath:str];
     }
     
-        [[IJSImageManager shareManager] saveVideoIntoSystemAlbumFromVideoUrl:url completion:^(id assetCollection, NSError *error, BOOL isExistedOrIsSuccess) {
-            NSLog(@"----%@",error);
-        }];
+//        [[IJSImageManager shareManager] saveVideoIntoSystemAlbumFromVideoUrl:url completion:^(id assetCollection, NSError *error, BOOL isExistedOrIsSuccess) {
+//            NSLog(@"----%@",error);
+//        }];
 //    [self testMemory];
 
 //    [UIColor redColor];

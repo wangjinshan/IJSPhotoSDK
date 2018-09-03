@@ -529,16 +529,4 @@ static IJSVideoManager *manager;
     });
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 @end

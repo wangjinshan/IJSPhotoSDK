@@ -82,6 +82,12 @@ CGFloat const imageViewWHIJS = 20;
 #pragma mark -----------------------添加单个标签------------------------------
 - (void)addTag:(NSString *)tagStr
 {
+    for (NSString *key in [self.tagsDic allKeys]) {
+        if ([tagStr isEqualToString:key]) {
+            return ;
+        }
+    }
+    
     Class tagClass = self.tagClass?_tagClass : [IJSTagButton class];
     
     // 创建标签按钮
@@ -269,25 +275,19 @@ CGFloat const imageViewWHIJS = 20;
     [pan setTranslation:CGPointZero inView:self];  // 结束时候 复位一下
 }
 #pragma mark -----------------------删除标签------------------------------
+/// 删除单个标签
 - (void)deleteTag:(NSString *)tagStr
 {
     IJSTagButton *button = self.tagsDic[tagStr];   // 获取对应的标题按钮
-    
     [button removeFromSuperview];      // 移除按钮
-    
     [self.tagButtonsArray removeObject:button];     // 移除数组
-    
     [self.tagsDic removeObjectForKey:tagStr];       // 移除字典
-    
     [self.tagStringArray removeObject:tagStr];    // 移除数组
-    
     [self _updateTag];      // 更新tag
-    
     // 更新后面按钮的frame
     [UIView animateWithDuration:0.25 animations:^{
         [self _updateLaterTagButtonFrame:button.tag];
     }];
-    
     // 更新自己的frame
     if (self.isFitTagListViewHeight) {
         CGRect frame = self.frame;
@@ -297,7 +297,7 @@ CGFloat const imageViewWHIJS = 20;
         }];
     }
 }
-/*-------------------------------------------------------------------------私有方法-------------------------------*/
+
 #pragma mark -----------------------私有方法------------------------------
 // 更新标签
 - (void)_updateTag
@@ -498,6 +498,7 @@ CGFloat const imageViewWHIJS = 20;
     }
     return _tagsDic;
 }
+
 - (void)setScaleTagInSort:(CGFloat)scaleTagInSort
 {
     _scaleTagInSort = scaleTagInSort;

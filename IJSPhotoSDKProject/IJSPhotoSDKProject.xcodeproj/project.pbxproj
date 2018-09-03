@@ -420,9 +420,9 @@
 		74CC0AAA2043AF600046E9E8 /* ConstantFile */ = {
 			isa = PBXGroup;
 			children = (
+				74CC0AAD2043AF600046E9E8 /* IJSImageManager.h */,
 				74CC0AAB2043AF600046E9E8 /* IJSImageManager.m */,
 				74CC0AAC2043AF600046E9E8 /* IJSConst.h */,
-				74CC0AAD2043AF600046E9E8 /* IJSImageManager.h */,
 			);
 			path = ConstantFile;
 			sourceTree = "<group>";
@@ -1074,6 +1074,7 @@
 			baseConfigurationReference = 25D405203274813E19C970DC /* Pods-IJSPhotoSDKProject.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7V3U9AVLEY;
@@ -1087,7 +1088,7 @@
 				INFOPLIST_FILE = IJSPhotoSDKProject/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = shenzoom.IJSPhotoSDK;
+				PRODUCT_BUNDLE_IDENTIFIER = shenzoom;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1099,6 +1100,7 @@
 			baseConfigurationReference = FABD4407EDC3B080753EEB3B /* Pods-IJSPhotoSDKProject.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7V3U9AVLEY;
@@ -1112,7 +1114,7 @@
 				INFOPLIST_FILE = IJSPhotoSDKProject/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = shenzoom.IJSPhotoSDK;
+				PRODUCT_BUNDLE_IDENTIFIER = shenzoom;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
