@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		1C30D64F1F568EEC004D547A /* IJSVideoTestController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C30D64E1F568EEC004D547A /* IJSVideoTestController.m */; };
 		5A35C0C86EEC3737ACD66C26 /* libPods-IJSPhotoSDKProject.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 581DE8E662BF6D6BB0A180EB /* libPods-IJSPhotoSDKProject.a */; };
+		74006FC9214B5567001CD82D /* IJSPhotoSDKProjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 74006FC8214B5567001CD82D /* IJSPhotoSDKProjectTests.m */; };
+		74006FD7214B5570001CD82D /* IJSPhotoSDKProjectUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 74006FD6214B5570001CD82D /* IJSPhotoSDKProjectUITests.m */; };
 		746F64C220541F380075E182 /* IJSVideoCutController.m in Sources */ = {isa = PBXBuildFile; fileRef = 746F64B720541F370075E182 /* IJSVideoCutController.m */; };
 		746F64C320541F380075E182 /* IJSVideoEditController.m in Sources */ = {isa = PBXBuildFile; fileRef = 746F64BA20541F380075E182 /* IJSVideoEditController.m */; };
 		746F64C420541F380075E182 /* IJSVideoManagerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 746F64BB20541F380075E182 /* IJSVideoManagerController.m */; };
@@ -95,11 +97,35 @@
 		74FDCC7D1FE389AF00AE93D8 /* 2002.mov in Resources */ = {isa = PBXBuildFile; fileRef = 74FDCC7C1FE389AF00AE93D8 /* 2002.mov */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		74006FCB214B5567001CD82D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 74CC34611F06210E00118CA9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 74CC34681F06210E00118CA9;
+			remoteInfo = IJSPhotoSDKProject;
+		};
+		74006FD9214B5570001CD82D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 74CC34611F06210E00118CA9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 74CC34681F06210E00118CA9;
+			remoteInfo = IJSPhotoSDKProject;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		1C30D64D1F568EEC004D547A /* IJSVideoTestController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IJSVideoTestController.h; sourceTree = "<group>"; };
 		1C30D64E1F568EEC004D547A /* IJSVideoTestController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IJSVideoTestController.m; sourceTree = "<group>"; };
 		25D405203274813E19C970DC /* Pods-IJSPhotoSDKProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IJSPhotoSDKProject.debug.xcconfig"; path = "Pods/Target Support Files/Pods-IJSPhotoSDKProject/Pods-IJSPhotoSDKProject.debug.xcconfig"; sourceTree = "<group>"; };
 		581DE8E662BF6D6BB0A180EB /* libPods-IJSPhotoSDKProject.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-IJSPhotoSDKProject.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		74006FC6214B5567001CD82D /* IJSPhotoSDKProjectTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IJSPhotoSDKProjectTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		74006FC8214B5567001CD82D /* IJSPhotoSDKProjectTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IJSPhotoSDKProjectTests.m; sourceTree = "<group>"; };
+		74006FCA214B5567001CD82D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		74006FD4214B5570001CD82D /* IJSPhotoSDKProjectUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IJSPhotoSDKProjectUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		74006FD6214B5570001CD82D /* IJSPhotoSDKProjectUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IJSPhotoSDKProjectUITests.m; sourceTree = "<group>"; };
+		74006FD8214B5570001CD82D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		742A460B214BB89000F2E705 /* IJSTestConfig.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = IJSTestConfig.xcconfig; sourceTree = "<group>"; };
 		746F64B720541F370075E182 /* IJSVideoCutController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IJSVideoCutController.m; sourceTree = "<group>"; };
 		746F64B820541F370075E182 /* IJSImageEditController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSImageEditController.h; sourceTree = "<group>"; };
 		746F64B920541F380075E182 /* IJSVideoManagerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IJSVideoManagerController.h; sourceTree = "<group>"; };
@@ -276,6 +302,20 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		74006FC3214B5567001CD82D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		74006FD1214B5570001CD82D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		74CC34661F06210E00118CA9 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -295,6 +335,32 @@
 				FABD4407EDC3B080753EEB3B /* Pods-IJSPhotoSDKProject.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		74006FC7214B5567001CD82D /* IJSPhotoSDKProjectTests */ = {
+			isa = PBXGroup;
+			children = (
+				74006FC8214B5567001CD82D /* IJSPhotoSDKProjectTests.m */,
+				74006FCA214B5567001CD82D /* Info.plist */,
+			);
+			path = IJSPhotoSDKProjectTests;
+			sourceTree = "<group>";
+		};
+		74006FD5214B5570001CD82D /* IJSPhotoSDKProjectUITests */ = {
+			isa = PBXGroup;
+			children = (
+				74006FD6214B5570001CD82D /* IJSPhotoSDKProjectUITests.m */,
+				74006FD8214B5570001CD82D /* Info.plist */,
+			);
+			path = IJSPhotoSDKProjectUITests;
+			sourceTree = "<group>";
+		};
+		742A460A214BB86000F2E705 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				742A460B214BB89000F2E705 /* IJSTestConfig.xcconfig */,
+			);
+			name = Config;
 			sourceTree = "<group>";
 		};
 		74CC0A722043AF600046E9E8 /* SDK */ = {
@@ -660,6 +726,8 @@
 			children = (
 				74CC0A722043AF600046E9E8 /* SDK */,
 				74CC346B1F06210E00118CA9 /* IJSPhotoSDKProject */,
+				74006FC7214B5567001CD82D /* IJSPhotoSDKProjectTests */,
+				74006FD5214B5570001CD82D /* IJSPhotoSDKProjectUITests */,
 				74CC346A1F06210E00118CA9 /* Products */,
 				22909A2EBBB04D7A66B81156 /* Pods */,
 				7AC009DD78DBA8C0103A4AF6 /* Frameworks */,
@@ -670,6 +738,8 @@
 			isa = PBXGroup;
 			children = (
 				74CC34691F06210E00118CA9 /* IJSPhotoSDKProject.app */,
+				74006FC6214B5567001CD82D /* IJSPhotoSDKProjectTests.xctest */,
+				74006FD4214B5570001CD82D /* IJSPhotoSDKProjectUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -682,6 +752,7 @@
 				74CC34721F06210E00118CA9 /* ViewController.h */,
 				7477D5C71F3C4BE9005F348D /* ViewController.m */,
 				1C30D64D1F568EEC004D547A /* IJSVideoTestController.h */,
+				742A460A214BB86000F2E705 /* Config */,
 				1C30D64E1F568EEC004D547A /* IJSVideoTestController.m */,
 				74FDCC7C1FE389AF00AE93D8 /* 2002.mov */,
 				74CC34751F06210E00118CA9 /* Main.storyboard */,
@@ -712,6 +783,42 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		74006FC5214B5567001CD82D /* IJSPhotoSDKProjectTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 74006FCF214B5567001CD82D /* Build configuration list for PBXNativeTarget "IJSPhotoSDKProjectTests" */;
+			buildPhases = (
+				74006FC2214B5567001CD82D /* Sources */,
+				74006FC3214B5567001CD82D /* Frameworks */,
+				74006FC4214B5567001CD82D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				74006FCC214B5567001CD82D /* PBXTargetDependency */,
+			);
+			name = IJSPhotoSDKProjectTests;
+			productName = IJSPhotoSDKProjectTests;
+			productReference = 74006FC6214B5567001CD82D /* IJSPhotoSDKProjectTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		74006FD3214B5570001CD82D /* IJSPhotoSDKProjectUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 74006FDB214B5570001CD82D /* Build configuration list for PBXNativeTarget "IJSPhotoSDKProjectUITests" */;
+			buildPhases = (
+				74006FD0214B5570001CD82D /* Sources */,
+				74006FD1214B5570001CD82D /* Frameworks */,
+				74006FD2214B5570001CD82D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				74006FDA214B5570001CD82D /* PBXTargetDependency */,
+			);
+			name = IJSPhotoSDKProjectUITests;
+			productName = IJSPhotoSDKProjectUITests;
+			productReference = 74006FD4214B5570001CD82D /* IJSPhotoSDKProjectUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		74CC34681F06210E00118CA9 /* IJSPhotoSDKProject */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 74CC34801F06210E00118CA9 /* Build configuration list for PBXNativeTarget "IJSPhotoSDKProject" */;
@@ -741,6 +848,16 @@
 				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = shanshen;
 				TargetAttributes = {
+					74006FC5214B5567001CD82D = {
+						CreatedOnToolsVersion = 9.4;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 74CC34681F06210E00118CA9;
+					};
+					74006FD3214B5570001CD82D = {
+						CreatedOnToolsVersion = 9.4;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 74CC34681F06210E00118CA9;
+					};
 					74CC34681F06210E00118CA9 = {
 						CreatedOnToolsVersion = 8.3.2;
 						DevelopmentTeam = 7V3U9AVLEY;
@@ -779,11 +896,27 @@
 			projectRoot = "";
 			targets = (
 				74CC34681F06210E00118CA9 /* IJSPhotoSDKProject */,
+				74006FC5214B5567001CD82D /* IJSPhotoSDKProjectTests */,
+				74006FD3214B5570001CD82D /* IJSPhotoSDKProjectUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		74006FC4214B5567001CD82D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		74006FD2214B5570001CD82D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		74CC34671F06210E00118CA9 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -853,6 +986,22 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		74006FC2214B5567001CD82D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				74006FC9214B5567001CD82D /* IJSPhotoSDKProjectTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		74006FD0214B5570001CD82D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				74006FD7214B5570001CD82D /* IJSPhotoSDKProjectUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		74CC34651F06210E00118CA9 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -941,6 +1090,19 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		74006FCC214B5567001CD82D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 74CC34681F06210E00118CA9 /* IJSPhotoSDKProject */;
+			targetProxy = 74006FCB214B5567001CD82D /* PBXContainerItemProxy */;
+		};
+		74006FDA214B5570001CD82D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 74CC34681F06210E00118CA9 /* IJSPhotoSDKProject */;
+			targetProxy = 74006FD9214B5570001CD82D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		74CC34751F06210E00118CA9 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -963,6 +1125,92 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		74006FCD214B5567001CD82D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = IJSPhotoSDKProjectTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.shenzoom.ijs.IJSPhotoSDKProjectTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/IJSPhotoSDKProject.app/IJSPhotoSDKProject";
+			};
+			name = Debug;
+		};
+		74006FCE214B5567001CD82D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = IJSPhotoSDKProjectTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.shenzoom.ijs.IJSPhotoSDKProjectTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/IJSPhotoSDKProject.app/IJSPhotoSDKProject";
+			};
+			name = Release;
+		};
+		74006FDC214B5570001CD82D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = IJSPhotoSDKProjectUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.shenzoom.ijs.IJSPhotoSDKProjectUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = IJSPhotoSDKProject;
+			};
+			name = Debug;
+		};
+		74006FDD214B5570001CD82D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = IJSPhotoSDKProjectUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.shenzoom.ijs.IJSPhotoSDKProjectUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = IJSPhotoSDKProject;
+			};
+			name = Release;
+		};
 		74CC347E1F06210E00118CA9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1124,6 +1372,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		74006FCF214B5567001CD82D /* Build configuration list for PBXNativeTarget "IJSPhotoSDKProjectTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				74006FCD214B5567001CD82D /* Debug */,
+				74006FCE214B5567001CD82D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		74006FDB214B5570001CD82D /* Build configuration list for PBXNativeTarget "IJSPhotoSDKProjectUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				74006FDC214B5570001CD82D /* Debug */,
+				74006FDD214B5570001CD82D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		74CC34641F06210E00118CA9 /* Build configuration list for PBXProject "IJSPhotoSDKProject" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
