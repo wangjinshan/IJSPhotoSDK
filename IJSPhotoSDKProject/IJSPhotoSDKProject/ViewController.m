@@ -17,6 +17,7 @@
 #import <Photos/Photos.h>
 #import "IJSVideoManager.h"
 #import "IJSAlbumModel.h"
+#import "IJSEditSDK.h"
 
 // 二维码模块
 #import "IJSQRCodeController.h"
@@ -32,6 +33,7 @@ static NSString *const cellID = @"cellID";
 
 @property (weak, nonatomic) IBOutlet UIButton *pushActionBt;
 
+@property (weak, nonatomic) IBOutlet UIImageView *testImageView;
 
 @end
 
@@ -41,16 +43,16 @@ static NSString *const cellID = @"cellID";
 {
     [super viewDidLoad];
     self.view.backgroundColor =[UIColor whiteColor];
-    [self createTableViewUI];
+//    [self createTableViewUI];
 //    [self.view bringSubviewToFront:self.pushActionBt];
 //
-        NSString *str = [[NSBundle mainBundle] pathForResource:@"2002" ofType:@"mov"];
-    
-    NSURL *url;
-    if (str)
-    {
-     url  =  [NSURL fileURLWithPath:str];
-    }
+//        NSString *str = [[NSBundle mainBundle] pathForResource:@"2002" ofType:@"mov"];
+//    
+//    NSURL *url;
+//    if (str)
+//    {
+//     url  =  [NSURL fileURLWithPath:str];
+//    }
     
 //        [[IJSImageManager shareManager] saveVideoIntoSystemAlbumFromVideoUrl:url completion:^(id assetCollection, NSError *error, BOOL isExistedOrIsSuccess) {
 //            NSLog(@"----%@",error);
@@ -234,6 +236,19 @@ static NSString *const cellID = @"cellID";
     [self presentViewController:vc animated:YES completion:nil];
 }
 
+
+- (IBAction)cutImageAction:(UIButton *)sender {
+    UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:@"https://img4.duitang.com/uploads/item/201404/28/20140428171407_Xf8tE.thumb.600_0.jpeg"]]];
+
+    IJSImageManagerController *vc =[[IJSImageManagerController alloc]initWithEditImage:image];
+
+    [vc loadImageOnCompleteResult:^(UIImage *image, NSURL *outputPath, NSError *error) {
+        self.testImageView.image = image;
+    }];
+    [self presentViewController:vc animated:YES completion:nil];
+
+
+}
 
 
 

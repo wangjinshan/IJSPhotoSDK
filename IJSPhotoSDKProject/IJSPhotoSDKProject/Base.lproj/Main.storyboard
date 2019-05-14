@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -22,45 +21,70 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sca-v2-hje">
-                                <rect key="frame" x="16" y="66" width="46" height="42"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sca-v2-hje">
+                                <rect key="frame" x="0.0" y="66" width="94" height="30"/>
                                 <color key="backgroundColor" red="0.24028345942497253" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="117" id="YkH-11-rcZ"/>
-                                    <constraint firstAttribute="height" constant="54" id="oZg-4j-nvW"/>
-                                </constraints>
                                 <state key="normal" title="选图"/>
                                 <connections>
                                     <action selector="shareAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="nS3-h1-KR2"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nlQ-J7-wu8">
-                                <rect key="frame" x="70" y="68" width="99" height="35"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nlQ-J7-wu8">
+                                <rect key="frame" x="94" y="66" width="93.5" height="30"/>
                                 <color key="backgroundColor" red="1" green="0.67216897004081255" blue="0.97335080662889761" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <state key="normal" title="裁剪方法测试"/>
+                                <state key="normal" title="裁剪视频"/>
                                 <connections>
                                     <action selector="cutTest:" destination="BYZ-38-t0r" eventType="touchUpInside" id="zhc-M7-jrV"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="904-RF-Srf">
-                                <rect key="frame" x="190" y="72" width="57" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="904-RF-Srf">
+                                <rect key="frame" x="187.5" y="66" width="94" height="30"/>
                                 <color key="backgroundColor" red="1" green="0.43922594718289731" blue="0.31622400978290899" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <state key="normal" title="二维码"/>
                                 <connections>
                                     <action selector="qrcodeAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="uXQ-jf-sGQ"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f9Y-Lt-BqS">
+                                <rect key="frame" x="281.5" y="66" width="93.5" height="30"/>
+                                <state key="normal" title="图片裁剪"/>
+                                <connections>
+                                    <action selector="cutImageAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cA7-a9-8rC"/>
+                                </connections>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Bha-rm-9sw">
+                                <rect key="frame" x="62" y="155" width="210" height="369"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="sca-v2-hje" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="242" id="h2J-bZ-VU2"/>
-                            <constraint firstItem="VRg-Bu-CvX" firstAttribute="top" secondItem="sca-v2-hje" secondAttribute="bottom" constant="547" id="jdL-fR-d0k"/>
+                            <constraint firstItem="Bha-rm-9sw" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="62" id="0ib-Cj-vBW"/>
+                            <constraint firstItem="Bha-rm-9sw" firstAttribute="top" secondItem="sca-v2-hje" secondAttribute="bottom" constant="59" id="8Sl-Di-ysb"/>
+                            <constraint firstItem="904-RF-Srf" firstAttribute="leading" secondItem="nlQ-J7-wu8" secondAttribute="trailing" id="9OI-1M-D4x"/>
+                            <constraint firstItem="nlQ-J7-wu8" firstAttribute="height" secondItem="sca-v2-hje" secondAttribute="height" id="DRt-5Y-I8j"/>
+                            <constraint firstItem="nlQ-J7-wu8" firstAttribute="leading" secondItem="sca-v2-hje" secondAttribute="trailing" id="HjP-Yj-kWw"/>
+                            <constraint firstItem="sca-v2-hje" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="MZN-5f-XKe"/>
+                            <constraint firstItem="f9Y-Lt-BqS" firstAttribute="height" secondItem="sca-v2-hje" secondAttribute="height" id="Rpp-rf-WDQ"/>
+                            <constraint firstAttribute="trailing" secondItem="Bha-rm-9sw" secondAttribute="trailing" constant="103" id="Uat-LK-pRg"/>
+                            <constraint firstItem="904-RF-Srf" firstAttribute="top" secondItem="sca-v2-hje" secondAttribute="top" id="VxC-uO-qpl"/>
+                            <constraint firstItem="nlQ-J7-wu8" firstAttribute="width" secondItem="sca-v2-hje" secondAttribute="width" id="bGz-fg-ZvB"/>
+                            <constraint firstItem="f9Y-Lt-BqS" firstAttribute="top" secondItem="sca-v2-hje" secondAttribute="top" id="dvN-sz-Xtc"/>
+                            <constraint firstItem="904-RF-Srf" firstAttribute="width" secondItem="sca-v2-hje" secondAttribute="width" id="flI-UN-nQv"/>
+                            <constraint firstItem="f9Y-Lt-BqS" firstAttribute="top" secondItem="sca-v2-hje" secondAttribute="top" id="fsW-ID-5Qb"/>
+                            <constraint firstItem="f9Y-Lt-BqS" firstAttribute="width" secondItem="sca-v2-hje" secondAttribute="width" id="ijC-rn-cPI"/>
+                            <constraint firstItem="904-RF-Srf" firstAttribute="leading" secondItem="nlQ-J7-wu8" secondAttribute="trailing" id="ke6-kj-NN4"/>
+                            <constraint firstItem="nlQ-J7-wu8" firstAttribute="leading" secondItem="sca-v2-hje" secondAttribute="trailing" id="ojJ-qK-myg"/>
+                            <constraint firstAttribute="trailing" secondItem="f9Y-Lt-BqS" secondAttribute="trailing" id="q7p-QE-Mju"/>
+                            <constraint firstItem="904-RF-Srf" firstAttribute="height" secondItem="sca-v2-hje" secondAttribute="height" id="s5n-7Z-fF6"/>
+                            <constraint firstItem="f9Y-Lt-BqS" firstAttribute="leading" secondItem="904-RF-Srf" secondAttribute="trailing" id="uug-aw-IgM"/>
+                            <constraint firstItem="nlQ-J7-wu8" firstAttribute="top" secondItem="sca-v2-hje" secondAttribute="top" id="wK3-Bf-YNm"/>
+                            <constraint firstItem="sca-v2-hje" firstAttribute="top" secondItem="vqT-9F-gQd" secondAttribute="bottom" constant="46" id="wmr-Hy-EhJ"/>
+                            <constraint firstItem="VRg-Bu-CvX" firstAttribute="top" secondItem="Bha-rm-9sw" secondAttribute="bottom" constant="143" id="xNf-dO-zci"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="pushActionBt" destination="sca-v2-hje" id="5C2-SZ-t9j"/>
+                        <outlet property="testImageView" destination="Bha-rm-9sw" id="aNb-Z3-q0T"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

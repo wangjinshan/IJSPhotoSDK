@@ -824,7 +824,8 @@
         CGFloat sw = textImg.size.width / selfRw;
         CGFloat sh = textImg.size.height / selfRh;
 
-        [textImg drawInRect:CGRectMake(exportView.js_left / selfRw, (exportView.js_top / selfRh) - drawY, sw, sh)];
+//        [textImg drawInRect:CGRectMake(exportView.js_left / selfRw, (exportView.js_top / selfRh) - drawY, sw, sh)];
+          [textImg drawInRect:CGRectMake(0, 0, sw, sh)];
     }
 
     UIImage *tmp = UIGraphicsGetImageFromCurrentImageContext();
