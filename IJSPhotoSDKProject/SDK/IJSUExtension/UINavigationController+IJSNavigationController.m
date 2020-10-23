@@ -1,6 +1,6 @@
 //
 //  UINavigationController+IJSNavigationController.m
-//  TZScrollViewPopGesture
+//  ScrollViewPopGesture
 //
 //  Created by 山神 on 2018/2/2.
 //  Copyright © 2018年 山神. All rights reserved.

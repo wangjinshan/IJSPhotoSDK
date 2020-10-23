@@ -496,9 +496,9 @@
 		74CC0AAE2043AF600046E9E8 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				74CC0AB12043AF600046E9E8 /* IJSAlbumModel.h */,
 				74CC0AAF2043AF600046E9E8 /* IJSAlbumModel.m */,
 				74CC0AB02043AF600046E9E8 /* IJSAssetModel.h */,
-				74CC0AB12043AF600046E9E8 /* IJSAlbumModel.h */,
 				74CC0AB22043AF600046E9E8 /* IJSAssetModel.m */,
 			);
 			path = Model;
@@ -870,6 +870,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 				ar,

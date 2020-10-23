@@ -181,7 +181,7 @@ typedef void (^completionHandler)(id assetCollection, NSError *error, BOOL isExi
 - (NSString *)getAssetIdentifier:(PHAsset *)asset;
 
 /*-----------------------------------属性-------------------------------------------------------*/
-/* 默认4列, TZPhotoPickerController中的照片collectionView */
+/* 默认4列 照片collectionView */
 @property (nonatomic, assign) NSInteger columnNumber;
 /* 修正方向 */
 @property (nonatomic, assign) BOOL shouldFixOrientation;
